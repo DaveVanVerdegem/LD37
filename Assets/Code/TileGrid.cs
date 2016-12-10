@@ -8,7 +8,7 @@ public class TileGrid : MonoBehaviour {
     [SerializeField] float tileDistance = 1;
     [SerializeField] float hardrockChance = 0.2f;
 
-    [SerializeField] GameObject tilePrefab;
+    [SerializeField] GameObject tilePrefab = null;
 
 	[Tooltip("This is the tile list.")]
 	[SerializeField]
@@ -39,20 +39,17 @@ public class TileGrid : MonoBehaviour {
 			}
 		}
 		
-
-
-
 		for (int x = 0; x < gridWidth; x++)
 		{
             for(int y = 0; y < gridHeight; y++)
 			{
-                GameObject tile = Instantiate<GameObject>(tilePrefab);
+                Tile tile = Instantiate(tilePrefab).GetComponent<Tile>();
                 tile.transform.localPosition = new Vector3(x*tileDistance - (gridWidth-1)*tileDistance/2, y*tileDistance - (gridHeight-1)*tileDistance/2,0);
                 tile.name = ""+x+","+y;
                 tile.transform.parent = transform;
-				_tileList[x, y] = tile.GetComponent<Tile>();
+				_tileList[x, y] = tile;
 
-				tile.GetComponent<Tile>().Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+				tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
             }
         }
     }

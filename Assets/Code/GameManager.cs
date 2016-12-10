@@ -21,4 +21,8 @@ public class GameManager : MonoBehaviour
 
 	}
 	#endregion
+
+	#region Methods
+
+	#endregion
 }
