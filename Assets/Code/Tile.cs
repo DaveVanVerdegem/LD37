@@ -8,10 +8,12 @@ public class Tile : MonoBehaviour {
     [SerializeField] GameObject stateRockPrefab;
     [SerializeField] GameObject stateHardrockPrefab;
     [SerializeField] GameObject stateDugPrefab;
+    [SerializeField] GameObject stateExitPrefab;
+    [SerializeField] GameObject stateEntrancePrefab;
     
     GameObject stateVisual;
 
-    public enum state { Rock, Hardrock, Dug}
+    public enum state { Rock, Hardrock, Dug, Exit, Entrance}
     [SerializeField] state tileState = state.Rock;
 
     
@@ -31,9 +33,32 @@ public class Tile : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        if(tileState==state.Rock) {
+
+        //DIG
+        if(tileState==state.Rock && UIStateManager.state == "Dig") {
+            tileState=state.Dug;
             Destroy(stateVisual);
             stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform); 
+        }
+        //FILL
+        if(tileState==state.Dug && UIStateManager.state == "Fill") {
+            tileState=state.Rock;
+            Destroy(stateVisual);
+            stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform); 
+        }
+        //ENTRANCE
+        if(tileState==state.Rock && UIStateManager.state == "Place Entrance") {
+            //TODO check if adjacent is dug
+            tileState=state.Entrance;
+            Destroy(stateVisual);
+            stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform); 
+        }
+        //EXIT
+        if(tileState==state.Rock && UIStateManager.state == "Place Exit") {
+            //TODO check if adjacent is dug
+            tileState=state.Exit;
+            Destroy(stateVisual);
+            stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform); 
         }
     }
 }
