@@ -10,8 +10,9 @@ public class TileGrid : MonoBehaviour {
 
     [SerializeField] GameObject tilePrefab;
 
-
-    List<GameObject> tileList;
+	[Tooltip("This is the tile list.")]
+	[SerializeField]
+    private Tile[,] _tileList;
 
 
 
@@ -20,24 +21,38 @@ public class TileGrid : MonoBehaviour {
     }
 
     public void RedrawGrid() {
-        if(tileList!=null) {
-            foreach(GameObject tile in tileList) {
-                Destroy(tile);
-            }
-        }
+		if (!tilePrefab)
+		{
+			Debug.LogWarning("No tile prefab found!");
+			return;
+		}
 
-        if(!tilePrefab) return;
+		_tileList = new Tile[gridWidth, gridHeight];
 
-        tileList = new List<GameObject>();
+		// Remove the existing tiles.
+		for (int x = 0; x < gridWidth; x++)
+		{
+			for (int y = 0; y < gridHeight; y++)
+			{
+				if (_tileList[x, y] != null)
+					Destroy(_tileList[x, y]);
+			}
+		}
+		
 
-        for(int x = 0; x < gridWidth; x++) {
-            for(int y = 0; y < gridHeight; y++) {
+
+
+		for (int x = 0; x < gridWidth; x++)
+		{
+            for(int y = 0; y < gridHeight; y++)
+			{
                 GameObject tile = Instantiate<GameObject>(tilePrefab);
                 tile.transform.localPosition = new Vector3(x*tileDistance - (gridWidth-1)*tileDistance/2, y*tileDistance - (gridHeight-1)*tileDistance/2,0);
                 tile.name = ""+x+","+y;
                 tile.transform.parent = transform;
-                tileList.Add(tile);
-                tile.GetComponent<Tile>().Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+				_tileList[x, y] = tile.GetComponent<Tile>();
+
+				tile.GetComponent<Tile>().Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
             }
         }
     }
