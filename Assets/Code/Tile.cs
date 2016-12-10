@@ -2,22 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
-public class Tile : MonoBehaviour
-{
-
-	// Use this for initialization
-	void Start ()
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
-=======
 [RequireComponent(typeof(BoxCollider))]
 public class Tile : MonoBehaviour {
     
@@ -52,5 +36,4 @@ public class Tile : MonoBehaviour {
             stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform); 
         }
     }
->>>>>>> 1e7c021f35fdc1e6b092da9dc21763f8a8df970b
 }
