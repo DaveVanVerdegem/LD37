@@ -55,5 +55,31 @@ public class TileGrid : MonoBehaviour {
 				tile.GetComponent<Tile>().Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
             }
         }
+		
+		for (int x = 0; x < gridWidth; x++)
+		{
+            for(int y = 0; y < gridHeight; y++)
+			{
+				_tileList[x, y].setNeighbouringTiles(getNeighbouringTiles(x,y));
+			}
+        }
     }
+	
+	List<KeyValuePair<string, Tile>> getNeighbouringTiles(int gridX,int gridY){
+		
+		List<KeyValuePair<string, Tile>> NeighbouringTiles = new List<KeyValuePair<string, Tile>>();
+		List<string> Names=new List<string>(){"up","down","left","right"};
+
+		for(int x = -1; x <= 1; x += 2){
+			if (gridX + x >= 0 && gridX + x <= gridWidth - 1) {
+				for (int y = -1; y <= 1; y += 2) {
+					if (gridY + y >= 0 && gridY + y <= gridHeight - 1) {
+						Debug.Log (x+1 + (y+1)/2);
+						NeighbouringTiles.Add (new KeyValuePair<string, Tile> ("ji", _tileList [gridX + x, gridY + y]));  
+					}  
+				}
+			}
+		}
+		return NeighbouringTiles;
+	}
 }
