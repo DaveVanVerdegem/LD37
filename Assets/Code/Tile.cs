@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour {
 
     
     public void Initialize(state spawnState) {
+        tileState = spawnState;
         switch(tileState) {
             case state.Rock:
                 stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);

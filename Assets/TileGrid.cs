@@ -6,7 +6,7 @@ public class TileGrid : MonoBehaviour {
     [SerializeField] int gridWidth  = 10;
     [SerializeField] int gridHeight = 10;
     [SerializeField] float tileDistance = 1;
-    [SerializeField] int hardrockChance = 20;
+    [SerializeField] float hardrockChance = 0.2f;
 
     [SerializeField] GameObject tilePrefab;
 
@@ -37,7 +37,7 @@ public class TileGrid : MonoBehaviour {
                 tile.name = ""+x+","+y;
                 tile.transform.parent = transform;
                 tileList.Add(tile);
-                tile.GetComponent<Tile>().Initialize(Random.Range(0, 100)>hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+                tile.GetComponent<Tile>().Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
             }
         }
     }
