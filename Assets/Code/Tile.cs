@@ -11,8 +11,10 @@ public class Tile : MonoBehaviour {
     [SerializeField] GameObject stateDugPrefab;
     [SerializeField] GameObject stateExitPrefab;
     [SerializeField] GameObject stateEntrancePrefab;
-    
-    GameObject stateVisual;
+
+	private List<KeyValuePair<string, Tile>> NeighbouringTiles = new List<KeyValuePair<string, Tile>>();
+
+	GameObject stateVisual;
 
     public enum state { Rock, Hardrock, Dug, Exit, Entrance}
     [SerializeField] state tileState = state.Rock;
@@ -92,6 +94,13 @@ public class Tile : MonoBehaviour {
 	#endregion
 
 	#region Methods
+	public void setNeighbouringTiles(List<KeyValuePair<string, Tile>> NeighbouringTiles)
+	{
+		this.NeighbouringTiles = NeighbouringTiles;
+
+	}
+
+
 	public bool AttachObject(InteractableObject objectToAttach)
 	{
 		if (_attachedObject != null)
