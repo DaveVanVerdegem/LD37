@@ -16,7 +16,7 @@ public class TileVariantChooser_Hardrock : MonoBehaviour {
 
 	}
 
-	public void setTileGraphics () {
+	public void setTileGraphics (bool[,] TileHood) {
 		GetComponent<Renderer> ().material.mainTexture = TileVariant_Hardrock;
 	}
 

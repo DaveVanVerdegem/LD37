@@ -120,10 +120,40 @@ public class Tile : MonoBehaviour {
 	public void updateTileGraphics(int[] Key)
 	{
 		if (tileState == state.Rock) {
-			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics ();
+			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics (getHood());
 		} else if (tileState == state.Hardrock)  {
-			stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics ();
+			stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics (getHood());
 		}
+	}
+
+	//Check the neighbourhood and return a list of booleans
+	public bool[,] getHood(){
+		bool[,] TileHood= new bool[3,3]{{false,false,false},{false,false,false},{false,false,false}};
+		bool StatusBit;
+		int[] Index = new int[2];
+
+		for(int i=0;i<=NeighbouringTiles.Count-1;i++){
+			switch (NeighbouringTiles[i].Value.tileState)
+			{
+			case state.Hardrock: case state.Rock:
+				StatusBit = false;
+				break;
+			case state.Dug:
+				StatusBit= true;
+				break;
+			default:
+				StatusBit = true;
+				break;
+			}
+
+			Index[0]=NeighbouringTiles [i].Key [0]+1;
+			Index[1]=Mathf.Abs(NeighbouringTiles [i].Key [1]-1);
+
+			TileHood[Index[0],Index[1]] = StatusBit;
+		}
+		Debug.Log (TileHood);
+
+		return TileHood;
 	}
 
 
