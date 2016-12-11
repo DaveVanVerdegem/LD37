@@ -23,8 +23,8 @@ public class Selector : MonoBehaviour {
 		//HitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 		//Debug.Log("Running selector...    ", this);
 
-		Debug.DrawRay(ray.origin, ray.direction * 100, Color.magenta);
-		Debug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.up, Color.yellow);
+		//Debug.DrawRay(ray.origin, ray.direction * 100, Color.magenta);
+		//Debug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.up, Color.yellow);
 
 		if (HitInfo.collider != null)
 		{
@@ -33,11 +33,15 @@ public class Selector : MonoBehaviour {
             if(HitInfo.transform.tag == "Tile")
 			{
                 transform.position = HitInfo.transform.position + offset;
-            }else {
-                Debug.Log("Hit this instead: "+HitInfo.transform.name);
             }
-        }else {
-            Debug.Log("Didn't hit a collider.");
+			else
+			{
+                //Debug.Log("Hit this instead: " + HitInfo.transform.name);
+            }
+        }
+		else
+		{
+            //Debug.Log("Didn't hit a collider.");
         }
 	}
 }
