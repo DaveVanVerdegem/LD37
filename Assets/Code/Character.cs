@@ -47,7 +47,21 @@ public class Character : MonoBehaviour {
     private float _attackSpeedModifier = 1.0f;
     private float _damageTakenModifier = 1.0f;
 
-    
+	#region Inspector Fields
+	[SerializeField]
+	[Tooltip("Loot prefab to drop on death.")]
+	/// <summary>
+	/// Loot prefab to drop on death.
+	/// </summary>
+	private Loot _lootPrefab;
+
+	[SerializeField]
+	[Tooltip("Amount of gold in inventory of this character.")]
+	/// <summary>
+	/// Amount of gold in inventory of this character.
+	/// </summary>
+	private int _gold = 10;
+	#endregion
 
 	void Start ()
     {
@@ -271,7 +285,8 @@ public class Character : MonoBehaviour {
         }
         // do death animation
         _isAlive = false;
-        Destroy(gameObject);
+		DropLoot();
+		Destroy(gameObject);
     }
 
     void RemoveTarget()
@@ -279,5 +294,13 @@ public class Character : MonoBehaviour {
         _currentTarget = null;
         _alertnessTimer = 0.0f;
     }
+
+	void DropLoot()
+	{
+		Loot loot = Instantiate(_lootPrefab, transform.position + Vector3.back, Quaternion.identity);
+
+		loot.SetGold(_gold);
+		loot.Initialize(null);
+	}
     #endregion
 }
