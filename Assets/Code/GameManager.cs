@@ -1,10 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 	#region Inspector Fields
+	[Header("Scenes")]
+	[Tooltip("Main menu scene.")]
+	/// <summary>
+	/// Main menu scene.
+	/// </summary>
+	public Object MainMenuScene;
+
+	[Tooltip("Game scene.")]
+	/// <summary>
+	/// Game scene.
+	/// </summary>
+	public Object GameScene;
+
+
+	[Header("Game")]
 	[SerializeField]
 	[Tooltip("Prefab to spawn chest.")]
 	/// <summary>
@@ -14,6 +30,8 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Properties
+	public static GameManager Instance;
+
 	/// <summary>
 	/// Current amount of gold saved up.
 	/// </summary>
@@ -25,8 +43,26 @@ public class GameManager : MonoBehaviour
 	public static Chest Chest;
 	#endregion
 
+	#region Fields
+
+	#endregion
+
 
 	#region Life Cycle
+	void Awake()
+	{
+		// Remove this if it's not the singleton.
+		if (Instance != null && Instance != this)
+			Destroy(gameObject);
+		// Set singleton.
+		else if (Instance == null)
+		{
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+
+	}
+
 	// Use this for initialization
 	void Start()
 	{
@@ -37,6 +73,13 @@ public class GameManager : MonoBehaviour
 	void Update()
 	{
 
+	}
+	#endregion
+
+	#region Level Loading
+	public static void LoadLevel(string sceneToLoad)
+	{
+		SceneManager.LoadScene(sceneToLoad);
 	}
 	#endregion
 

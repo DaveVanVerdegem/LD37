@@ -28,3 +28,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/Spine/spine_Characters/Knight.png.meta
+Assets/spine_Characters.meta
