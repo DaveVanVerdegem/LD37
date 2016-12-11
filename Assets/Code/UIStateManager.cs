@@ -17,12 +17,14 @@ public class UIStateManager : MonoBehaviour {
 
     public static string state;
 
-	#region Fields
+	#region Properties
 	/// <summary>
 	/// Current state of the UI.
 	/// </summary>
-	private UIState _state = UIState.Play;
+	public static UIState State = UIState.Play;
+	#endregion
 
+	#region Fields
 	// Placing objects.
 	/// <summary>
 	/// Object currently placing in the room.
@@ -30,15 +32,18 @@ public class UIStateManager : MonoBehaviour {
 	private GameObject _objectToPlace;
 	#endregion
 
-	void Start() {
-        state = "Dig";
-    }
+
+	#region Life Cycle
+	void Start()
+	{
+		state = "Dig";
+	}
 
 	void Update()
 	{
 		CheckInput();
 	}
-
+	#endregion
 
 	#region Input
 	/// <summary>
@@ -49,7 +54,7 @@ public class UIStateManager : MonoBehaviour {
 		if (EventSystem.current.IsPointerOverGameObject())
 			return;
 
-		switch (_state)
+		switch (State)
 		{
 			case UIState.Buy:
 				if (Input.GetMouseButtonDown(0))
@@ -57,7 +62,7 @@ public class UIStateManager : MonoBehaviour {
 					Tile tile = Selector.HitInfo.transform.GetComponent<Tile>();
 
 					// You can only place objects on non-solid tiles.
-					if (tile == null || tile.Solid)
+					if (tile == null || tile.Solid == true)
 						break;
 
 					if(tile.AttachObject(_objectToPlace.GetComponent<InteractableObject>()))
@@ -104,7 +109,7 @@ public class UIStateManager : MonoBehaviour {
 	/// <param name="newUIState">New UI state to change to.</param>
 	public void ChangeState(UIState newUIState)
 	{
-		_state = newUIState;
+		State = newUIState;
 	}
 
 	/// <summary>
@@ -128,7 +133,7 @@ public class UIStateManager : MonoBehaviour {
 
 	IEnumerator PlacingObjectCoroutine()
 	{
-		while (_state == UIState.Buy && _objectToPlace != null)
+		while (State == UIState.Buy && _objectToPlace != null)
 		{
 			if (Selector.HitInfo.transform != null && Selector.HitInfo.transform.CompareTag("Tile"))
 			{

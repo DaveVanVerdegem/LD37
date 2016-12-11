@@ -15,6 +15,11 @@ public class InteractableObject : MonoBehaviour
 	/// Tile where this object is attached to.
 	/// </summary>
 	protected Tile _parentTile;
+
+	/// <summary>
+	/// Collider of this interactable object.
+	/// </summary>
+	private Collider _collider;
 	#endregion
 
 
@@ -22,13 +27,21 @@ public class InteractableObject : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		_collider = GetComponent<Collider>();
 
+		if (_collider == null)
+			Debug.LogWarning("No collider attached!", this);
+
+		_collider.enabled = false;
 	}
 
 	public virtual void Initialize(Tile parentTile)
 	{
 		// Assign our parent tile.
 		_parentTile = parentTile;
+
+		// Activate collider.
+		_collider.enabled = true;
 
 		_initialized = true;
 	}

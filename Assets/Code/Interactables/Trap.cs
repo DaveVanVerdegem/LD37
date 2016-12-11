@@ -5,12 +5,6 @@ using UnityEngine;
 public class Trap : InteractableObject
 {
 	#region Life Cycle
-	// Use this for initialization
-	void Start()
-	{
-
-	}
-
 	public override void Initialize(Tile parentTile)
 	{
 		Debug.Log("Initialized trap.");
