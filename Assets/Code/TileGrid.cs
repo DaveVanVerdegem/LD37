@@ -7,6 +7,7 @@ public class TileGrid : MonoBehaviour {
     [SerializeField] int gridHeight = 10;
     [SerializeField] float tileDistance = 1;
     [SerializeField] float hardrockChance = 0.2f;
+    [SerializeField] bool hardrockBypresets = false;
 
     [SerializeField] GameObject tilePrefab = null;
     [SerializeField] TextAsset gridPreset;
@@ -71,8 +72,12 @@ public class TileGrid : MonoBehaviour {
 				else {
                     switch(presetmap[x,y]) {
                         case "x":   tile.Initialize(Tile.state.Dug);       break;
-                        case ".":   tile.Initialize(Tile.state.Rock);       break;
-                        case "!":   tile.Initialize(Tile.state.Hardrock);   break;
+                        case ".":   if(!hardrockBypresets)   tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+                                    else                    tile.Initialize(Tile.state.Rock);
+                                    break;
+                        case "!":   if(!hardrockBypresets)   tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+                                    else                    tile.Initialize(Tile.state.Hardrock);
+                                    break;
                         case "v":   tile.Initialize(Tile.state.Entrance);   break;
                         case "^":   tile.Initialize(Tile.state.Exit);       break;
                         case "c":   Debug.LogWarning("NYI. Type: "+presetmap[x,y]);tile.Initialize(Tile.state.Dug); break;//tile.Initialize(Tile.state. chest???);   break;
