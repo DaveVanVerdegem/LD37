@@ -46,12 +46,11 @@ public class TileGrid : MonoBehaviour {
         string[,] presetmap = null;
         if(preset) {
             string[] lines = gridPreset.text.Split(',');
-            for(int x = 0; x<lines.Length-1;x++) {
-                string[] tiles = lines[x].Split(']');
-                for(int y = 0; y < tiles.Length-1; y++) {
+            for(int y = 0; y<lines.Length;y++) {
+                string[] tiles = lines[y].Split(']');
+                for(int x = 0; x < tiles.Length-1; x++) {
                     if(presetmap == null) presetmap = new string[tiles.Length, lines.Length];
-                    ///Debug.Log("["+x+","+y+"]"+" "+""+tiles[y]+", length: "+tiles[y].Length);
-                    presetmap[y,lines.Length-1-x] = ""+tiles[y][tiles[y].Length==2?1:3];
+                    presetmap[x,lines.Length-1-y] = ""+tiles[x][tiles[x].Length==2?1:3];
                 }
             }
         }

@@ -33,7 +33,11 @@ public class Selector : MonoBehaviour {
             if(HitInfo.transform.tag == "Tile")
 			{
                 transform.position = HitInfo.transform.position + offset;
+            }else {
+                Debug.Log("Hit this instead: "+HitInfo.transform.name);
             }
+        }else {
+            Debug.Log("Didn't hit a collider.");
         }
 	}
 }
