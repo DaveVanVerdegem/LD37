@@ -19,6 +19,8 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 	public Texture TileVariant_TShape;
 	public Texture TileVariant_TShapeRed;
 
+	//private List<string,Texture> TileVariants;
+
 
 	// Use this for initialization
 	void Start () {
@@ -31,118 +33,70 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 
 	public void setTileGraphics (bool[,] TileHood) {	
 		Texture tex;
-		float _rotationDegrees;
-		_rotationDegrees = 0.0f;
+		float _rotationDegrees = 0.0f;
 
-		switch (getEquivalentKey(TileHood))
-		{
-		case 1: //done
-			tex = TileVariant_CornerBigRed;
-			_rotationDegrees = 90.0f;
+		int numberOfDiggedDiagonalNeighbours = 0;
+		int numberOfDiggedNeighbours = 0;
+		List<Vector2> directionOfDiggedNeighbours = new List<Vector2>();
+
+		for (int xx=0;xx<=2;xx++){
+			for (int yy=0;yy<=2;yy++){
+				if (TileHood[xx,yy]){
+					numberOfDiggedNeighbours++;
+					directionOfDiggedNeighbours.Add(new Vector2(xx,yy));
+					if ((xx + yy)%2  == 0) {
+						numberOfDiggedDiagonalNeighbours++;
+					}
+				}
+			}
+		}
+
+		//Debug.Log (numberOfDiggedDiagonalNeighbours);
+		switch(numberOfDiggedNeighbours){
+		case 0:
+			tex=TileVariant_Red;
 			break;
-		case 10: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 90.0f;
+		//Only one digged tile...
+		case 1:
+			switch (numberOfDiggedDiagonalNeighbours) {
+			case 0: //There's one straight digged neighbour!
+				tex=TileVariant_OuterWall;
+				break;
+			default: //There's one diagonal digged neighbour!
+				tex = TileVariant_CornerBigRed;
+				break;
+			}
 			break;
-		case 100: //done
-			tex = TileVariant_CornerBigRed;
-			_rotationDegrees = 180.0f;
+		case 6:
+			switch (numberOfDiggedDiagonalNeighbours) {
+			case 2: //There's two diagonal digged neighbour!
+				tex=TileVariant_CrossDoubleRed;
+				break;
+			case 3: //There's three diagonal digged neighbour!
+				tex=TileVariant_Stump;
+				break;
+			default: //There's four diagonal digged neighbour!
+				tex=TileVariant_InnerWall;
+				break;
+			}
 			break;
-		case 1000: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 0.0f;
-			break;
-		case 100000: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 180.0f;
-			break;
-		case 1000000: //done
-			tex =  TileVariant_CornerBigRed;
-			_rotationDegrees = 0.0f;
-			break;
-		case 10000000: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 270.0f;
-			break;
-		case 100000000: //done
-			tex = TileVariant_CornerBigRed;
-			_rotationDegrees = 270.0f;
-			break;
-		case 100100: case 100100000: case 100100100: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 180.0f;
-			break;
-		case 1001: case 1001000: case 1001001: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 0.0f;
-			break;
-		case 11: case 110: case 111: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 90.0f;
-			break;
-		case 110000000: case 11000000: case 111000000: //done
-			tex = TileVariant_OuterWall;
-			_rotationDegrees = 270.0f;
-			break;
-		case 1011: case 1111: case 1001011: case 1001111: //done
-			tex = TileVariant_CornerSmallRed;
-			_rotationDegrees = 270.0f;
-			break;
-		case 11001000: case 111001000: case 11001001: case 111001001: //done
-			tex = TileVariant_CornerSmallRed;
-			_rotationDegrees = 180.0f;
-			break;
-		case 100110: case 100111: case 100100111: case 100100110: //done
-			tex = TileVariant_CornerSmallRed;
-			_rotationDegrees = 0.0f;
-			break;
-		case 110100100: case 111100100: case 110100000: //done
-			tex = TileVariant_CornerSmallRed;
-			_rotationDegrees = 90.0f;
-			break;
-		case 11001011: case 111001011: case 111001111: case 11001111: //done
+		//Its a tile only connected with one side!
+		case 7: 
 			tex = TileVariant_Stump;
-			_rotationDegrees = 270.0f;
 			break;
-		case 1000001: //done
-			tex = TileVariant_TShapeRed;
-			_rotationDegrees = 180.0f;
-			break;
-		case 11000001: //done
-			tex = TileVariant_TShape;
-			_rotationDegrees = 270.0f;
-			break;
-		case 11000011: //done
-			tex = TileVariant_InnerWall;
-			_rotationDegrees = 90.0f;
-			break;
-		case 111101111: //done
+		//Its a tile surrounded by digged areas!
+		case 8:
 			tex = TileVariant_SingleSquare;
-			_rotationDegrees = 0.0f;
 			break;
 		default:
 			tex=TileVariant_Red;
-			Debug.Log (getEquivalentKey (TileHood));
 			break;
+
 		}
 			
 		GetComponent<Renderer>().material.SetFloat ("_RotationDegrees", _rotationDegrees);
 
 		GetComponent<Renderer> ().material.mainTexture = tex;
 	}
-
-	public int getEquivalentKey(bool[,] TileHood){
-
-		int HoodKey=0;
-				for (int xx=0;xx<=2;xx++){
-					for (int yy=0;yy<=2;yy++){
-				if (TileHood[xx,yy]){
-					HoodKey += (int)Math.Pow(10,3*xx+yy);
-					//Debug.Log (Math.Pow(10,3*xx+yy));
-				}
-			}
-		}
-		return HoodKey;
-	}	
 
 }
