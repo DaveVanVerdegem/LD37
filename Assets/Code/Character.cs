@@ -9,6 +9,7 @@ using UnityEngine;
 public class Character : MonoBehaviour {
 
     // character core attributes
+    #region Properties
     public int MaxHealth;
     public float MovementSpeedIdle;
     public float MovementSpeedCombat;
@@ -51,9 +52,10 @@ public class Character : MonoBehaviour {
     private float _speedModifier = 1.0f;
     private float _attackSpeedModifier = 1.0f;
     private float _damageTakenModifier = 1.0f;
+    #endregion
 
-    
-	void Start ()
+
+    void Start ()
     {
         _currentHealth = MaxHealth;
         _alertnessTimer = MaxAlertnessDurationSeconds; // causes the monster to not be alert at first
@@ -158,6 +160,16 @@ public class Character : MonoBehaviour {
     #endregion
 
     #region Targetting
+    void ClearTarget()
+    {
+        RemoveFromTargetingList();
+        _currentTarget = null;
+        if (_currentState == (int)_characterStates.Combat)
+        {
+            SwitchToAlertState();
+        }
+    }
+
     void RemoveFromTargetingList()
     {
         if (_currentTarget.GetComponent<Character>() != null)
@@ -179,15 +191,6 @@ public class Character : MonoBehaviour {
 
     }
 
-    void ClearTarget()
-    {
-        RemoveFromTargetingList();
-        _currentTarget = null;
-        if (_currentState == (int)_characterStates.Combat)
-        {
-            SwitchToAlertState();
-        }
-    }
     #endregion
 
     #endregion
