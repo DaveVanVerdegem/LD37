@@ -19,6 +19,7 @@ public class Character : MonoBehaviour {
     public float MaxIdleMovement;
     public float MaxIdleWaitSeconds;
     public float MaxAlertnessDurationSeconds;
+    
 
     public float IdleDetectionRadius;
     public float CombatDetectionRadius;
@@ -27,8 +28,12 @@ public class Character : MonoBehaviour {
     public string Group;
     public string BattleType;
     public List<string> Skills;
+    public float TreasurePriority; // how much priority the character gives to either fight or grab treasure.
 
-    private bool _inCombat = false;
+    private List<GameObject> _detectedGameObjects = new List<GameObject>();
+
+    private enum _characterStates { Idle, Combat, Alert, Fetch}
+    private int _currentState = (int) _characterStates.Idle;
     private bool _isAlive = true;
     private int _currentHealth;
     private float _attackTimer = 0.0f;
@@ -38,7 +43,7 @@ public class Character : MonoBehaviour {
     private bool _newIdlePositionChosen = false;
 
     private Vector2 _newIdleMovePosition;
-    private Character _currentTarget;
+    private GameObject _currentTarget;
     private List<Character> _targetedBy = new List<Character>();
 
     // make class Modifier with remaining time and effect or so...
@@ -48,58 +53,144 @@ public class Character : MonoBehaviour {
     private float _damageTakenModifier = 1.0f;
 
     
-
 	void Start ()
     {
         _currentHealth = MaxHealth;
         _alertnessTimer = MaxAlertnessDurationSeconds; // causes the monster to not be alert at first
         SwitchToIdleState();
-	}
+        if (_targetedBy.Contains(GetComponent<Character>()))
+        {
+            _targetedBy.Remove(GetComponent<Character>());
+        }
+    }
 	
 	void Update ()
     {
-        if (_inCombat)
+        switch (_currentState)
         {
-            CharacterCombat();
+            case (int)_characterStates.Combat:
+                CharacterCombat();
+                break;
+            case (int)_characterStates.Alert:
+                CharacterAlert();
+                break;
+            case (int)_characterStates.Idle:
+                CharacterIdle();
+                break;
+            case (int)_characterStates.Fetch:
+                CharacterFetch();
+                break;
+            default:
+                Debug.Log("Invalid character state");
+                break;
         }
-        else
-        {
-            CharacterIdle();
-        }        
 	}
 
+    #region GeneralFunctionality
+    #region Animations
     void SetAnimation(string newAnimation)
     {
 
     }
+    #endregion
 
+    #region Movement
     void MoveTo(Vector2 destination, float MovementSpeed)
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        transform.position = Vector2.MoveTowards(transform.position,destination, MoveStep);
+        transform.position = Vector2.MoveTowards(transform.position, destination, MoveStep);
     }
+    #endregion
 
-    void DetectEnemiesInArea(float detectionRadius)
+    #region ObjectDetection
+    void DetectCollidersInArea(float detectionRadius)
     {
         Collider2D[] Colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
+        Debug.Log(Colliders.Length);
         foreach (Collider2D Collider in Colliders)
         {
-			Character colliderCharacter = Collider.GetComponent<Character>();
-
-
-			if (colliderCharacter != null && colliderCharacter.Group != Group)
+            Debug.Log(Physics2D.Raycast(transform.position, transform.position - Collider.transform.position).collider == Collider);
+            if (!_detectedGameObjects.Contains(Collider.gameObject) && Physics2D.Raycast(transform.position, Collider.transform.position - transform.position).collider == Collider)
             {
-                if (Physics2D.Raycast(transform.position, transform.position - Collider.transform.position))
+                if (Collider.GetComponent<Character>() != null && Collider.GetComponent<Character>().Group != Group)
                 {
-                    _currentTarget = colliderCharacter;
-                    _currentTarget.AddTarget(this);
-                    SwitchToCombatState();
-                    return;
+                    Debug.Log("Euh");
+                    DetectedEnemy(Collider);
                 }
+                if (Collider.GetComponent<Object>() != null)
+                {
+                    DetectedTreasure(Collider);
+                }
+                _detectedGameObjects.Add(Collider.gameObject);
             }
+
         }
     }
+
+    void DetectedEnemy(Collider2D Collider)
+    {
+        Debug.Log(Collider.name);
+        if (_currentState != (int)_characterStates.Combat && _currentState != (int)_characterStates.Fetch)
+        {
+            _currentTarget = Collider.gameObject;
+            // adds the character to the new target's _targetedBy list.
+            _currentTarget.GetComponent<Character>()._targetedBy.Add(GetComponent<Character>());
+            Debug.Log("WOAH! DETECTED");
+            Debug.Log(_currentTarget.name);
+            SwitchToCombatState();
+            return;
+        }
+    }
+
+    void DetectedTreasure(Collider2D Collider)
+    {
+        if (_currentState == (int)_characterStates.Fetch || (_currentState == (int)_characterStates.Combat && Random.value > TreasurePriority))
+        {
+            return;
+        }
+        _currentTarget = Collider.gameObject;
+        // adds the character to the new target's _targetedBy list.
+        // _currentTarget.GetComponent<Treasure>()._targetedBy.Add(gameObject);
+        SwitchToFetchState();
+        return;
+    }
+    #endregion
+
+    #region Targetting
+    void RemoveFromTargetingList()
+    {
+        if (_currentTarget.GetComponent<Character>() != null)
+        {
+            if (_currentTarget.GetComponent<Character>()._targetedBy.Contains(GetComponent<Character>()))
+            {
+                _currentTarget.GetComponent<Character>()._targetedBy.Remove(GetComponent<Character>());
+            }
+        }
+        /*
+        if (_currentTarget.GetComponent<Treasure>() != null)
+        {
+            if (_currentTarget.GetComponent<Treasure>()._targetedBy.Contains(GetComponent<Character>()))
+            {
+                _currentTarget.GetComponent<Treasure>()._targetedBy.Remove(GetComponent<Character>());
+            }
+        }
+        */
+
+    }
+
+    void ClearTarget()
+    {
+        RemoveFromTargetingList();
+        _currentTarget = null;
+        if (_currentState == (int)_characterStates.Combat)
+        {
+            SwitchToAlertState();
+        }
+    }
+    #endregion
+
+    #endregion
 
     #region CharacterIdle
     void CharacterIdle()
@@ -109,7 +200,7 @@ public class Character : MonoBehaviour {
         {
             CharacterIdleMove();
         }
-        DetectEnemiesInArea(IdleDetectionRadius);
+        DetectCollidersInArea(IdleDetectionRadius);
     }
 
     void CharacterIdleMove()
@@ -132,7 +223,7 @@ public class Character : MonoBehaviour {
 
     void SwitchToIdleState()
     {
-        _inCombat = false;
+        _currentState = (int)_characterStates.Idle;
         _idleMovementTimer = 0.0f;
     }
 
@@ -152,114 +243,115 @@ public class Character : MonoBehaviour {
     }
     #endregion
 
+    #region CharacterAlert
+    void CharacterAlert()
+    {
+        _alertnessTimer += Time.deltaTime;
+        DetectCollidersInArea(CombatDetectionRadius);
+        CharacterAlertMove();
+
+        if (_alertnessTimer > MaxAlertnessDurationSeconds)
+        {
+            SwitchToIdleState();
+        }
+    }
+
+    void CharacterAlertMove()
+    {
+        SetAnimation("CombatMove");
+        if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
+        {
+            SetNewIdlePosition();
+        }
+        else
+        {
+            MoveTo(_newIdleMovePosition, MovementSpeedCombat);
+        }
+    }
+
+    void SwitchToAlertState()
+    {
+        _currentState = (int)_characterStates.Alert;
+        SetNewIdlePosition();
+    }
+
+    #endregion
+
+    #region CharacterFetch
+    void CharacterFetch()
+    {
+
+    }
+
+    void SwitchToFetchState()
+    {
+
+    }
+    #endregion
+
     #region CharacterCombat
     void CharacterCombat()
     {
         _attackTimer += Time.deltaTime;
-        if (_currentTarget == null)
+        CharacterCombatMove();
+        if (_attackTimer > AttackSpeedSeconds)
         {
-            SelectNewTarget();
-        }
-        else
-        {
-            CharacterCombatMove();
-            if (_attackTimer > AttackSpeedSeconds)
-            {
-                if (GetDistanceToTarget() < AttackDistance)
-                {
-                    CharacterAttack();
-                }
-            }
+            Attack();
         }
     }
 
  
-    float GetDistanceToTarget()
+    float GetDistanceToTarget(Vector2 target)
     {
-        if (_inCombat)
-        {
-            if (_currentTarget == null)
-            {
-                return Vector2.Distance(transform.position, _newIdleMovePosition);
-            }
-            else
-            {
-                return Vector2.Distance(transform.position, _currentTarget.transform.position);
-            }
-        }
-        else
-        {
-            return Vector2.Distance(transform.position, _newIdleMovePosition);
-        }
+        return Vector2.Distance(transform.position, target);
     }
 
     void CharacterCombatMove()
     {
         SetAnimation("CombatMove");
-        if (GetDistanceToTarget() > AttackDistance)
+        if (GetDistanceToTarget(_currentTarget.transform.position) > AttackDistance)
         {
             MoveTo(_currentTarget.transform.position, MovementSpeedCombat);
         }
     }
-
-    void SelectNewTarget()
-    {
-        // if no target in range -> search for new target with high radius in alert duration
-        DetectEnemiesInArea(CombatDetectionRadius);
-        if (_currentTarget == null)
-        {
-            // this should provide smooth overlap to a slower walk towards the same idle destination
-            // once the alert phase is over.
-            _alertnessTimer += Time.deltaTime;
-            SetAnimation("CombatMove");
-            if (!_newIdlePositionChosen)
-            {
-                StartIdleWait();
-                SetNewIdlePosition();
-            }
-            if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
-            {
-                SetNewIdlePosition();
-            }
-            else
-            {
-                MoveTo(_newIdleMovePosition, MovementSpeedCombat);
-            }
-        }
-        if (_alertnessTimer > MaxAlertnessDurationSeconds)
-        {
-            SwitchToIdleState();
-        }
         
-    }
-        
-    void CharacterAttack()
+    void Attack()
     {
-        _attackTimer = 0.0f;
-        SetAnimation("Attack");
-        int damageDealt = (int)(Random.Range(MaxBaseDamage, MaxBaseDamage) * _damageDealtModifier);
-        _currentTarget.ReceiveDamage(damageDealt);
+        if (GetDistanceToTarget(_currentTarget.transform.position) <= AttackDistance)
+        {
+            _attackTimer = 0.0f;
+            SetAnimation("Attack");
+            int damageDealt = (int)(Random.Range(MaxBaseDamage, MaxBaseDamage) * _damageDealtModifier);
+            _currentTarget.GetComponent<Character>().ReceiveDamage(gameObject, damageDealt);
+        }
     }
 
-    public void ReceiveDamage(int damage)
+    public void ReceiveDamage(GameObject damageDealer, int damage)
     {
         _currentHealth -= (int)_damageTakenModifier * damage;
         if (_currentHealth <= 0)
         {
+            Debug.Log("Dying!!");
             CharacterDeath();
+        }
+
+        if (_currentState == (int)_characterStates.Fetch)
+        {
+            if (damageDealer.GetComponent<Character>() != null && Random.value > TreasurePriority)
+            {
+                _currentTarget = damageDealer;
+                SwitchToCombatState();
+            }
         }
     }
 
     void SwitchToCombatState()
     {
-        _inCombat = true;
+        _currentState = (int)_characterStates.Combat;
         _attackTimer = 0.0f;
     }
 
-    void AddTarget(Character character)
-    {
-        _targetedBy.Add(character);
-    }
+    
     #endregion
 
     #region CharacterDeath
@@ -267,17 +359,12 @@ public class Character : MonoBehaviour {
     {
         foreach (Character CharacterTargetedBy in _targetedBy)
         {
-            CharacterTargetedBy.RemoveTarget();
+            CharacterTargetedBy.ClearTarget();
         }
         // do death animation
+        SetAnimation("Death");
         _isAlive = false;
-        Destroy(gameObject);
-    }
-
-    void RemoveTarget()
-    {
-        _currentTarget = null;
-        _alertnessTimer = 0.0f;
+        Destroy(gameObject, 0.2f);
     }
     #endregion
 }
