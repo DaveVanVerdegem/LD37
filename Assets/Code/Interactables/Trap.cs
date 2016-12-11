@@ -109,7 +109,7 @@ public class Trap : InteractableObject
 		Debug.Log("Doing damage to " + characterToDamage, characterToDamage);
 
 		// Do damage.
-		characterToDamage.ReceiveDamage(_attackStrength);
+		characterToDamage.ReceiveDamage(gameObject, _attackStrength);
 
 		SpendShot();
 	}
