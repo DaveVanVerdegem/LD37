@@ -15,10 +15,16 @@ public class GameManager : MonoBehaviour
 
 	#region Properties
 	/// <summary>
+	/// Current amount of gold saved up.
+	/// </summary>
+	public static int Gold = 500;
+
+	/// <summary>
 	/// Ingame chest object.
 	/// </summary>
 	public static Chest Chest;
 	#endregion
+
 
 	#region Life Cycle
 	// Use this for initialization
@@ -47,6 +53,22 @@ public class GameManager : MonoBehaviour
 		}
 
 		Chest = newChest;
+	}
+	#endregion
+
+	#region Gold
+	public static bool AddGold(int amountOfGold)
+	{
+		// We can't use gold that we don't have.
+		if (Gold + amountOfGold < 0)
+			return false;
+
+		// Adjust the total gold value.
+		Gold += amountOfGold;
+
+		Debug.Log("Current amount of gold: " + Gold);
+
+		return true;
 	}
 	#endregion
 }

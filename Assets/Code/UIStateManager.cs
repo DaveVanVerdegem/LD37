@@ -29,7 +29,7 @@ public class UIStateManager : MonoBehaviour {
 	/// <summary>
 	/// Object currently placing in the room.
 	/// </summary>
-	private GameObject _objectToPlace;
+	private InteractableObject _objectToPlace;
 	#endregion
 
 
@@ -65,11 +65,11 @@ public class UIStateManager : MonoBehaviour {
 					if (tile == null || tile.Solid == true)
 						break;
 
-					if(tile.AttachObject(_objectToPlace.GetComponent<InteractableObject>()))
+					if(tile.AttachObject(_objectToPlace))
 					{
 						Debug.Log("Placing object.");
 
-						_objectToPlace.GetComponent<InteractableObject>().Initialize(tile);
+						_objectToPlace.Initialize(tile);
 						_objectToPlace = null;
 
 						ChangeState(UIState.Play);
@@ -80,10 +80,15 @@ public class UIStateManager : MonoBehaviour {
 				{
 					Debug.Log("Cancelling placement.");
 
-					Destroy(_objectToPlace);
+					Destroy(_objectToPlace.gameObject);
 					_objectToPlace = null;
 
 					ChangeState(UIState.Play);
+				}
+				else if(Input.GetMouseButtonDown(2) || Input.GetKeyDown(KeyCode.R))
+				{
+					// Rotate object to place.
+					RotateObject();
 				}
 
 				break;
@@ -102,7 +107,7 @@ public class UIStateManager : MonoBehaviour {
 	public void StateInput(string input)
 	{
 		if (_objectToPlace != null)
-			Destroy(_objectToPlace);
+			Destroy(_objectToPlace.gameObject);
 
 
 		ChangeState(UIState.Play);
@@ -122,10 +127,10 @@ public class UIStateManager : MonoBehaviour {
 	/// Start the routine place an object.
 	/// </summary>
 	/// <param name="objectToPlace">Gameobject to place.</param>
-	public void PlaceObject(GameObject objectToPlace)
+	public void PlaceObject(InteractableObject objectToPlace)
 	{
 		if (_objectToPlace != null)
-			Destroy(_objectToPlace);
+			Destroy(_objectToPlace.gameObject);
 
 		// Spawn object to place.
 		_objectToPlace = Instantiate(objectToPlace);
@@ -135,6 +140,16 @@ public class UIStateManager : MonoBehaviour {
 
 		// Start the placement coroutine.
 		StartCoroutine(PlacingObjectCoroutine());
+	}
+
+	void RotateObject(bool clockwise = true)
+	{
+		if (!_objectToPlace.Rotatable)
+			return;
+
+		// Rotate object.
+		float angle = (clockwise) ? -90 : 90;
+		_objectToPlace.transform.Rotate(Vector3.forward, angle);
 	}
 
 	IEnumerator PlacingObjectCoroutine()

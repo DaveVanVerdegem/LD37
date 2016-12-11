@@ -8,9 +8,25 @@ using UnityEngine;
 
 public class Character : MonoBehaviour {
 
-    // character core attributes
-    #region Properties
-    public int MaxHealth;
+	#region Inspector Fields
+	[SerializeField]
+	[Tooltip("Loot prefab to drop on death.")]
+	/// <summary>
+	/// Loot prefab to drop on death.
+	/// </summary>
+	private Loot _lootPrefab;
+
+	[SerializeField]
+	[Tooltip("Amount of gold in inventory of this character.")]
+	/// <summary>
+	/// Amount of gold in inventory of this character.
+	/// </summary>
+	private int _gold = 10;
+	#endregion
+
+	// character core attributes
+	#region Properties
+	public int MaxHealth;
     public float MovementSpeedIdle;
     public float MovementSpeedCombat;
     public float MinBaseDamage;
@@ -109,10 +125,10 @@ public class Character : MonoBehaviour {
     void DetectCollidersInArea(float detectionRadius)
     {
         Collider2D[] Colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
-        Debug.Log(Colliders.Length);
+        //Debug.Log(Colliders.Length);
         foreach (Collider2D Collider in Colliders)
         {
-            Debug.Log(Physics2D.Raycast(transform.position, transform.position - Collider.transform.position).collider == Collider);
+            //Debug.Log(Physics2D.Raycast(transform.position, transform.position - Collider.transform.position).collider == Collider);
             if (!_detectedGameObjects.Contains(Collider.gameObject) && Physics2D.Raycast(transform.position, Collider.transform.position - transform.position).collider == Collider)
             {
                 if (Collider.GetComponent<Character>() != null && Collider.GetComponent<Character>().Group != Group)
@@ -367,7 +383,22 @@ public class Character : MonoBehaviour {
         // do death animation
         SetAnimation("Death");
         _isAlive = false;
-        Destroy(gameObject, 0.2f);
+		DropLoot();
+		Destroy(gameObject, 0.2f);
     }
-    #endregion
+
+	/// <summary>
+	/// Have the character drop loot.
+	/// </summary>
+	void DropLoot()
+	{
+		if (_lootPrefab == null || _gold <= 0)
+			return;
+
+		Loot loot = Instantiate(_lootPrefab, transform.position + Vector3.back, Quaternion.identity);
+
+		loot.SetGold(_gold);
+		loot.Initialize(null);
+	}
+	#endregion
 }

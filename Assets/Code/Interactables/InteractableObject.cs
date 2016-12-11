@@ -6,6 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class InteractableObject : MonoBehaviour
 {
+	#region Inspector Fields
+	[Tooltip("Object can be rotated when placing.")]
+	/// <summary>
+	/// Object can be rotated when placing.
+	/// </summary>
+	public bool Rotatable = true;
+	#endregion
+
 	#region Fields
 	/// <summary>
 	/// Returns true when this class is initialized.
@@ -28,6 +36,14 @@ public class InteractableObject : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		SetReferences();
+	}
+
+	void SetReferences()
+	{
+		if (_collider != null)
+			return;
+
 		_collider = GetComponent<Collider2D>();
 
 		if (_collider == null)
@@ -38,6 +54,8 @@ public class InteractableObject : MonoBehaviour
 
 	public virtual void Initialize(Tile parentTile)
 	{
+		SetReferences();
+
 		// Assign our parent tile.
 		_parentTile = parentTile;
 

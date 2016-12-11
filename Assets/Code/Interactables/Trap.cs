@@ -4,7 +4,22 @@ using UnityEngine;
 
 public class Trap : InteractableObject
 {
+	#region Enums
+	public enum Type
+	{
+		Area,
+		Projectile
+	}
+	#endregion
+
 	#region Inspector Fields
+	[SerializeField]
+	[Tooltip("Type of trap.")]
+	/// <summary>
+	/// Type of trap.
+	/// </summary>
+	private Type _type = Type.Area;
+
 	[SerializeField]
 	[Tooltip("Amount of shots that this trap can fire.")]
 	/// <summary>
@@ -18,6 +33,13 @@ public class Trap : InteractableObject
 	/// Attack strength of this trap.
 	/// </summary>
 	private int _attackStrength = 1;
+
+	[SerializeField]
+	[Tooltip("Prefab used for projectile traps.")]
+	/// <summary>
+	/// Prefab used for projectile traps.
+	/// </summary>
+	private Projectile _projectilePrefab;
 	#endregion
 
 	#region Fields
@@ -26,7 +48,15 @@ public class Trap : InteractableObject
 	/// </summary>
 	private int _shotsFired = 0;
 
+	/// <summary>
+	/// Damage collider component of this trap. Used for area traps.
+	/// </summary>
 	private TrapDamageCollider _damageCollider;
+
+	/// <summary>
+	/// Spawner for this trap. Used for projectile traps.
+	/// </summary>
+	private Spawner _spawner;
 	#endregion
 
 	#region Life Cycle
@@ -34,11 +64,21 @@ public class Trap : InteractableObject
 	{
 		Debug.Log("Initialized trap.");
 
-		_damageCollider = GetComponentInChildren<TrapDamageCollider>();
-		if(_damageCollider == null)
-			Debug.LogWarning("No damage collider found!", this);
+		if(_type == Type.Area)
+		{
+			_damageCollider = GetComponentInChildren<TrapDamageCollider>();
+			if (_damageCollider == null)
+				Debug.LogWarning("No damage collider found!", this);
 
-		_damageCollider.Initialize(this);
+			_damageCollider.Initialize(this);
+		}
+
+		if(_type == Type.Projectile)
+		{
+			_spawner = GetComponentInChildren<Spawner>();
+			if (_spawner == null)
+				Debug.LogWarning("Nospawner found!", this);
+		}
 
 		base.Initialize(parentTile);
 	}
@@ -55,30 +95,50 @@ public class Trap : InteractableObject
 	{
 		Debug.Log("Activated trap.");
 
-		FireShot();
+		PrepareShot();
 	}
 	#endregion
 
 	#region Methods
+	/// <summary>
+	/// Damage a character.
+	/// </summary>
+	/// <param name="characterToDamage">Character to damage.</param>
 	public void DoDamage(Character characterToDamage)
 	{
 		Debug.Log("Doing damage to " + characterToDamage, characterToDamage);
 
 		// Do damage.
-		characterToDamage.GetComponent<Character>().ReceiveDamage(gameObject, _attackStrength);
+		characterToDamage.ReceiveDamage(gameObject, _attackStrength);
+
+		SpendShot();
 	}
 
-	void FireShot()
+	void PrepareShot()
 	{
-		// Only fire a shot when this trap isn't active yet.
-		if (_damageCollider.Active)
-			return;
+		switch(_type)
+		{
+			case Type.Area:
+				// Only fire a shot when this trap isn't active yet.
+				if (_damageCollider.Active)
+					return;
 
-		Debug.Log("Firing shot.");
+				Debug.Log("Firing shot.");
 
-		// Activate damage collider.
-		_damageCollider.Activate();
+				// Activate damage collider.
+				_damageCollider.Activate();
+				break;
 
+			case Type.Projectile:
+				SpendShot();
+				FireProjectile();
+
+				break;
+		}
+	}
+
+	void SpendShot()
+	{
 		// Fire shot.
 		_shotsFired++;
 
@@ -87,6 +147,12 @@ public class Trap : InteractableObject
 			Debug.Log("All shots fired.");
 			Destroy(gameObject);
 		}
+	}
+
+	void FireProjectile()
+	{
+		Projectile newProjectile = Instantiate(_projectilePrefab, _spawner.transform.position, _spawner.transform.rotation, _spawner.transform);
+		newProjectile.SetAttackStrength(_attackStrength);
 	}
 	#endregion
 }
