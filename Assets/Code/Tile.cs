@@ -151,7 +151,6 @@ public class Tile : MonoBehaviour {
 
 			TileHood[Index[0],Index[1]] = StatusBit;
 		}
-		Debug.Log (TileHood);
 
 		return TileHood;
 	}
