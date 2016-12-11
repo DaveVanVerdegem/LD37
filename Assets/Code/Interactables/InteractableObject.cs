@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+[SelectionBase]
+[RequireComponent(typeof(Collider2D))]
 public class InteractableObject : MonoBehaviour
 {
 	#region Fields
@@ -19,7 +20,7 @@ public class InteractableObject : MonoBehaviour
 	/// <summary>
 	/// Collider of this interactable object.
 	/// </summary>
-	private Collider _collider;
+	private Collider2D _collider;
 	#endregion
 
 
@@ -27,7 +28,7 @@ public class InteractableObject : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		_collider = GetComponent<Collider>();
+		_collider = GetComponent<Collider2D>();
 
 		if (_collider == null)
 			Debug.LogWarning("No collider attached!", this);

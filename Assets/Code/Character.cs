@@ -85,12 +85,15 @@ public class Character : MonoBehaviour {
         Collider2D[] Colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
         foreach (Collider2D Collider in Colliders)
         {
-            if (Collider.GetComponent<Character>().Group != Group)
+			Character colliderCharacter = Collider.GetComponent<Character>();
+
+
+			if (colliderCharacter != null && colliderCharacter.Group != Group)
             {
                 if (Physics2D.Raycast(transform.position, transform.position - Collider.transform.position))
                 {
-                    _currentTarget = Collider.GetComponent<Character>();
-                    _currentTarget.AddTarget(GetComponent<Character>());
+                    _currentTarget = colliderCharacter;
+                    _currentTarget.AddTarget(this);
                     SwitchToCombatState();
                     return;
                 }
