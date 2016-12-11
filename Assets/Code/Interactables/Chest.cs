@@ -5,10 +5,13 @@ using UnityEngine;
 public class Chest : InteractableObject
 {
 	#region Life Cycle
-	// Use this for initialization
-	void Start()
+	public override void Initialize(Tile parentTile)
 	{
+		Debug.Log("Initialized chest.");
 
+		GameManager.ReplaceChest(this);
+
+		base.Initialize(parentTile);
 	}
 
 	// Update is called once per frame

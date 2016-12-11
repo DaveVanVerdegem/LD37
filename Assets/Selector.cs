@@ -8,19 +8,24 @@ public class Selector : MonoBehaviour {
     [SerializeField] Vector3 offset =  new Vector3(0,0,-1);
 
 	#region Properties
-	public static RaycastHit HitInfo;
+	public static RaycastHit2D HitInfo;
 	#endregion
 
 
 	void Update () {
-		if(!runOnUpdate) return;
+		if(!runOnUpdate)
+			return;
 
-        //raycast
-        //get object
-        //place selector on object
+		//raycast
+		//get object
+		//place selector on object
 
-        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(0,0,1), out HitInfo)) {
-            if(HitInfo.transform.tag == "Tile") {
+		HitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+		if (HitInfo.collider != null)
+		{
+            if(HitInfo.transform.tag == "Tile")
+			{
                 transform.position = HitInfo.transform.position + offset;
             }
         }

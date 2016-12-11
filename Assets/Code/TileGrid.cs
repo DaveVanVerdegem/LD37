@@ -23,7 +23,7 @@ public class TileGrid : MonoBehaviour {
     public void RedrawGrid() {
 		if (!tilePrefab)
 		{
-			Debug.LogWarning("No tile prefab found!");
+			Debug.LogWarning("No tile prefab found!", this);
 			return;
 		}
 

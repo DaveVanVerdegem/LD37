@@ -24,11 +24,7 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		// Spawn chest.
-		if(Chest == null)
-		{
-			Chest = Instantiate(_chestPrefab);
-		}
+
 	}
 
 	// Update is called once per frame
@@ -39,6 +35,18 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Methods
+	/// <summary>
+	/// Replaces the current chest with the new one.
+	/// </summary>
+	/// <param name="newChest">New chest to place.</param>
+	public static void ReplaceChest(Chest newChest)
+	{
+		if(Chest != null)
+		{
+			Destroy(Chest.gameObject);
+		}
 
+		Chest = newChest;
+	}
 	#endregion
 }

@@ -238,7 +238,7 @@ public class Character : MonoBehaviour {
         _currentTarget.ReceiveDamage(damageDealt);
     }
 
-    void ReceiveDamage(int damage)
+    public void ReceiveDamage(int damage)
     {
         _currentHealth -= (int)_damageTakenModifier * damage;
         if (_currentHealth <= 0)
