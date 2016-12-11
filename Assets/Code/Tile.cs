@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour {
     [SerializeField] state tileState = state.Rock;
 
 	#region Properties
-	[HideInInspector]
+	//[HideInInspector]
 	/// <summary>
 	/// Returns true if the tile is a solid and isn't walkable.
 	/// </summary>
@@ -55,6 +55,8 @@ public class Tile : MonoBehaviour {
 
 	void OnMouseDown()
 	{
+		if (UIStateManager.State != UIState.Play)
+			return;
 
 		//DIG
 		if (tileState == state.Rock && UIStateManager.state == "Dig")
