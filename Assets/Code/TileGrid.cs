@@ -9,6 +9,7 @@ public class TileGrid : MonoBehaviour {
     [SerializeField] float hardrockChance = 0.2f;
 
     [SerializeField] GameObject tilePrefab = null;
+    [SerializeField] TextAsset gridPreset;
 
 	[Tooltip("This is the tile list.")]
 	[SerializeField]
@@ -39,6 +40,24 @@ public class TileGrid : MonoBehaviour {
 			}
 		}
 		
+        //preset fields
+        bool preset = gridPreset==null?false:true;
+
+        string[,] presetmap = null;
+        if(preset) {
+            string[] lines = gridPreset.text.Split(',');
+            for(int x = 0; x<lines.Length-1;x++) {
+                string[] tiles = lines[x].Split(']');
+                for(int y = 0; y < tiles.Length-1; y++) {
+                    if(presetmap == null) presetmap = new string[tiles.Length, lines.Length];
+                    ///Debug.Log("["+x+","+y+"]"+" "+""+tiles[y]+", length: "+tiles[y].Length);
+                    presetmap[y,lines.Length-1-x] = ""+tiles[y][tiles[y].Length==2?1:3];
+                }
+            }
+        }
+
+
+        ///generation
 		for (int x = 0; x < gridWidth; x++)
 		{
             for(int y = 0; y < gridHeight; y++)
@@ -48,8 +67,19 @@ public class TileGrid : MonoBehaviour {
                 tile.name = ""+x+","+y;
                 tile.transform.parent = transform;
 				_tileList[x, y] = tile;
-
-				tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+                
+				if(!preset)tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+				else {
+                    switch(presetmap[x,y]) {
+                        case "x":   tile.Initialize(Tile.state.Dug);       break;
+                        case ".":   tile.Initialize(Tile.state.Rock);       break;
+                        case "!":   tile.Initialize(Tile.state.Hardrock);   break;
+                        case "v":   tile.Initialize(Tile.state.Entrance);   break;
+                        case "^":   tile.Initialize(Tile.state.Exit);       break;
+                        case "c":   Debug.LogWarning("NYI. Type: "+presetmap[x,y]);tile.Initialize(Tile.state.Dug); break;//tile.Initialize(Tile.state. chest???);   break;
+                        //default: Debug.LogWarning("Couldn't read preset file. Type: "+presetmap[x,y]); break;
+                    }
+                }
             }
         }
 		
