@@ -12,7 +12,7 @@ public class Tile : MonoBehaviour {
     [SerializeField] GameObject stateExitPrefab;
     [SerializeField] GameObject stateEntrancePrefab;
 
-	private List<KeyValuePair<string, Tile>> NeighbouringTiles = new List<KeyValuePair<string, Tile>>();
+	private List<KeyValuePair<int[], Tile>> NeighbouringTiles = new List<KeyValuePair<int[], Tile>>();
 
 	GameObject stateVisual;
 
@@ -60,6 +60,9 @@ public class Tile : MonoBehaviour {
 		if (tileState == state.Rock && UIStateManager.state == "Dig")
 		{
 			tileState = state.Dug;
+			//notify the neighbours that something has changed!
+			notifyNeighbours();
+
 			Destroy(stateVisual);
 			stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
 
@@ -69,6 +72,9 @@ public class Tile : MonoBehaviour {
 		if (tileState == state.Dug && UIStateManager.state == "Fill")
 		{
 			tileState = state.Rock;
+			//notify the neighbours that something has changed!
+			notifyNeighbours();
+
 			Destroy(stateVisual);
 			stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
 
@@ -94,10 +100,28 @@ public class Tile : MonoBehaviour {
 	#endregion
 
 	#region Methods
-	public void setNeighbouringTiles(List<KeyValuePair<string, Tile>> NeighbouringTiles)
+	public void setNeighbouringTiles(List<KeyValuePair<int[], Tile>> NeighbouringTiles)
 	{
 		this.NeighbouringTiles = NeighbouringTiles;
 
+	}
+
+	//Notify all neighbours of this tile that they should update their neighbours
+	public void notifyNeighbours()
+	{
+		for(int i=0;i<=NeighbouringTiles.Count-1;i++){
+			NeighbouringTiles[i].Value.updateTileGraphics(NeighbouringTiles[i].Key);
+		}
+	}
+
+	//update the graphics
+	public void updateTileGraphics(int[] Key)
+	{
+		if (tileState == state.Rock) {
+			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics ();
+		} else if (tileState == state.Hardrock)  {
+			stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics ();
+		}
 	}
 
 

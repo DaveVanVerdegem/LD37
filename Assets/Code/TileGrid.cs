@@ -63,17 +63,15 @@ public class TileGrid : MonoBehaviour {
     }
 
 	
-	List<KeyValuePair<string, Tile>> getNeighbouringTiles(int gridX,int gridY){
+	List<KeyValuePair<int[], Tile>> getNeighbouringTiles(int gridX,int gridY){
 		
-		List<KeyValuePair<string, Tile>> NeighbouringTiles = new List<KeyValuePair<string, Tile>>();
-		List<string> Names=new List<string>(){"up","down","left","right"};
+		List<KeyValuePair<int[], Tile>> NeighbouringTiles = new List<KeyValuePair<int[], Tile>>();
 
-		for(int x = -1; x <= 1; x += 2){
+		for(int x = -1; x <= 1; x ++){
 			if (gridX + x >= 0 && gridX + x <= gridWidth - 1) {
-				for (int y = -1; y <= 1; y += 2) {
-					if (gridY + y >= 0 && gridY + y <= gridHeight - 1) {
-						Debug.Log (x+1 + (y+1)/2);
-						NeighbouringTiles.Add (new KeyValuePair<string, Tile> ("ji", _tileList [gridX + x, gridY + y]));  
+				for (int y = -1; y <= 1; y ++) {
+					if (gridY + y >= 0 && gridY + y <= gridHeight - 1 && !(y==0 && x==0)) {
+						NeighbouringTiles.Add (new KeyValuePair<int[], Tile> (new int[]{x,y}, _tileList [gridX + x, gridY + y]));  
 					}  
 				}
 			}
