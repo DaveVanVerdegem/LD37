@@ -98,6 +98,12 @@ public class UIStateManager : MonoBehaviour {
 	#endregion
 
 	#region Methods
+    public void ToggleDigInput(bool val) {
+        if(val) StateInput("Dig");
+    }
+    public void ToggleFillInput(bool val) {
+        if(val) StateInput("Fill");
+    }
 	public void StateInput(string input)
 	{
 		if (_objectToPlace != null)
