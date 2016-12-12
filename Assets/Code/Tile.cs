@@ -47,27 +47,6 @@ public class Tile : MonoBehaviour {
 			return;
 
 		UpdateState(UIStateManager.state);
-
-		////DIG
-		//if (_tileState == state.Rock && UIStateManager.state == "Dig")
-		//{
-
-		//}
-		////FILL
-		//if (_tileState == state.Dug && UIStateManager.state == "Fill")
-		//{
-
-		//}
-		////ENTRANCE
-		//if (_tileState == state.Rock && UIStateManager.state == "Place Entrance")
-		//{
-
-		//}
-		////EXIT
-		//if (_tileState == state.Rock && UIStateManager.state == "Place Exit")
-		//{
-
-		//}
 	}
 	#endregion
 

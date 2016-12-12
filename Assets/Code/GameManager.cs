@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
 
 	[Header("Game")]
+
+
 	[SerializeField]
 	[Tooltip("Prefab to spawn chest.")]
 	/// <summary>
