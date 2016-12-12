@@ -103,27 +103,19 @@ public class Character : MonoBehaviour {
     // TODO work out how to add complete event to this one?
     void AnimationHandleEvent(TrackEntry trackEntry, Spine.Event e)
     {
-        Debug.Log(e.Data.Name);
         if (e.Data.Name == "AttackHit")
         {
-            Debug.Log("HIT!");
-            if (_currentTarget.GetComponent<Character>()._isAlive)
+            if (_currentTarget != null)
             {
-                _currentTarget.GetComponent<Character>().TriggerHitAnimation();
+                if (_currentTarget.GetComponent<Character>()._isAlive)
+                {
+                    _currentTarget.GetComponent<Character>().TriggerHitAnimation();
+                }
             }
         }
-        if (e.Data.Name == "Pickup")
+        else if (e.Data.Name == "Pickup")
         {
             Debug.Log("PICKUP!");
-        }
-        if (e.Data.Name == "Complete")
-        {
-            Debug.Log("COMPLETED");
-            _animationFinished = true;
-            if (_skeletonAnimation.state.GetCurrent(0).ToString().Equals("death"))
-            {
-                _deathAnimationFinished = true;
-            }
         }
     }
 
@@ -155,54 +147,52 @@ public class Character : MonoBehaviour {
 
     #region GeneralFunctionality
     #region Animations
-    void SetNewAnimation(string animation, float animationSpeed, bool loop)
+    void SetNewAnimation(string animation, bool loop)
+    {
+        _animationFinished = false;
+        _skeletonAnimation.state.SetAnimation(0, animation, loop);
+    }
+
+    void AnimationManager(string animation, float animationSpeed, bool loop)
     {
         _skeletonAnimation.timeScale = animationSpeed;
         if (_skeletonAnimation.state.GetCurrent(0) == null)
         {
-            _animationFinished = false;
-            _skeletonAnimation.state.SetAnimation(0, animation, loop);
-            return;
+            SetNewAnimation(animation, loop);
         }
         string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
         // if previous animation cycle is rounded up, just do this.
         if (_animationFinished)
         {
-            _animationFinished = false;
-            _skeletonAnimation.state.SetAnimation(0, animation, loop);
-            return;
+            SetNewAnimation(animation, loop);
         }
         else
         {
             if (!animation.Equals(CurrentAnimation) && (CurrentAnimation.Equals("walk") || (CurrentAnimation.Equals("idle"))))
             {
-                _animationFinished = false;
-                _skeletonAnimation.state.SetAnimation(0, animation, loop);
-                return;
+                SetNewAnimation(animation, loop);
             }
-            if (animation.Equals("attack") && !CurrentAnimation.Equals("attack"))
+            else if (animation.Equals("attack") && !CurrentAnimation.Equals("attack"))
             {
-                _animationFinished = false;
-                _skeletonAnimation.state.SetAnimation(0, animation, loop);
-                return;
+                SetNewAnimation(animation, loop);
             }
-            if (animation.Equals("death") && !CurrentAnimation.Equals("death"))
+            else if (animation.Equals("death") && !CurrentAnimation.Equals("death"))
             {
-                _animationFinished = false;
-                _skeletonAnimation.state.SetAnimation(0, animation, loop);
-                return;
+                SetNewAnimation(animation, loop);
             }
             else if (animation.Equals("hurt"))
             {
+                if (CurrentAnimation.Equals("attack"))
+                {
+                    return;
+                }
                 if (animation.Equals(CurrentAnimation))
                 {
-                    _animationFinished = false;
-                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                    SetNewAnimation(animation, loop);
                 }
-                else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("hurt") || !CurrentAnimation.Equals("death"))
+                else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("death"))
                 {
-                    _animationFinished = false;
-                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                    SetNewAnimation(animation, loop);
                 }
             }
         }
@@ -214,25 +204,25 @@ public class Character : MonoBehaviour {
         switch (newAnimation)
         {
             case "IdleWait":
-                SetNewAnimation("idle", 1, false);
+                AnimationManager("idle", 1, false);
                 break;
             case "IdleMove":
-                SetNewAnimation("walk", 1, false);
+                AnimationManager("walk", 1, false);
                 break;
             case "CombatWait":
-                SetNewAnimation("idle", 1.2f, false);
+                AnimationManager("idle", 1.2f, false);
                 break;
             case "CombatMove":
-                SetNewAnimation("walk", 1.2f, false);
+                AnimationManager("walk", 1.2f, false);
                 break;
             case "Attack":
-                SetNewAnimation("attack", 1, false);
+                AnimationManager("attack", 1, false);
                 break;
             case "Hurt":
-                SetNewAnimation("hurt", 1, false);
+                AnimationManager("hurt", 1, false);
                 break;
             case "Death":
-                SetNewAnimation("death", 1, false);
+                AnimationManager("death", 1, false);
                 break;
             default:
                 Debug.Log("Animation doesn't exist");
