@@ -28,6 +28,12 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private int _startingGold = 10;
 
+	[Tooltip("Limit of heroes that can pass.")]
+	/// <summary>
+	/// Limit of heroes that can pass.
+	/// </summary>
+	public int HeroLimit = 5;
+
 	[SerializeField]
 	[Tooltip("Prefab to spawn chest.")]
 	/// <summary>
@@ -36,11 +42,11 @@ public class GameManager : MonoBehaviour
 	private Chest _chestPrefab;
 
 	[SerializeField]
-	[Tooltip("Character list of heroes to spawn.")]
+	[Tooltip("Properties of this level.")]
 	/// <summary>
-	/// Character list of heroes to spawn.
+	/// Properties of this level.
 	/// </summary>
-	private List<Character> _heroes = new List<Character>();
+	private LevelProperties _levelProperties;
 	#endregion
 
 	#region Properties
@@ -48,6 +54,11 @@ public class GameManager : MonoBehaviour
 	/// Instance reference of this gamemanager singleton.
 	/// </summary>
 	public static GameManager Instance;
+
+	/// <summary>
+	/// True when the game is running.
+	/// </summary>
+	public static bool InGame = false;
 
 	/// <summary>
 	/// Current amount of gold saved up.
@@ -71,7 +82,20 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Fields
+	/// <summary>
+	/// Index of current level.
+	/// </summary>
+	private static int _levelIndex = -1;
 
+	/// <summary>
+	/// Amount of heroes that have passed this room.
+	/// </summary>
+	private static int _heroesPassed = 0;
+
+	/// <summary>
+	/// Amount of heroes that have been killed in this room.
+	/// </summary>
+	private static int _heroesKilled = 0;
 	#endregion
 
 	#region Events
@@ -104,16 +128,26 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		// Check input.
 		if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
 			// Spawn hero.
-			SpawnCharacter(_heroes[Random.Range(0, _heroes.Count)]);
+			SpawnCharacter(_levelProperties.SpawnList[Random.Range(0, _levelProperties.SpawnList.Count)]);
 
 		if (Input.GetKeyDown(KeyCode.Return))
 			AddGold(10);
+
+		if (Input.GetKeyDown(KeyCode.S))
+			InGame = true;
+
+		// Check scene.
+		if(InGame && UIStateManager.Instance != null)
+		{
+			UIStateManager.Instance.DisplayNoChestAlert(Chest == null);
+		}
 	}
 	#endregion
 
-	#region Level Loading
+	#region Level
 	public static void LoadLevel(string sceneToLoad)
 	{
 		SceneManager.LoadScene(sceneToLoad);
@@ -174,6 +208,24 @@ public class GameManager : MonoBehaviour
 		Spawner spawner = (characterToSpawn.Group == "Hero") ? EntranceSpawn : ExitSpawn;
 
 		return Instantiate(characterToSpawn, spawner.transform.position, spawner.transform.rotation);
+	}
+	#endregion
+
+	#region Characters
+	public static void HeroLeavesRoom()
+	{
+		_heroesPassed++;
+
+		if (_heroesPassed >= Instance.HeroLimit)
+			UIStateManager.Instance.GameOver();
+	}
+
+	public static void HeroKilled()
+	{
+		_heroesKilled++;
+
+		if ((_heroesPassed + _heroesKilled) >= Instance._levelProperties.SpawnList.Count)
+			UIStateManager.Instance.Win();
 	}
 	#endregion
 }

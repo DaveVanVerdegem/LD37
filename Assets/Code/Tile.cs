@@ -82,6 +82,14 @@ public class Tile : MonoBehaviour {
 	void SetState(state spawnState)
 	{
 		_tileState = spawnState;
+        if (_tileState == state.Dug)
+        {
+            GetComponent<Collider2D>().isTrigger = true;
+        }
+        else
+        {
+            GetComponent<Collider2D>().isTrigger = false;
+        }
 
 		switch (_tileState)
 		{
@@ -108,6 +116,7 @@ public class Tile : MonoBehaviour {
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
 
+                
 				Solid = false;
 				break;
 
@@ -118,7 +127,13 @@ public class Tile : MonoBehaviour {
 
 				Solid = true;
 
-				// Set entrance spawn.
+				// Change exit tile.
+				if (TileGrid.ExitTile != null)
+					TileGrid.ExitTile.SetState(state.Rock);
+
+				TileGrid.ExitTile = this;
+
+				// Set exit spawn.
 				GameManager.ExitSpawn = GetComponentInChildren<Spawner>();
 
 				break;
@@ -130,7 +145,13 @@ public class Tile : MonoBehaviour {
 
 				Solid = true;
 
-				// Set exit spawn.
+				// Change entrance tile.
+				if (TileGrid.EntranceTile != null)
+					TileGrid.EntranceTile.SetState(state.Rock);
+
+				TileGrid.EntranceTile = this;
+
+				// Set entrance spawn.
 				GameManager.EntranceSpawn = GetComponentInChildren<Spawner>();
 
 				break;
@@ -201,7 +222,7 @@ public class Tile : MonoBehaviour {
 			return false;
 		}
 
-		objectToAttach.transform.SetParent(transform);
+		//objectToAttach.transform.SetParent(transform);
 		_attachedObject = objectToAttach;
 
 		return true;
