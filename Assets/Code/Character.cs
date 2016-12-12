@@ -25,11 +25,17 @@ public class Character : MonoBehaviour {
     /// Amount of gold in inventory of this character.
     /// </summary>
     private int _gold = 10;
-    #endregion
 
-    // character core attributes
-    #region Properties
-    public int MaxHealth;
+	[Tooltip("Price in gold of this character.")]
+	/// <summary>
+	/// Price in gold of this character.
+	/// </summary>
+	public int Price = 10;
+	#endregion
+
+	// character core attributes
+	#region Properties
+	public int MaxHealth;
     public float MovementSpeedIdle;
     public float MovementSpeedCombat;
     public float MinBaseDamage;

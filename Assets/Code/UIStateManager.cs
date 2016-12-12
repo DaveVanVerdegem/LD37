@@ -245,6 +245,12 @@ public class UIStateManager : MonoBehaviour
 			yield return null;
 		}
 	}
+
+	public void SpawnCharacter(Character character)
+	{
+		if(GameManager.AddGold(-character.Price))
+			GameManager.SpawnCharacter(character);
+	}
 	#endregion
 
 	#region UI
