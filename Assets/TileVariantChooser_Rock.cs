@@ -76,7 +76,7 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 		compareHood (TileHoodArray);
 
 		if (sprit == Tile_OuterWall) {
-			Debug.Log (_rotationDegrees);
+			//Debug.Log (_rotationDegrees);
 		}
 
 		GetComponent< SpriteRenderer >().sprite= sprit;

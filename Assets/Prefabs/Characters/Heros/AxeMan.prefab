@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 70197797825337048}
   - component: {fileID: 50417743876583068}
   m_Layer: 0
-  m_Name: Knight
+  m_Name: AxeMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: f2d7020dfa0d3884d9bf1b24e7c8f2e5, type: 2}
-  initialSkinName: Knight
+  initialSkinName: Axeman
   separatorSlotNames: []
   zSpacing: 0
   renderMeshes: 1
