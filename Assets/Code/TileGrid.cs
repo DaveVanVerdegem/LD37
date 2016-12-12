@@ -92,6 +92,7 @@ public class TileGrid : MonoBehaviour {
             for(int y = 0; y < gridHeight; y++)
 			{
 				_tileList[x, y].setNeighbouringTiles(getNeighbouringTiles(x,y));
+				_tileList[x,y].updateTileGraphics(new int[2]);
 			}
         }
     }
