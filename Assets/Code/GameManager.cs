@@ -261,10 +261,12 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Characters
-	public static void HeroLeavesRoom()
+	public static void HeroLeavesRoom(GameObject character)
 	{
 		_heroesPassed++;
 		UIStateManager.Instance.HeroCounters.TickOffHeroes(_heroesPassed);
+
+		Destroy(character);
 
 		if (_heroesPassed >= Instance.HeroLimit)
 			UIStateManager.Instance.GameOver();
