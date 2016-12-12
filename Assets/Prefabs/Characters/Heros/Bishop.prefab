@@ -199,7 +199,7 @@ MonoBehaviour:
   MaxAlertnessDurationSeconds: 10
   IdleDetectionRadius: 7
   CombatDetectionRadius: 10
-  AutoGoToExit: 0
+  AutoGoToExit: 1
   Group: Hero
   BattleType: 
   Skills: []
