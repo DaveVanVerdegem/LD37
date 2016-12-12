@@ -141,7 +141,7 @@ MonoBehaviour:
   Price: 5
   _type: 1
   _shotsAvailable: 5
-  _attackStrength: 2
+  _attackStrength: 100
   _normalSprite: {fileID: 21300000, guid: 07b73470ae72c104a930ff315a47eb43, type: 3}
   _loadedSprite: {fileID: 21300000, guid: 07b73470ae72c104a930ff315a47eb43, type: 3}
   _cooldown: 1

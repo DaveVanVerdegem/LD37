@@ -180,8 +180,9 @@ public class Trap : InteractableObject
 
 		// Do damage.
 		characterToDamage.ReceiveDamage(gameObject, _attackStrength);
+        characterToDamage.TriggerHitAnimation();
 
-		SpendShot();
+        SpendShot();
 	}
 
 	void LoadShot()
@@ -208,10 +209,9 @@ public class Trap : InteractableObject
 				break;
 
 			case Type.Projectile:
-				SpendShot();
-				FireProjectile();
-
-				break;
+                FireProjectile();
+                SpendShot();
+                break;
 		}
 	}
 
@@ -235,7 +235,7 @@ public class Trap : InteractableObject
 
 	void FireProjectile()
 	{
-		Projectile newProjectile = Instantiate(_projectilePrefab, _spawner.transform.position, _spawner.transform.rotation, _spawner.transform);
+        Projectile newProjectile = Instantiate(_projectilePrefab, _spawner.transform.position, _spawner.transform.rotation);
 		newProjectile.SetAttackStrength(_attackStrength);
 	}
 	#endregion
