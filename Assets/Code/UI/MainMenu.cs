@@ -14,14 +14,15 @@ public class MainMenu : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		if (Input.anyKeyDown)
+			LoadGameScene();
 	}
 
 	#region UI Interaction
 	public void LoadGameScene()
 	{
 		GameManager.GameCanStart = true;
-		GameManager.LoadLevel(GameManager.Instance.GameScene.name);
+		GameManager.LoadLevel(GameManager.Instance.GameScene);
 	}
 	#endregion
 }

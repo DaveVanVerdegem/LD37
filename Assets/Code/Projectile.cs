@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
 	void FixedUpdate()
 	{
 		// Move.
-		Vector3 movementVector = Vector3.up * Time.deltaTime * _speed;
+		Vector3 movementVector = transform.up * Time.deltaTime * _speed;
 		transform.localPosition += movementVector;
 	}
 

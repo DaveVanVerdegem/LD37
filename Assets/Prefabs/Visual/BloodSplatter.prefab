@@ -9,60 +9,56 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1014093776032766}
+  m_RootGameObject: {fileID: 1606982355118114}
   m_IsPrefabParent: 1
---- !u!1 &1014093776032766
+--- !u!1 &1606982355118114
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4611420296627604}
-  - component: {fileID: 212970878709762902}
-  - component: {fileID: 114811266343035346}
+  - component: {fileID: 4796910966227204}
+  - component: {fileID: 212997505778830054}
+  - component: {fileID: 114239883701870156}
   m_Layer: 0
-  m_Name: RoomFace
+  m_Name: BloodSplatter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4611420296627604
+--- !u!4 &4796910966227204
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1014093776032766}
+  m_GameObject: {fileID: 1606982355118114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114811266343035346
+--- !u!114 &114239883701870156
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1014093776032766}
+  m_GameObject: {fileID: 1606982355118114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff91a562efbe734dbeeeb16d2c5c477, type: 3}
+  m_Script: {fileID: 11500000, guid: d2ed84ac90f047d409df4d4e2ebaf4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 0.1
-  RoomFaces:
-  - {fileID: 21300000, guid: b1ab181fe61825c4fbf86d78f5dc3f31, type: 3}
-  - {fileID: 21300000, guid: d53d03caeef655c408b9c4bb87673a81, type: 3}
-  - {fileID: 21300000, guid: 7ca6140c73cb1f6418da31a4f697b46d, type: 3}
---- !u!212 &212970878709762902
+  _displayTime: 0.1
+--- !u!212 &212997505778830054
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1014093776032766}
+  m_GameObject: {fileID: 1606982355118114}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -86,9 +82,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -47245959
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b1ab181fe61825c4fbf86d78f5dc3f31, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 75ec87d21e4f3ac498fe5d2b0fac1cb8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Main menu scene.
 	/// </summary>
-	public Object MainMenuScene;
+	public string MainMenuScene;
 
 	[Tooltip("Game scene.")]
 	/// <summary>
 	/// Game scene.
 	/// </summary>
-	public Object GameScene;
+	public string GameScene;
 
 
 	[Header("Game")]
@@ -141,7 +141,10 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-        // Check input.
+		// Check input.
+		if (Input.GetKeyDown(KeyCode.Escape))
+			Application.Quit();
+
         if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
         {
             // Spawn hero.
