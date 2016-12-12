@@ -17,7 +17,7 @@ public class Tile : MonoBehaviour {
 	GameObject stateVisual;
 
     public enum state { Rock, Hardrock, Dug, Exit, Entrance}
-    [SerializeField] state tileState = state.Rock;
+	private state _tileState = state.Rock;
 
 	#region Properties
 	//[HideInInspector]
@@ -38,25 +38,7 @@ public class Tile : MonoBehaviour {
 	#region Life Cycle
 	public void Initialize(state spawnState)
 	{
-		tileState = spawnState;
-		switch (tileState)
-		{
-			case state.Rock:
-				stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
-				break;
-			case state.Hardrock:
-				stateVisual = Instantiate(stateHardrockPrefab, transform.position, transform.rotation, transform);
-				break;
-			case state.Dug:
-				stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
-				break;
-			case state.Exit:
-				stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
-				break;
-			case state.Entrance:
-				stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
-				break;
-		}
+		SetState(spawnState);
 	}
 
 	void OnMouseDown()
@@ -64,50 +46,117 @@ public class Tile : MonoBehaviour {
 		if (UIStateManager.State != UIState.Play)
 			return;
 
-		//DIG
-		if (tileState == state.Rock && UIStateManager.state == "Dig")
-		{
-			tileState = state.Dug;
-			//notify the neighbours that something has changed!
-			notifyNeighbours();
+		UpdateState(UIStateManager.state);
 
-			Destroy(stateVisual);
-			stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
+		////DIG
+		//if (_tileState == state.Rock && UIStateManager.state == "Dig")
+		//{
 
-			Solid = false;
-		}
-		//FILL
-		if (tileState == state.Dug && UIStateManager.state == "Fill")
-		{
-			tileState = state.Rock;
-			//notify the neighbours that something has changed!
-			notifyNeighbours();
+		//}
+		////FILL
+		//if (_tileState == state.Dug && UIStateManager.state == "Fill")
+		//{
 
-			Destroy(stateVisual);
-			stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
+		//}
+		////ENTRANCE
+		//if (_tileState == state.Rock && UIStateManager.state == "Place Entrance")
+		//{
 
-			Solid = true;
-		}
-		//ENTRANCE
-		if (tileState == state.Rock && UIStateManager.state == "Place Entrance")
-		{
-			//TODO check if adjacent is dug
-			tileState = state.Entrance;
-			Destroy(stateVisual);
-			stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
-		}
-		//EXIT
-		if (tileState == state.Rock && UIStateManager.state == "Place Exit")
-		{
-			//TODO check if adjacent is dug
-			tileState = state.Exit;
-			Destroy(stateVisual);
-			stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
-		}
+		//}
+		////EXIT
+		//if (_tileState == state.Rock && UIStateManager.state == "Place Exit")
+		//{
+
+		//}
 	}
 	#endregion
 
 	#region Methods
+	void UpdateState(string newState)
+	{
+		//DIG
+		if (_tileState == state.Rock && newState == "Dig")
+		{
+			SetState(state.Dug);
+		}
+		//FILL
+		if (_tileState == state.Dug && newState == "Fill")
+		{
+			SetState(state.Rock);
+		}
+		//ENTRANCE
+		if (_tileState == state.Rock && newState == "Place Entrance")
+		{
+			SetState(state.Entrance);
+		}
+		//EXIT
+		if (_tileState == state.Rock && newState == "Place Exit")
+		{
+			SetState(state.Exit);
+		}
+	}
+
+	/// <summary>
+	/// Set the state of this tile.
+	/// </summary>
+	/// <param name="spawnState">State to change to.</param>
+	void SetState(state spawnState)
+	{
+		_tileState = spawnState;
+		switch (_tileState)
+		{
+			case state.Rock:
+				_tileState = state.Rock;
+
+				// Notify the neighbours that something has changed!
+				notifyNeighbours();
+
+				Destroy(stateVisual);
+				stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
+
+				Solid = true;
+				break;
+
+			case state.Hardrock:
+				stateVisual = Instantiate(stateHardrockPrefab, transform.position, transform.rotation, transform);
+
+				Solid = true;
+				break;
+
+			case state.Dug:
+				_tileState = state.Dug;
+
+				// Notify the neighbours that something has changed!
+				notifyNeighbours();
+
+				Destroy(stateVisual);
+				stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
+
+				Solid = false;
+				break;
+
+			case state.Exit:
+				// TODO check if adjacent is dug
+				_tileState = state.Exit;
+
+				Destroy(stateVisual);
+				stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
+
+				Solid = true;
+				break;
+
+			case state.Entrance:
+				// TODO check if adjacent is dug
+				_tileState = state.Entrance;
+
+				Destroy(stateVisual);
+				stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
+
+				Solid = true;
+				break;
+		}
+	}
+
 	public void setNeighbouringTiles(List<KeyValuePair<int[], Tile>> NeighbouringTiles)
 	{
 		this.NeighbouringTiles = NeighbouringTiles;
@@ -125,9 +174,9 @@ public class Tile : MonoBehaviour {
 	//update the graphics
 	public void updateTileGraphics(int[] Key)
 	{
-		if (tileState == state.Rock) {
+		if (_tileState == state.Rock) {
 			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics (getHood());
-		} else if (tileState == state.Hardrock)  {
+		} else if (_tileState == state.Hardrock)  {
 			stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics (getHood());
 		}
 	}
@@ -139,7 +188,7 @@ public class Tile : MonoBehaviour {
 		int[] Index = new int[2];
 
 		for(int i=0;i<=NeighbouringTiles.Count-1;i++){
-			switch (NeighbouringTiles[i].Value.tileState)
+			switch (NeighbouringTiles[i].Value._tileState)
 			{
 			case state.Hardrock: case state.Rock:
 				StatusBit = false;
