@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "NCYytiKDNgNWYFn51ZgkQiRnSpg", "spine": "3.3.07", "width": 159.2, "height": 159.61, "images": "" },
+"skeleton": { "hash": "U/WYM0poFR1xJCkFrtl0xvRidi8", "spine": "3.3.07", "width": 185.48, "height": 205.75, "images": "" },
 "bones": [
 	{ "name": "root", "x": -1.2, "y": 0.63 },
 	{ "name": "body", "parent": "root", "length": 50, "rotation": 93.64, "x": -0.38, "y": -0.03 },
@@ -19,25 +19,19 @@
 	{ "name": "schaduwke", "bone": "root", "attachment": "schaduwke" },
 	{ "name": "Knight_arm_shield", "bone": "arm_Shield", "attachment": "Arm_shield" },
 	{ "name": "Shield", "bone": "shield", "attachment": "Shield" },
-	{ "name": "Knight_leg1", "bone": "leg_Front", "attachment": "Knight_leg1" },
-	{ "name": "Knight_leg2", "bone": "leg_Back", "attachment": "Knight_leg2" },
+	{ "name": "Knight_leg1", "bone": "leg_Front", "attachment": "leg1" },
+	{ "name": "Knight_leg2", "bone": "leg_Back", "attachment": "leg2" },
 	{ "name": "Knight_Body", "bone": "body", "attachment": "Body" },
-	{ "name": "Knight_arm_weapon", "bone": "arm_Weapon", "attachment": "Arm_weapon" },
 	{ "name": "helmet_brushBack", "bone": "Helmet_Brush_Back", "attachment": "Helmet_brushBack" },
 	{ "name": "helmet_brushFront", "bone": "Helmet_Brush_Front", "attachment": "Helmet_brushFront" },
 	{ "name": "Knight_head", "bone": "head", "attachment": "Head" },
+	{ "name": "Knight_arm_weapon", "bone": "arm_Weapon", "attachment": "Arm_weapon" },
 	{ "name": "Sword", "bone": "weapon", "attachment": "Weapon" },
 	{ "name": "Knight_hand_weapon", "bone": "hand_Weapon", "attachment": "Hand_weapon" },
 	{ "name": "particle_Slash", "bone": "particle" }
 ],
 "skins": {
 	"default": {
-		"Knight_leg1": {
-			"Knight_leg1": { "x": 11.03, "y": 1.56, "rotation": 89.16, "width": 15, "height": 28 }
-		},
-		"Knight_leg2": {
-			"Knight_leg2": { "x": 9.25, "y": 0.92, "rotation": 91.68, "width": 17, "height": 30 }
-		},
 		"particle_Slash": {
 			"particle_Slash1": { "x": 37, "y": 62.81, "rotation": -13.32, "width": 110, "height": 50 },
 			"particle_Slash2": { "x": 10.12, "y": 56.44, "width": 176, "height": 80 }
@@ -58,6 +52,12 @@
 		},
 		"Knight_head": {
 			"Head": { "name": "axeman_head", "x": 35.97, "y": -9.21, "rotation": -77.79, "width": 102, "height": 91 }
+		},
+		"Knight_leg1": {
+			"leg1": { "name": "Knight_leg1", "x": 10.49, "y": -0.79, "rotation": 89.16, "width": 15, "height": 28 }
+		},
+		"Knight_leg2": {
+			"leg2": { "name": "Knight_leg2", "x": 10.51, "y": -0.33, "rotation": 91.68, "width": 17, "height": 30 }
 		},
 		"Shield": {
 			"Shield": { "name": "axeman_arm", "x": -1.02, "y": 18.49, "rotation": -81.3, "width": 27, "height": 34 }
@@ -82,11 +82,40 @@
 		"Knight_head": {
 			"Head": { "name": "bishop_head", "x": 65.99, "y": -1.16, "rotation": -77.79, "width": 110, "height": 177 }
 		},
+		"Knight_leg1": {
+			"leg1": { "name": "Knight_leg1", "x": 12.15, "y": -1.38, "rotation": 89.16, "width": 15, "height": 28 }
+		},
+		"Knight_leg2": {
+			"leg2": { "name": "Knight_leg2", "x": 11.09, "y": -0.87, "rotation": 91.68, "width": 17, "height": 30 }
+		},
 		"Shield": {
 			"Shield": { "name": "bishop_book", "x": 8.07, "y": 1.93, "rotation": -81.3, "width": 42, "height": 51 }
 		},
 		"Sword": {
 			"Weapon": { "name": "scepter", "x": 41.22, "y": 0.22, "rotation": -113.24, "width": 74, "height": 149 }
+		}
+	},
+	"Dragon": {
+		"Knight_Body": {
+			"Body": { "name": "dragon_body", "x": 20.86, "y": 2.11, "rotation": -93.64, "width": 53, "height": 66 }
+		},
+		"Knight_arm_weapon": {
+			"Arm_weapon": { "name": "dragon_weapon_arm", "x": 12.01, "y": 5, "rotation": 173.76, "width": 36, "height": 23 }
+		},
+		"Knight_hand_weapon": {
+			"Hand_weapon": { "name": "claw", "x": 30.36, "y": -5.5, "rotation": -122.08, "width": 42, "height": 61 }
+		},
+		"Knight_head": {
+			"Head": { "name": "dragon_head", "x": 50.26, "y": -10.69, "rotation": -77.79, "width": 125, "height": 149 }
+		},
+		"Knight_leg1": {
+			"leg1": { "name": "dragon_leg1", "x": 11.04, "y": -0.8, "rotation": 89.16, "width": 15, "height": 28 }
+		},
+		"Knight_leg2": {
+			"leg2": { "name": "dragon_leg2", "x": 11.05, "y": 0.23, "rotation": 91.68, "width": 17, "height": 30 }
+		},
+		"Shield": {
+			"Shield": { "name": "dragon_arm", "x": -7.09, "y": 19.31, "rotation": -81.3, "width": 37, "height": 34 }
 		}
 	},
 	"Knight": {
@@ -104,6 +133,12 @@
 		},
 		"Knight_head": {
 			"Head": { "name": "Knight_helmet", "x": 40.19, "y": -10.79, "rotation": -77.79, "width": 108, "height": 100 }
+		},
+		"Knight_leg1": {
+			"leg1": { "name": "Knight_leg1", "x": 11.61, "y": -0.25, "rotation": 89.16, "width": 15, "height": 28 }
+		},
+		"Knight_leg2": {
+			"leg2": { "name": "Knight_leg2", "x": 9.96, "y": -0.35, "rotation": 91.68, "width": 17, "height": 30 }
 		},
 		"Shield": {
 			"Shield": { "x": 10.11, "y": -2.29, "rotation": -81.3, "width": 40, "height": 73 }
@@ -130,6 +165,12 @@
 		},
 		"Knight_head": {
 			"Head": { "name": "Bandit head", "x": 45.29, "y": -17.29, "rotation": -73.7, "width": 112, "height": 160 }
+		},
+		"Knight_leg1": {
+			"leg1": { "name": "Knight_leg1", "x": 12.72, "y": -0.83, "rotation": 89.16, "width": 15, "height": 28 }
+		},
+		"Knight_leg2": {
+			"leg2": { "name": "Knight_leg2", "x": 12.74, "y": -0.27, "rotation": 91.68, "width": 17, "height": 30 }
 		},
 		"Shield": {
 			"Shield": { "name": "Bandit_arm", "x": -4.98, "y": 18.39, "rotation": -81.3, "width": 27, "height": 34 }

@@ -160,7 +160,7 @@ public class Character : MonoBehaviour {
         transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y / 1000);
         if (AutoGoToExit)
         {
-            if (GetDistanceToTarget(TileGrid.ExitTile.transform.position) < 1 && (_currentState == (int)_characterStates.Idle || _currentState == (int)_characterStates.Idle))
+            if (GetDistanceToTarget(TileGrid.ExitTile.transform.position) < 1 && (_currentState == (int)_characterStates.Idle || _currentState == (int)_characterStates.Alert))
             {
                 _nearExit = true;
                 GameManager.HeroLeavesRoom(gameObject);
