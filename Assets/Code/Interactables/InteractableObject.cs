@@ -12,6 +12,12 @@ public class InteractableObject : MonoBehaviour
 	/// Object can be rotated when placing.
 	/// </summary>
 	public bool Rotatable = true;
+
+	[Tooltip("Price of this item in gold.")]
+	/// <summary>
+	/// Price of this item in gold.
+	/// </summary>
+	public int Price = 1;
 	#endregion
 
 	#region Fields
@@ -73,6 +79,8 @@ public class InteractableObject : MonoBehaviour
 
 	void OnMouseDown()
 	{
+		Debug.Log("Registered click.", this);
+
 		if (!_initialized)
 			return;
 

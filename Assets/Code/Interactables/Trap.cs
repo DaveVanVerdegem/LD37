@@ -35,6 +35,31 @@ public class Trap : InteractableObject
 	private int _attackStrength = 1;
 
 	[SerializeField]
+	[Tooltip("Normal sprite for this trap.")]
+	/// <summary>
+	/// Normal sprite for this trap.
+	/// </summary>
+	private Sprite _normalSprite;
+
+	[SerializeField]
+	[Tooltip("Sprite for loaded trap.")]
+	/// <summary>
+	/// Sprite for loaded trap.
+	/// </summary>
+	private Sprite _loadedSprite;
+
+	[SerializeField]
+	[Tooltip("Cooldown for this trap.")]
+	/// <summary>
+	/// Cooldown for this trap.
+	/// </summary>
+	private float _cooldown = 1f;
+
+	//[Header("Area Trap")]
+
+
+	[Header("Projectile Trap")]
+	[SerializeField]
 	[Tooltip("Prefab used for projectile traps.")]
 	/// <summary>
 	/// Prefab used for projectile traps.
@@ -57,9 +82,35 @@ public class Trap : InteractableObject
 	/// Spawner for this trap. Used for projectile traps.
 	/// </summary>
 	private Spawner _spawner;
+
+	/// <summary>
+	/// Sprite renderer component of this trap.
+	/// </summary>
+	private SpriteRenderer _spriteRenderer;
+
+	/// <summary>
+	/// Timer to use for cooldown.
+	/// </summary>
+	private float _timer = 0;
+
+	/// <summary>
+	/// Timer is running.
+	/// </summary>
+	private bool _timerRunning = false;
 	#endregion
 
+
 	#region Life Cycle
+	private void Awake()
+	{
+		_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+		if (_spriteRenderer == null)
+			Debug.LogWarning("No sprite renderer found!", this);
+
+		SwitchSprite(_normalSprite);
+	}
+
 	public override void Initialize(Tile parentTile)
 	{
 		Debug.Log("Initialized trap.");
@@ -86,6 +137,25 @@ public class Trap : InteractableObject
 	// Update is called once per frame
 	void Update()
 	{
+		if(_timerRunning)
+		{
+			// Run timer.
+			if (_timer > 0)
+			{
+				_timer -= Time.deltaTime;
+			}
+			else
+			{
+				// Reset timer.
+				_timer = 0;
+				_timerRunning = false;
+
+				if (_type == Type.Area)
+				{
+					SpendShot();
+				}
+			}
+		}
 
 	}
 	#endregion
@@ -95,7 +165,7 @@ public class Trap : InteractableObject
 	{
 		Debug.Log("Activated trap.");
 
-		PrepareShot();
+		LoadShot();
 	}
 	#endregion
 
@@ -114,7 +184,7 @@ public class Trap : InteractableObject
 		SpendShot();
 	}
 
-	void PrepareShot()
+	void LoadShot()
 	{
 		switch(_type)
 		{
@@ -127,6 +197,14 @@ public class Trap : InteractableObject
 
 				// Activate damage collider.
 				_damageCollider.Activate();
+
+				// Switch sprite.
+				SwitchSprite(_loadedSprite);
+
+				// Set timer.
+				_timer = _cooldown;
+				_timerRunning = true;
+
 				break;
 
 			case Type.Projectile:
@@ -139,6 +217,12 @@ public class Trap : InteractableObject
 
 	void SpendShot()
 	{
+		// Switch sprite.
+		SwitchSprite(_normalSprite);
+
+		if(_damageCollider != null)
+			_damageCollider.Deactivate();
+
 		// Fire shot.
 		_shotsFired++;
 
@@ -153,6 +237,13 @@ public class Trap : InteractableObject
 	{
 		Projectile newProjectile = Instantiate(_projectilePrefab, _spawner.transform.position, _spawner.transform.rotation, _spawner.transform);
 		newProjectile.SetAttackStrength(_attackStrength);
+	}
+	#endregion
+
+	#region Visuals
+	void SwitchSprite(Sprite sprite)
+	{
+		_spriteRenderer.sprite = sprite;
 	}
 	#endregion
 }

@@ -54,12 +54,12 @@ public class Tile : MonoBehaviour {
 	void UpdateState(string newState)
 	{
 		//DIG
-		if (_tileState == state.Rock && newState == "Dig")
+		if (_tileState == state.Rock && newState == "Dig" && GameManager.AddGold(-UIStateManager.Instance.DigPrice))
 		{
 			SetState(state.Dug);
 		}
 		//FILL
-		if (_tileState == state.Dug && newState == "Fill")
+		if (_tileState == state.Dug && newState == "Fill" && GameManager.AddGold(-UIStateManager.Instance.FillPrice))
 		{
 			SetState(state.Rock);
 		}
@@ -82,17 +82,15 @@ public class Tile : MonoBehaviour {
 	void SetState(state spawnState)
 	{
 		_tileState = spawnState;
+
 		switch (_tileState)
 		{
 			case state.Rock:
-				_tileState = state.Rock;
-
 				// Notify the neighbours that something has changed!
 				notifyNeighbours();
 
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
-
 
 				Solid = true;
 				break;
@@ -104,8 +102,6 @@ public class Tile : MonoBehaviour {
 				break;
 
 			case state.Dug:
-				_tileState = state.Dug;
-
 				// Notify the neighbours that something has changed!
 				notifyNeighbours();
 
@@ -117,22 +113,26 @@ public class Tile : MonoBehaviour {
 
 			case state.Exit:
 				// TODO check if adjacent is dug
-				_tileState = state.Exit;
-
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
 
 				Solid = true;
+
+				// Set entrance spawn.
+				GameManager.ExitSpawn = GetComponentInChildren<Spawner>();
+
 				break;
 
 			case state.Entrance:
 				// TODO check if adjacent is dug
-				_tileState = state.Entrance;
-
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
 
 				Solid = true;
+
+				// Set exit spawn.
+				GameManager.EntranceSpawn = GetComponentInChildren<Spawner>();
+
 				break;
 		}
 	}
@@ -156,7 +156,6 @@ public class Tile : MonoBehaviour {
 	{
 		if (_tileState == state.Rock)
 		{
-			Debug.Log("Updated graphics for tile.", this);
 			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics (getHood());
 		}
 		//else if (_tileState == state.Hardrock)  {

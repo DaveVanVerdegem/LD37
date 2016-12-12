@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine;
 using Spine.Unity;
 
 // GetDistanceToTarget opkuisen met getdistance etc voor of de state momenteel in combat, alert, of idle is.
@@ -87,26 +88,38 @@ public class Character : MonoBehaviour {
             _targetedBy.Remove(GetComponent<Character>());
         }
         _skeletonAnimation.state.Complete += delegate {
-            // You can also use an anonymous delegate.
             _animationFinished = true;
             string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
             if (CurrentAnimation.Equals("death"))
             {
                 _deathAnimationFinished = true;
             }
-            if (CurrentAnimation.Equals("attack"))
+        };
+
+        _skeletonAnimation.state.Event += AnimationHandleEvent;
+    }
+
+
+    // TODO work out how to add complete event to this one?
+    void AnimationHandleEvent(TrackEntry trackEntry, Spine.Event e)
+    {
+        if (e.Data.Name == "AttackHit")
+        {
+            if (_currentTarget != null)
             {
-                Debug.Log("Must be hit");
-                if (_currentTarget.GetComponent<Character>()._currentState != (int)_characterStates.Death)
+                if (_currentTarget.GetComponent<Character>()._isAlive)
                 {
-                    Debug.Log("Is hit");
                     _currentTarget.GetComponent<Character>().TriggerHitAnimation();
                 }
             }
-        };
+        }
+        else if (e.Data.Name == "Pickup")
+        {
+            Debug.Log("PICKUP!");
+        }
     }
 
-    void Update()
+        void Update()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
         switch (_currentState)
@@ -134,45 +147,52 @@ public class Character : MonoBehaviour {
 
     #region GeneralFunctionality
     #region Animations
-    void SetNewAnimation(string animation, float animationSpeed, bool loop)
+    void SetNewAnimation(string animation, bool loop)
+    {
+        _animationFinished = false;
+        _skeletonAnimation.state.SetAnimation(0, animation, loop);
+    }
+
+    void AnimationManager(string animation, float animationSpeed, bool loop)
     {
         _skeletonAnimation.timeScale = animationSpeed;
         if (_skeletonAnimation.state.GetCurrent(0) == null)
         {
-            _skeletonAnimation.state.SetAnimation(0, animation, loop);
-            return;
+            SetNewAnimation(animation, loop);
         }
+        string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
         // if previous animation cycle is rounded up, just do this.
         if (_animationFinished)
         {
-            _animationFinished = false;
-            _skeletonAnimation.state.SetAnimation(0, animation, loop);
-            return;
+            SetNewAnimation(animation, loop);
         }
         else
         {
-            string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
-            if (animation.Equals("death"))
+            if (!animation.Equals(CurrentAnimation) && (CurrentAnimation.Equals("walk") || (CurrentAnimation.Equals("idle"))))
             {
-                _animationFinished = false;
-                _skeletonAnimation.state.AddAnimation(0, animation, loop, 0.0f);
+                SetNewAnimation(animation, loop);
             }
-            else if (animation.Equals("attack") || animation.Equals("hurt"))
+            else if (animation.Equals("attack") && !CurrentAnimation.Equals("attack"))
             {
+                SetNewAnimation(animation, loop);
+            }
+            else if (animation.Equals("death") && !CurrentAnimation.Equals("death"))
+            {
+                SetNewAnimation(animation, loop);
+            }
+            else if (animation.Equals("hurt"))
+            {
+                if (CurrentAnimation.Equals("attack"))
+                {
+                    return;
+                }
                 if (animation.Equals(CurrentAnimation))
                 {
-                    _animationFinished = false;
-                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                    SetNewAnimation(animation, loop);
                 }
-                else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("hurt") || !CurrentAnimation.Equals("death"))
+                else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("death"))
                 {
-                    _animationFinished = false;
-                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
-                }
-                else
-                {
-                    _animationFinished = false;
-                    _skeletonAnimation.state.AddAnimation(0, animation, loop, 0.0f);
+                    SetNewAnimation(animation, loop);
                 }
             }
         }
@@ -184,25 +204,25 @@ public class Character : MonoBehaviour {
         switch (newAnimation)
         {
             case "IdleWait":
-                SetNewAnimation("idle", 1, false);
+                AnimationManager("idle", 1, false);
                 break;
             case "IdleMove":
-                SetNewAnimation("walk", 1, false);
+                AnimationManager("walk", 1, false);
                 break;
             case "CombatWait":
-                SetNewAnimation("idle", 1.2f, false);
+                AnimationManager("idle", 1.2f, false);
                 break;
             case "CombatMove":
-                SetNewAnimation("walk", 1.2f, false);
+                AnimationManager("walk", 1.2f, false);
                 break;
             case "Attack":
-                SetNewAnimation("attack", 1, false);
+                AnimationManager("attack", 1, false);
                 break;
             case "Hurt":
-                SetNewAnimation("hurt", 1, false);
+                AnimationManager("hurt", 1, false);
                 break;
             case "Death":
-                SetNewAnimation("death", 1, false);
+                AnimationManager("death", 1, false);
                 break;
             default:
                 Debug.Log("Animation doesn't exist");
@@ -210,15 +230,17 @@ public class Character : MonoBehaviour {
         }
     }
 
+    // not happy with how this works out managing the death inside...
     void TriggerHitAnimation()
     {
-        if (_isAlive)
+        if (_currentState == (int)_characterStates.Death)
         {
-            SetAnimation("Hurt");
+            _isAlive = false;
+            SetAnimation("Death");
         }
         else
         {
-            SetAnimation("Death");
+            SetAnimation("Hurt");
         }
     }
     #endregion
@@ -228,7 +250,8 @@ public class Character : MonoBehaviour {
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        transform.position = Vector2.MoveTowards(transform.position, destination, MoveStep);
+        destination = new Vector3(destination.x, destination.y, transform.position.z);
+        transform.position = Vector3.MoveTowards(transform.position, destination, MoveStep);
         OrientSelf(destination);
     }
 
@@ -478,12 +501,12 @@ public class Character : MonoBehaviour {
     public void ReceiveDamage(GameObject damageDealer, int damage)
     {
         _currentHealth -= (int)_damageTakenModifier * damage;
-        SetAnimation("Hurt");
+       
         if (_currentHealth <= 0)
         {
-            CharacterDeath();
+            SwitchToDeathState();
+            return;
         }
-
         if (_currentState == (int)_characterStates.Fetch)
         {
             if (damageDealer.GetComponent<Character>() != null && Random.value > TreasurePriority)
@@ -504,16 +527,13 @@ public class Character : MonoBehaviour {
     #region CharacterDeath
     void CharacterDeath()
     {
-        Debug.Log("Wait what");
         if (_deathAnimationFinished)
         {
-            
             Death();
         }
     }
     void SwitchToDeathState()
     {
-        _isAlive = false;
         _currentState = (int)_characterStates.Death;
     }
     
