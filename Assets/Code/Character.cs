@@ -286,7 +286,7 @@ public class Character : MonoBehaviour {
         }
         _currentTarget = Collider.gameObject;
         // adds the character to the new target's _targetedBy list.
-        _currentTarget.GetComponent<Loot>()._targetedBy.Add(gameObject);
+        // _currentTarget.GetComponent<Loot>()._targetedBy.Add(gameObject);
         SwitchToFetchState();
         return;
     }
