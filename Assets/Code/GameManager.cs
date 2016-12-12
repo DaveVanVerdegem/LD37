@@ -217,6 +217,7 @@ public class GameManager : MonoBehaviour
 	public static void HeroLeavesRoom()
 	{
 		_heroesPassed++;
+		UIStateManager.Instance.HeroCounters.TickOffHeroes(_heroesPassed);
 
 		if (_heroesPassed >= Instance.HeroLimit)
 			UIStateManager.Instance.GameOver();
