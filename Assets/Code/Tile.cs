@@ -50,6 +50,12 @@ public class Tile : MonoBehaviour {
 			case state.Dug:
 				stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
 				break;
+			case state.Exit:
+				stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
+				break;
+			case state.Entrance:
+				stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
+				break;
 		}
 	}
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 
 // GetDistanceToTarget opkuisen met getdistance etc voor of de state momenteel in combat, alert, of idle is.
 // alert loskoppelen van combat.
@@ -48,6 +49,7 @@ public class Character : MonoBehaviour {
     public float TreasurePriority; // how much priority the character gives to either fight or grab treasure.
 
     private List<GameObject> _detectedGameObjects = new List<GameObject>();
+    private SkeletonAnimation _skeletonAnimation;
 
     private enum _characterStates { Idle, Combat, Alert, Fetch}
     private int _currentState = (int) _characterStates.Idle;
@@ -68,21 +70,30 @@ public class Character : MonoBehaviour {
     private float _speedModifier = 1.0f;
     private float _attackSpeedModifier = 1.0f;
     private float _damageTakenModifier = 1.0f;
+
+    private bool _animationFinished = true;
     #endregion
 
 
     void Start ()
     {
+        _skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         _currentHealth = MaxHealth;
         _alertnessTimer = MaxAlertnessDurationSeconds; // causes the monster to not be alert at first
-        SwitchToIdleState();
+        // SwitchToIdleState();
         if (_targetedBy.Contains(GetComponent<Character>()))
         {
             _targetedBy.Remove(GetComponent<Character>());
         }
+
+        _skeletonAnimation.state.Complete += delegate {
+            // You can also use an anonymous delegate.
+            _animationFinished = true;
+        };
+
     }
-	
-	void Update ()
+
+    void Update ()
     {
         switch (_currentState)
         {
@@ -99,16 +110,87 @@ public class Character : MonoBehaviour {
                 CharacterFetch();
                 break;
             default:
-                Debug.Log("Invalid character state");
+                // Debug.Log("Invalid character state");
                 break;
         }
 	}
 
     #region GeneralFunctionality
     #region Animations
+    void SetNewAnimation(string animation, float animationSpeed, bool loop)
+    {
+        _skeletonAnimation.timeScale = animationSpeed;
+        if (_skeletonAnimation.state.GetCurrent(0) == null)
+        {
+            _skeletonAnimation.state.SetAnimation(0, animation, loop);
+            return;
+        }
+        // if previous animation cycle is rounded up, just do this.
+        if (_animationFinished)
+        {
+            _animationFinished = false;
+            _skeletonAnimation.state.SetAnimation(0, animation, loop);
+            return;
+        }
+        else
+        {
+            string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
+            if (animation.Equals("death"))
+            {
+                _animationFinished = false;
+                _skeletonAnimation.state.AddAnimation(0, animation, loop, 0.0f);
+            }
+            else if (animation.Equals("attack") || animation.Equals("hurt"))
+            {
+                if (animation.Equals(CurrentAnimation))
+                {
+                    _animationFinished = false;
+                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                }
+                else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("hurt") || !CurrentAnimation.Equals("death"))
+                {
+                    _animationFinished = false;
+                    _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                }
+                else
+                {
+                    _animationFinished = false;
+                    _skeletonAnimation.state.AddAnimation(0, animation, loop, 0.0f);
+                }
+            }
+        }
+    }
+
     void SetAnimation(string newAnimation)
     {
-
+        
+        switch (newAnimation)
+        {
+            case "IdleWait":
+                SetNewAnimation("idle", 1, false);
+                break;
+            case "IdleMove":
+                SetNewAnimation("walk", 1, false);
+                break;
+            case "CombatWait":
+                SetNewAnimation("idle", 1.2f, false);
+                break;
+            case "CombatMove":
+                SetNewAnimation("walk", 1.2f, false);
+                break;
+            case "Attack":
+                SetNewAnimation("attack", 1, false);
+                break;
+            case "Hurt":
+                SetNewAnimation("hurt", 1, false);
+                break;
+            case "Death":
+                // SetNewAnimation("death", 1, false);
+                break;
+            default:
+                Debug.Log("Animation doesn't exist");
+                break;
+        }
     }
     #endregion
 
@@ -118,6 +200,19 @@ public class Character : MonoBehaviour {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
         transform.position = Vector2.MoveTowards(transform.position, destination, MoveStep);
+        OrientSelf(destination);
+    }
+
+    void OrientSelf(Vector2 destination)
+    {
+        if ((destination - (Vector2)transform.position).x < 0 && transform.localScale.x == 1)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if ((destination - (Vector2)transform.position).x > 0 && transform.localScale.x == -1)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
     }
     #endregion
 
@@ -125,15 +220,12 @@ public class Character : MonoBehaviour {
     void DetectCollidersInArea(float detectionRadius)
     {
         Collider2D[] Colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
-        //Debug.Log(Colliders.Length);
         foreach (Collider2D Collider in Colliders)
         {
-            //Debug.Log(Physics2D.Raycast(transform.position, transform.position - Collider.transform.position).collider == Collider);
             if (!_detectedGameObjects.Contains(Collider.gameObject) && Physics2D.Raycast(transform.position, Collider.transform.position - transform.position).collider == Collider)
             {
                 if (Collider.GetComponent<Character>() != null && Collider.GetComponent<Character>().Group != Group)
                 {
-                    Debug.Log("Euh");
                     DetectedEnemy(Collider);
                 }
                 if (Collider.GetComponent<Object>() != null)
@@ -148,14 +240,11 @@ public class Character : MonoBehaviour {
 
     void DetectedEnemy(Collider2D Collider)
     {
-        Debug.Log(Collider.name);
         if (_currentState != (int)_characterStates.Combat && _currentState != (int)_characterStates.Fetch)
         {
             _currentTarget = Collider.gameObject;
             // adds the character to the new target's _targetedBy list.
             _currentTarget.GetComponent<Character>()._targetedBy.Add(GetComponent<Character>());
-            Debug.Log("WOAH! DETECTED");
-            Debug.Log(_currentTarget.name);
             SwitchToCombatState();
             return;
         }
@@ -178,12 +267,14 @@ public class Character : MonoBehaviour {
     #region Targetting
     void ClearTarget()
     {
-        RemoveFromTargetingList();
+        // RemoveFromTargetingList();
         _currentTarget = null;
         if (_currentState == (int)_characterStates.Combat)
         {
             SwitchToAlertState();
         }
+        _detectedGameObjects = new List<GameObject>();
+        // _detectedGameObjects.Clear();
     }
 
     void RemoveFromTargetingList()
@@ -218,6 +309,10 @@ public class Character : MonoBehaviour {
         if (_idleMovementTimer > _idleWaitTimer)
         {
             CharacterIdleMove();
+        }
+        else
+        {
+            SetAnimation("IdleWait");
         }
         DetectCollidersInArea(IdleDetectionRadius);
     }
@@ -277,19 +372,20 @@ public class Character : MonoBehaviour {
 
     void CharacterAlertMove()
     {
-        SetAnimation("CombatMove");
         if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
         {
             SetNewIdlePosition();
         }
         else
         {
+            SetAnimation("CombatMove");
             MoveTo(_newIdleMovePosition, MovementSpeedCombat);
         }
     }
 
     void SwitchToAlertState()
     {
+        _alertnessTimer = 0.0f;
         _currentState = (int)_characterStates.Alert;
         SetNewIdlePosition();
     }
@@ -327,10 +423,15 @@ public class Character : MonoBehaviour {
 
     void CharacterCombatMove()
     {
-        SetAnimation("CombatMove");
-        if (GetDistanceToTarget(_currentTarget.transform.position) > AttackDistance)
+        if (GetDistanceToTarget(_currentTarget.transform.position) >= AttackDistance)
         {
+            SetAnimation("CombatMove");
             MoveTo(_currentTarget.transform.position, MovementSpeedCombat);
+        }
+        else
+        {
+            SetAnimation("CombatWait");
+            OrientSelf(_currentTarget.transform.position);
         }
     }
         
@@ -348,9 +449,9 @@ public class Character : MonoBehaviour {
     public void ReceiveDamage(GameObject damageDealer, int damage)
     {
         _currentHealth -= (int)_damageTakenModifier * damage;
+        SetAnimation("Hurt");
         if (_currentHealth <= 0)
         {
-            Debug.Log("Dying!!");
             CharacterDeath();
         }
 
