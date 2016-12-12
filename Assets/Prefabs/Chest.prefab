@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rotatable: 0
-  Price: 1
+  Price: 0
 --- !u!212 &212812005380758668
 SpriteRenderer:
   m_ObjectHideFlags: 1

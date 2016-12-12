@@ -63,7 +63,7 @@ public class Character : MonoBehaviour {
     private SkeletonAnimation _skeletonAnimation;
 
     private enum _characterStates { Idle, Combat, Alert, Fetch, Death }
-    private int _currentState = (int)_characterStates.Idle;
+    private int _currentState = (int)_characterStates.Idle; // private _characterStates
     private bool _isAlive = true;
     private int _currentHealth;
     private float _attackTimer = 0.0f;
@@ -84,6 +84,8 @@ public class Character : MonoBehaviour {
 
     private bool _animationFinished = true;
     private bool _deathAnimationFinished = false;
+
+    private bool _nearExit = false;
 
     private float _movementEpsilon = 0.3f;
     #endregion
@@ -134,8 +136,6 @@ public class Character : MonoBehaviour {
 
         void Update()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y/1000);
-        Debug.Log(_skeletonAnimation.state.GetCurrent(0).ToString());
         switch (_currentState)
         {
             case (int)_characterStates.Combat:
@@ -156,6 +156,15 @@ public class Character : MonoBehaviour {
             default:
                 // Debug.Log("Invalid character state");
                 break;
+        }
+        transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y / 1000);
+        if (AutoGoToExit)
+        {
+            if (GetDistanceToTarget(TileGrid.ExitTile.transform.position) < 1 && (_currentState == (int)_characterStates.Idle || _currentState == (int)_characterStates.Idle))
+            {
+                _nearExit = true;
+                GameManager.HeroLeavesRoom(gameObject);
+            }
         }
     }
 
@@ -264,7 +273,7 @@ public class Character : MonoBehaviour {
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        destination = new Vector3(destination.x, destination.y, -1.0f + destination.y / 1000);
+        // destination = new Vector3(destination.x, destination.y, -1.0f + destination.y / 1000);
         transform.position = Vector3.MoveTowards(transform.position, destination, MoveStep);
         OrientSelf(destination);
     }
@@ -391,14 +400,22 @@ public class Character : MonoBehaviour {
             SetNewIdlePosition();
         }
 
-        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon || Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position).distance < 0.1)
         {
-            StartIdleWait();
+            RaycastHit2D Hit = Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position);
+            Debug.Log(Hit.collider.name);
+            Tile Tile = Hit.collider.GetComponent<Tile>();
+            if (Tile != null)
+            {
+                Debug.Log("WHAT?");
+                if (Tile.Solid)
+                {
+                    StartIdleWait();
+                    return;
+                }
+            }
         }
-        else
-        {
-            MoveTo(NewIdleMovePosition, MovementSpeedIdle);
-        }
+        MoveTo(NewIdleMovePosition, MovementSpeedIdle);
     }
 
     void SwitchToIdleState()
@@ -418,7 +435,11 @@ public class Character : MonoBehaviour {
 
     void SetNewIdlePosition()
     {
-        NewIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
+        NewIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle.normalized * Random.Range(MaxIdleMovement/2, MaxIdleMovement);
+        if (AutoGoToExit)
+        {
+            NewIdleMovePosition = TileGrid.ExitTile.transform.position;
+        }
         _newIdlePositionChosen = true;
     }
     #endregion

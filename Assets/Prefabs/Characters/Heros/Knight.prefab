@@ -103,7 +103,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1302889055
   m_SortingOrder: 0
 --- !u!33 &33094146910841206
 MeshFilter:
@@ -183,8 +183,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b256e9b2d40ac64991d600b51475209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lootPrefab: {fileID: 0}
+  _lootPrefab: {fileID: 114942809738713750, guid: 7f53ca74bd2f4cb418ba003a97ce43db,
+    type: 2}
   _gold: 10
+  Price: 10
   MaxHealth: 30
   MovementSpeedIdle: 1
   MovementSpeedCombat: 1.5
@@ -192,13 +194,14 @@ MonoBehaviour:
   MaxBaseDamage: 6
   AttackSpeedSeconds: 2
   AttackDistance: 2
-  MaxIdleMovement: 2
+  MaxIdleMovement: 5
   MaxIdleWaitSeconds: 2
   MaxAlertnessDurationSeconds: 10
   IdleDetectionRadius: 7
   CombatDetectionRadius: 10
-  AutoGoToExit: 0
+  AutoGoToExit: 1
   Group: Hero
   BattleType: 
   Skills: []
   TreasurePriority: 0
+  NewIdleMovePosition: {x: 0, y: 0}

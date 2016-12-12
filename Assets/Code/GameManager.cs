@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Main menu scene.
 	/// </summary>
-	public Object MainMenuScene;
+	public string MainMenuScene;
 
 	[Tooltip("Game scene.")]
 	/// <summary>
 	/// Game scene.
 	/// </summary>
-	public Object GameScene;
+	public string GameScene;
 
 
 	[Header("Game")]
@@ -54,10 +54,12 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public static GameManager Instance;
 
+	public static bool GameCanStart = false;
+
 	/// <summary>
 	/// True when the game is running.
 	/// </summary>
-	public static bool InGame = false;
+	public static bool GameRunning = false;
 
 	/// <summary>
 	/// Current amount of gold saved up.
@@ -95,6 +97,18 @@ public class GameManager : MonoBehaviour
 	/// Amount of heroes that have been killed in this room.
 	/// </summary>
 	private static int _heroesKilled = 0;
+
+
+	// Spawners
+	/// <summary>
+	/// Spawn index for the hero to spawn.
+	/// </summary>
+	private int _heroSpawnIndex = 0;
+
+	/// <summary>
+	/// Countdown timer for hero spawner.
+	/// </summary>
+	private float _spawnTimer = 0;
 	#endregion
 
 	#region Events
@@ -127,23 +141,57 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-        // Check input.
+		// Check input.
+		if (Input.GetKeyDown(KeyCode.Escape))
+			Application.Quit();
+
         if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
         {
             // Spawn hero.
             Character Hero = SpawnCharacter(LevelProperties.SpawnList[Random.Range(0, LevelProperties.SpawnList.Count)]);
-            Hero.NewIdleMovePosition = TileGrid.ExitTile.transform.position;
+            // Hero.NewIdleMovePosition = TileGrid.EntranceTile.transform.position;
         }
 		if (Input.GetKeyDown(KeyCode.Return))
 			AddGold(10);
 
 		if (Input.GetKeyDown(KeyCode.S))
-			InGame = true;
+			GameCanStart = true;
 
 		// Check scene.
-		if(InGame && UIStateManager.Instance != null)
+		if(GameCanStart && UIStateManager.Instance != null)
 		{
-			UIStateManager.Instance.DisplayNoChestAlert(Chest == null);
+			if(Chest == null)
+			{
+				UIStateManager.Instance.DisplayNoChestAlert(true);
+				GameRunning = false;
+			}
+			else
+			{
+				UIStateManager.Instance.DisplayNoChestAlert(false);
+				GameRunning = true;
+			}
+		}
+
+		// Spawner
+		if(GameRunning)
+		{
+			if(_heroSpawnIndex < LevelProperties.SpawnList.Count)
+			{
+				// Do timer.
+				if (_spawnTimer < LevelProperties.SpawnInterval)
+				{
+					_spawnTimer += Time.deltaTime;
+				}
+				else
+				{
+					// Reset timer.
+					_spawnTimer = 0;
+
+					// Spawn hero.
+					SpawnCharacter(LevelProperties.SpawnList[_heroSpawnIndex]);
+					_heroSpawnIndex++;
+				}	
+			}
 		}
 	}
 	#endregion
@@ -213,10 +261,12 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Characters
-	public static void HeroLeavesRoom()
+	public static void HeroLeavesRoom(GameObject character)
 	{
 		_heroesPassed++;
 		UIStateManager.Instance.HeroCounters.TickOffHeroes(_heroesPassed);
+
+		Destroy(character);
 
 		if (_heroesPassed >= Instance.HeroLimit)
 			UIStateManager.Instance.GameOver();
