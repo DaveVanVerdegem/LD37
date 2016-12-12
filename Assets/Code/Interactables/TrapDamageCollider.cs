@@ -67,7 +67,7 @@ public class TrapDamageCollider : MonoBehaviour
 	/// <summary>
 	/// Deactivate trap.
 	/// </summary>
-	private void Deactivate()
+	public void Deactivate()
 	{
 		Active = false;
 		_damageCollider.enabled = false;

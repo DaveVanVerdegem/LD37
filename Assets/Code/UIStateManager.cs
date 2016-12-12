@@ -37,6 +37,19 @@ public class UIStateManager : MonoBehaviour
 	/// Current state of the UI.
 	/// </summary>
 	public static UIState State = UIState.Play;
+
+	[Header("Prices")]
+	[Tooltip("Price to dig.")]
+	/// <summary>
+	/// Price to dig.
+	/// </summary>
+	public int DigPrice = 3;
+
+	[Tooltip("Price to fill.")]
+	/// <summary>
+	/// Price to fill.
+	/// </summary>
+	public int FillPrice = 3;
 	#endregion
 
 	#region Fields
@@ -66,6 +79,16 @@ public class UIStateManager : MonoBehaviour
 	{
 		CheckInput();
 	}
+
+	private void OnEnable()
+	{
+		GameManager.GoldUpdatedEvent += UpdateGoldCounter;
+	}
+
+	private void OnDisable()
+	{
+		GameManager.GoldUpdatedEvent -= UpdateGoldCounter;
+	}
 	#endregion
 
 	#region Input
@@ -88,10 +111,12 @@ public class UIStateManager : MonoBehaviour
 					if (tile == null || tile.Solid == true)
 						break;
 
-					if(tile.AttachObject(_objectToPlace))
+					// We can place the object and pay for it.
+					if(tile.AttachObject(_objectToPlace) && GameManager.AddGold(-_objectToPlace.Price))
 					{
 						Debug.Log("Placing object.");
 
+						// Initialize object.
 						_objectToPlace.Initialize(tile);
 						_objectToPlace = null;
 
@@ -192,7 +217,7 @@ public class UIStateManager : MonoBehaviour
 	#endregion
 
 	#region UI
-	public void UpdateGoldCounter()
+	void UpdateGoldCounter()
 	{
 		_goldCounterText.text = GameManager.Gold.ToString();
 	}

@@ -21,7 +21,12 @@ public class GameManager : MonoBehaviour
 
 
 	[Header("Game")]
-
+	[SerializeField]
+	[Tooltip("Gold amount that player starts with.")]
+	/// <summary>
+	/// Gold amount that player starts with.
+	/// </summary>
+	private int _startingGold = 10;
 
 	[SerializeField]
 	[Tooltip("Prefab to spawn chest.")]
@@ -37,7 +42,7 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Current amount of gold saved up.
 	/// </summary>
-	public static int Gold = 500;
+	public static int Gold = 0;
 
 	/// <summary>
 	/// Ingame chest object.
@@ -47,6 +52,11 @@ public class GameManager : MonoBehaviour
 
 	#region Fields
 
+	#endregion
+
+	#region Events
+	public delegate void UpdateAction();
+	public static event UpdateAction GoldUpdatedEvent;
 	#endregion
 
 
@@ -68,7 +78,7 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-
+		AddGold(_startingGold);
 	}
 
 	// Update is called once per frame
@@ -111,9 +121,9 @@ public class GameManager : MonoBehaviour
 		// Adjust the total gold value.
 		Gold += amountOfGold;
 
-		UIStateManager.Instance.UpdateGoldCounter();
-
-		Debug.Log("Current amount of gold: " + Gold);
+		// Send notification.
+		if (GoldUpdatedEvent != null)
+			GoldUpdatedEvent();
 
 		return true;
 	}
