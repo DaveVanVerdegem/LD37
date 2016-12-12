@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1246715008936962}
+  m_IsPrefabParent: 1
+--- !u!1 &1246715008936962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4686570717461996}
+  - component: {fileID: 33341968040219710}
+  - component: {fileID: 23883018592186312}
+  - component: {fileID: 114067150768233046}
+  m_Layer: 0
+  m_Name: Rock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4686570717461996
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1246715008936962}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.208, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23883018592186312
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1246715008936962}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: eade034642ed775428904fda81f8dddf, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &33341968040219710
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1246715008936962}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114067150768233046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1246715008936962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b0b07ae8ada9d49942244f832cf34c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TileVariant_CornerBigRed: {fileID: 2800000, guid: aaa77cef1f387f945ba3038729bd66cd,
+    type: 3}
+  TileVariant_CornerSmallRed: {fileID: 2800000, guid: 3ee9b9416877fc84d907510ecf8a41e3,
+    type: 3}
+  TileVariant_OuterWall: {fileID: 2800000, guid: 00d99e6906b0d7d4ba81843ef03421ec,
+    type: 3}
+  TileVariant_Red: {fileID: 2800000, guid: 0efc6cd54ba303949988f40d041b6bcb, type: 3}
+  TileVariant_CornerYellow: {fileID: 2800000, guid: a76d3e2331e6a044da2fef9e07c49efe,
+    type: 3}
+  TileVariant_CrossDoubleRed: {fileID: 2800000, guid: 111f4757c8c847c4e97a0c2e5ca32edb,
+    type: 3}
+  TileVariant_CrossOneRed: {fileID: 2800000, guid: 9fb4cea84a3c20b4ab85d09b10aded72,
+    type: 3}
+  TileVariant_CrossYellow: {fileID: 2800000, guid: a5819806cd320dd4aa89d047075dd573,
+    type: 3}
+  TileVariant_SingleSquare: {fileID: 2800000, guid: 73ce18adb3c42554b8c440d25e16d520,
+    type: 3}
+  TileVariant_InnerWall: {fileID: 2800000, guid: d877a4bdc6b2826468fb051093266b73,
+    type: 3}
+  TileVariant_Stump: {fileID: 2800000, guid: 5017bcbe86f362d4986bdeb967266bb3, type: 3}
+  TileVariant_TShape: {fileID: 2800000, guid: edb2bb08f527e0748bdf0c1c1122e692, type: 3}
+  TileVariant_TShapeRed: {fileID: 2800000, guid: cdbf6fa1b4a86af47b9e4c405b1654fa,
+    type: 3}
+  TileVariant_TShapeSmallRed: {fileID: 2800000, guid: bf6c16a69cd3bde45af65aee3de0f297,
+    type: 3}

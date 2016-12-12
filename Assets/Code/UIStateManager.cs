@@ -25,18 +25,6 @@ public class UIStateManager : MonoBehaviour
 	/// Text component for the gold counter.
 	/// </summary>
 	private Text _goldCounterText;
-	#endregion
-
-	#region Properties
-	/// <summary>
-	/// Static reference to this instance.
-	/// </summary>
-	public static UIStateManager Instance;
-
-	/// <summary>
-	/// Current state of the UI.
-	/// </summary>
-	public static UIState State = UIState.Play;
 
 	[Header("Prices")]
 	[Tooltip("Price to dig.")]
@@ -50,6 +38,49 @@ public class UIStateManager : MonoBehaviour
 	/// Price to fill.
 	/// </summary>
 	public int FillPrice = 3;
+
+	[Header("Components")]
+	[SerializeField]
+	[Tooltip("Game over panel.")]
+	/// <summary>
+	/// Game over panel.
+	/// </summary>
+	private GameObject _gameOverPanel;
+
+	[SerializeField]
+	[Tooltip("Win panel.")]
+	/// <summary>
+	/// Win panel.
+	/// </summary>
+	private GameObject _winPanel;
+
+	[SerializeField]
+	[Tooltip("Alert panel for missing chest.")]
+	/// <summary>
+	/// Alert panel for missing chest.
+	/// </summary>
+	private GameObject _noChestAlertPanel;
+
+	//[SerializeField]
+	[Tooltip("Herocounters component.")]
+	/// <summary>
+	/// Herocounters component.
+	/// </summary>
+	public HeroCounters HeroCounters;
+	#endregion
+
+	#region Properties
+	/// <summary>
+	/// Static reference to this instance.
+	/// </summary>
+	public static UIStateManager Instance;
+
+	/// <summary>
+	/// Current state of the UI.
+	/// </summary>
+	public static UIState State = UIState.Play;
+
+
 	#endregion
 
 	#region Fields
@@ -214,12 +245,47 @@ public class UIStateManager : MonoBehaviour
 			yield return null;
 		}
 	}
+
+	public void SpawnCharacter(Character character)
+	{
+		if(GameManager.AddGold(-character.Price))
+			GameManager.SpawnCharacter(character);
+	}
 	#endregion
 
 	#region UI
 	void UpdateGoldCounter()
 	{
+		if (_goldCounterText == null)
+			return;
+
 		_goldCounterText.text = GameManager.Gold.ToString();
+	}
+
+	public void DisplayNoChestAlert(bool displayPanel = true)
+	{
+		if (_noChestAlertPanel == null)
+			return;
+
+		_noChestAlertPanel.SetActive(displayPanel);
+	}
+
+	/// <summary>
+	/// Set game over state.
+	/// </summary>
+	public void GameOver()
+	{
+		Time.timeScale = 0;
+		_gameOverPanel.SetActive(true);
+	}
+
+	/// <summary>
+	/// Set win state.
+	/// </summary>
+	public void Win()
+	{
+		Time.timeScale = 0;
+		_winPanel.SetActive(true);
 	}
 	#endregion
 }

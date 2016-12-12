@@ -79,9 +79,8 @@ public class Projectile : MonoBehaviour
 	public void DoDamage(Character characterToDamage)
 	{
 		Debug.Log("Doing damage to " + characterToDamage, characterToDamage);
-
-		// Do damage.
 		characterToDamage.ReceiveDamage(gameObject, _attackStrength);
-	}
+        characterToDamage.TriggerHitAnimation();
+    }
 	#endregion
 }
