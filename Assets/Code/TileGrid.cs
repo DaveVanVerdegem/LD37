@@ -45,12 +45,19 @@ public class TileGrid : MonoBehaviour {
         bool preset = gridPreset==null?false:true;
 
         string[,] presetmap = null;
-        if(preset) {
+        if(preset)
+		{
             string[] lines = gridPreset.text.Split(',');
-            for(int y = 0; y<lines.Length;y++) {
+
+            for(int y = 0; y<lines.Length;y++)
+			{
                 string[] tiles = lines[y].Split(']');
-                for(int x = 0; x < tiles.Length-1; x++) {
-                    if(presetmap == null) presetmap = new string[tiles.Length, lines.Length];
+
+                for(int x = 0; x < tiles.Length-1; x++)
+				{
+                    if(presetmap == null)
+						presetmap = new string[tiles.Length, lines.Length];
+
                     presetmap[x,lines.Length-1-y] = ""+tiles[x][tiles[x].Length==2?1:3];
                 }
             }
@@ -68,19 +75,42 @@ public class TileGrid : MonoBehaviour {
                 tile.transform.parent = transform;
 				_tileList[x, y] = tile;
                 
-				if(!preset)tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
-				else {
-                    switch(presetmap[x,y]) {
-                        case "x":   tile.Initialize(Tile.state.Dug);       break;
-                        case ".":   if(!hardrockBypresets)   tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
-                                    else                    tile.Initialize(Tile.state.Rock);
-                                    break;
-                        case "!":   if(!hardrockBypresets)   tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
-                                    else                    tile.Initialize(Tile.state.Hardrock);
-                                    break;
-                        case "v":   tile.Initialize(Tile.state.Entrance);   break;
-                        case "^":   tile.Initialize(Tile.state.Exit);       break;
-                        case "c":   Debug.LogWarning("NYI. Type: "+presetmap[x,y]);tile.Initialize(Tile.state.Dug); break;//tile.Initialize(Tile.state. chest???);   break;
+				if(!preset)
+					tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+				else
+				{
+                    switch(presetmap[x,y])
+					{
+                        case "x":
+							tile.Initialize(Tile.state.Dug);
+							break;
+
+                        case ".":
+							if (!hardrockBypresets)
+								tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+							else
+								tile.Initialize(Tile.state.Rock);
+							break;
+
+                        case "!":
+							if (!hardrockBypresets)
+								tile.Initialize(Random.Range(0.0f,1.01f)<hardrockChance?Tile.state.Hardrock:Tile.state.Rock);
+							else
+								tile.Initialize(Tile.state.Hardrock);
+							break;
+
+                        case "v":
+							tile.Initialize(Tile.state.Entrance);
+							break;
+
+                        case "^":
+							tile.Initialize(Tile.state.Exit);
+							break;
+
+                        case "c":
+							Debug.LogWarning("NYI. Type: "+presetmap[x,y]);tile.Initialize(Tile.state.Dug);
+							break; //tile.Initialize(Tile.state. chest???);   break;
+
                         //default: Debug.LogWarning("Couldn't read preset file. Type: "+presetmap[x,y]); break;
                     }
                 }
