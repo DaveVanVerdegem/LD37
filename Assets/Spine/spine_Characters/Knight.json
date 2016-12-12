@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "j7yTjoMGbsKWiFMmIKtMLwWGCC4", "spine": "3.3.07", "width": 159.28, "height": 160.05, "images": "" },
+"skeleton": { "hash": "NCYytiKDNgNWYFn51ZgkQiRnSpg", "spine": "3.3.07", "width": 159.2, "height": 159.61, "images": "" },
 "bones": [
 	{ "name": "root", "x": -1.2, "y": 0.63 },
 	{ "name": "body", "parent": "root", "length": 50, "rotation": 93.64, "x": -0.38, "y": -0.03 },
@@ -138,6 +138,10 @@
 			"Weapon": { "name": "Mace", "x": 43.14, "y": 7.41, "rotation": -113.24, "width": 74, "height": 117 }
 		}
 	}
+},
+"events": {
+	"AttackHit": {},
+	"PickupHit": {}
 },
 "animations": {
 	"attack": {
@@ -342,7 +346,10 @@
 					{ "time": 0.5333, "angle": -28.63 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.5, "name": "AttackHit" }
+		]
 	},
 	"death": {
 		"slots": {
@@ -817,7 +824,10 @@
 					{ "time": 0.4, "angle": -0.75 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.3, "name": "PickupHit" }
+		]
 	},
 	"walk": {
 		"slots": {
