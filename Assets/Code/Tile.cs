@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour {
 	private state _tileState = state.Rock;
 
 	#region Properties
-	//[HideInInspector]
+	[HideInInspector]
 	/// <summary>
 	/// Returns true if the tile is a solid and isn't walkable.
 	/// </summary>
@@ -93,6 +93,7 @@ public class Tile : MonoBehaviour {
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateRockPrefab, transform.position, transform.rotation, transform);
 
+
 				Solid = true;
 				break;
 
@@ -146,18 +147,21 @@ public class Tile : MonoBehaviour {
 	public void notifyNeighbours()
 	{
 		for(int i=0;i<=NeighbouringTiles.Count-1;i++){
-			NeighbouringTiles[i].Value.updateTileGraphics(NeighbouringTiles[i].Key);
+			NeighbouringTiles[i].Value.updateTileGraphics();
 		}
 	}
 
 	//update the graphics
-	public void updateTileGraphics(int[] Key)
+	public void updateTileGraphics()
 	{
-		if (_tileState == state.Rock) {
+		if (_tileState == state.Rock)
+		{
+			Debug.Log("Updated graphics for tile.", this);
 			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics (getHood());
-		} else if (_tileState == state.Hardrock)  {
-			stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics (getHood());
 		}
+		//else if (_tileState == state.Hardrock)  {
+		//	stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics (getHood());
+		//}
 	}
 
 	//Check the neighbourhood and return a list of booleans
