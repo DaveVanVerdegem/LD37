@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "LD37/Level Properties")]
 public class LevelProperties : ScriptableObject
 {
 	[Tooltip("Preset level map.")]
