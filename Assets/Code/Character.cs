@@ -9,25 +9,25 @@ using Spine.Unity;
 
 public class Character : MonoBehaviour {
 
-	#region Inspector Fields
-	[SerializeField]
-	[Tooltip("Loot prefab to drop on death.")]
-	/// <summary>
-	/// Loot prefab to drop on death.
-	/// </summary>
-	private Loot _lootPrefab;
+    #region Inspector Fields
+    [SerializeField]
+    [Tooltip("Loot prefab to drop on death.")]
+    /// <summary>
+    /// Loot prefab to drop on death.
+    /// </summary>
+    private Loot _lootPrefab;
 
-	[SerializeField]
-	[Tooltip("Amount of gold in inventory of this character.")]
-	/// <summary>
-	/// Amount of gold in inventory of this character.
-	/// </summary>
-	private int _gold = 10;
-	#endregion
+    [SerializeField]
+    [Tooltip("Amount of gold in inventory of this character.")]
+    /// <summary>
+    /// Amount of gold in inventory of this character.
+    /// </summary>
+    private int _gold = 10;
+    #endregion
 
-	// character core attributes
-	#region Properties
-	public int MaxHealth;
+    // character core attributes
+    #region Properties
+    public int MaxHealth;
     public float MovementSpeedIdle;
     public float MovementSpeedCombat;
     public float MinBaseDamage;
@@ -37,7 +37,7 @@ public class Character : MonoBehaviour {
     public float MaxIdleMovement;
     public float MaxIdleWaitSeconds;
     public float MaxAlertnessDurationSeconds;
-    
+
 
     public float IdleDetectionRadius;
     public float CombatDetectionRadius;
@@ -51,8 +51,8 @@ public class Character : MonoBehaviour {
     private List<GameObject> _detectedGameObjects = new List<GameObject>();
     private SkeletonAnimation _skeletonAnimation;
 
-    private enum _characterStates { Idle, Combat, Alert, Fetch}
-    private int _currentState = (int) _characterStates.Idle;
+    private enum _characterStates { Idle, Combat, Alert, Fetch, Death }
+    private int _currentState = (int)_characterStates.Idle;
     private bool _isAlive = true;
     private int _currentHealth;
     private float _attackTimer = 0.0f;
@@ -72,10 +72,11 @@ public class Character : MonoBehaviour {
     private float _damageTakenModifier = 1.0f;
 
     private bool _animationFinished = true;
+    private bool _deathAnimationFinished = false;
     #endregion
 
 
-    void Start ()
+    void Start()
     {
         _skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         _currentHealth = MaxHealth;
@@ -85,15 +86,27 @@ public class Character : MonoBehaviour {
         {
             _targetedBy.Remove(GetComponent<Character>());
         }
-
+        SetAnimation("Death");
+        SwitchToDeathState();
         _skeletonAnimation.state.Complete += delegate {
             // You can also use an anonymous delegate.
             _animationFinished = true;
+            string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
+            if (CurrentAnimation.Equals("death"))
+            {
+                _deathAnimationFinished = true;
+            }
+            if (_skeletonAnimation.Equals("attack"))
+            {
+                if (_currentTarget.GetComponent<Character>()._currentState != (int)_characterStates.Death)
+                {
+                    _currentTarget.GetComponent<Character>().TriggerHitAnimation();
+                }
+            }
         };
-
     }
 
-    void Update ()
+    void Update()
     {
         switch (_currentState)
         {
@@ -109,11 +122,14 @@ public class Character : MonoBehaviour {
             case (int)_characterStates.Fetch:
                 CharacterFetch();
                 break;
+            case (int)_characterStates.Death:
+                CharacterDeath();
+                break;
             default:
                 // Debug.Log("Invalid character state");
                 break;
         }
-	}
+    }
 
     #region GeneralFunctionality
     #region Animations
@@ -163,7 +179,7 @@ public class Character : MonoBehaviour {
 
     void SetAnimation(string newAnimation)
     {
-        
+
         switch (newAnimation)
         {
             case "IdleWait":
@@ -185,11 +201,23 @@ public class Character : MonoBehaviour {
                 SetNewAnimation("hurt", 1, false);
                 break;
             case "Death":
-                // SetNewAnimation("death", 1, false);
+                SetNewAnimation("death", 1, false);
                 break;
             default:
                 Debug.Log("Animation doesn't exist");
                 break;
+        }
+    }
+
+    void TriggerHitAnimation()
+    {
+        if (_isAlive)
+        {
+            SetAnimation("Hurt");
+        }
+        else
+        {
+            SetAnimation("Death");
         }
     }
     #endregion
@@ -228,7 +256,7 @@ public class Character : MonoBehaviour {
                 {
                     DetectedEnemy(Collider);
                 }
-                if (Collider.GetComponent<Object>() != null)
+                if (Collider.GetComponent<Loot>() != null)
                 {
                     DetectedTreasure(Collider);
                 }
@@ -258,7 +286,7 @@ public class Character : MonoBehaviour {
         }
         _currentTarget = Collider.gameObject;
         // adds the character to the new target's _targetedBy list.
-        // _currentTarget.GetComponent<Treasure>()._targetedBy.Add(gameObject);
+        _currentTarget.GetComponent<Loot>()._targetedBy.Add(gameObject);
         SwitchToFetchState();
         return;
     }
@@ -352,7 +380,7 @@ public class Character : MonoBehaviour {
 
     void SetNewIdlePosition()
     {
-        _newIdleMovePosition = (Vector2) transform.position + Random.insideUnitCircle * MaxIdleMovement;
+        _newIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
         _newIdlePositionChosen = true;
     }
     #endregion
@@ -415,7 +443,7 @@ public class Character : MonoBehaviour {
         }
     }
 
- 
+
     float GetDistanceToTarget(Vector2 target)
     {
         return Vector2.Distance(transform.position, target);
@@ -434,7 +462,7 @@ public class Character : MonoBehaviour {
             OrientSelf(_currentTarget.transform.position);
         }
     }
-        
+
     void Attack()
     {
         if (GetDistanceToTarget(_currentTarget.transform.position) <= AttackDistance)
@@ -470,22 +498,33 @@ public class Character : MonoBehaviour {
         _currentState = (int)_characterStates.Combat;
         _attackTimer = 0.0f;
     }
-
-    
     #endregion
 
     #region CharacterDeath
     void CharacterDeath()
     {
+        Debug.Log("Wait what");
+        if (_deathAnimationFinished)
+        {
+            
+            Death();
+        }
+    }
+    void SwitchToDeathState()
+    {
+        _isAlive = false;
+        _currentState = (int)_characterStates.Death;
+    }
+    
+    void Death()
+    {
+        DropLoot();
         foreach (Character CharacterTargetedBy in _targetedBy)
         {
             CharacterTargetedBy.ClearTarget();
         }
-        // do death animation
-        SetAnimation("Death");
-        _isAlive = false;
-		DropLoot();
-		Destroy(gameObject, 0.2f);
+        Destroy(gameObject);
+        // Destroy(gameObject.GetComponent<Character>());
     }
 
 	/// <summary>
