@@ -174,6 +174,12 @@ public class Character : MonoBehaviour {
         }
         else
         {
+            if (!animation.Equals(CurrentAnimation) && (CurrentAnimation.Equals("walk") || (CurrentAnimation.Equals("idle"))))
+            {
+                _animationFinished = false;
+                _skeletonAnimation.state.SetAnimation(0, animation, loop);
+                return;
+            }
             if (animation.Equals("attack") && !CurrentAnimation.Equals("attack"))
             {
                 _animationFinished = false;
