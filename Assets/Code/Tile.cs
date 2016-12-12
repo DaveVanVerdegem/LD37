@@ -84,11 +84,11 @@ public class Tile : MonoBehaviour {
 		_tileState = spawnState;
         if (_tileState == state.Dug)
         {
-            GetComponent<Rigidbody2D>().simulated = false;
+            GetComponent<Collider2D>().isTrigger = true;
         }
         else
         {
-            GetComponent<Rigidbody2D>().simulated = true;
+            GetComponent<Collider2D>().isTrigger = false;
         }
 
 		switch (_tileState)
