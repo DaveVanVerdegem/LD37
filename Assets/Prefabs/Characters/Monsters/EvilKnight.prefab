@@ -186,6 +186,7 @@ MonoBehaviour:
   _lootPrefab: {fileID: 114942809738713750, guid: 7f53ca74bd2f4cb418ba003a97ce43db,
     type: 2}
   _gold: 10
+  Price: 10
   MaxHealth: 10
   MovementSpeedIdle: 1
   MovementSpeedCombat: 1.5
@@ -193,6 +194,7 @@ MonoBehaviour:
   MaxBaseDamage: 3
   AttackSpeedSeconds: 1
   AttackDistance: 2
+  MinIdleMovement: 1.2
   MaxIdleMovement: 2
   MaxIdleWaitSeconds: 3
   MaxAlertnessDurationSeconds: 5
@@ -203,3 +205,4 @@ MonoBehaviour:
   BattleType: 
   Skills: []
   TreasurePriority: 0
+  NewIdleMovePosition: {x: 0, y: 0}

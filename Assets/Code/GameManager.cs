@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
         {
             // Spawn hero.
             Character Hero = SpawnCharacter(LevelProperties.SpawnList[Random.Range(0, LevelProperties.SpawnList.Count)]);
-            Hero.NewIdleMovePosition = TileGrid.ExitTile.transform.position;
+            // Hero.NewIdleMovePosition = TileGrid.EntranceTile.transform.position;
         }
 		if (Input.GetKeyDown(KeyCode.Return))
 			AddGold(10);
