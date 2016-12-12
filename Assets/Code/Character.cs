@@ -44,6 +44,8 @@ public class Character : MonoBehaviour {
     public float IdleDetectionRadius;
     public float CombatDetectionRadius;
 
+    public bool AutoGoToExit;
+
     // use this for future additions
     public string Group;
     public string BattleType;
@@ -80,10 +82,11 @@ public class Character : MonoBehaviour {
 
     void Start()
     {
+        
         _skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         _currentHealth = MaxHealth;
         _alertnessTimer = MaxAlertnessDurationSeconds; // causes the monster to not be alert at first
-        // SwitchToIdleState();
+        SwitchToIdleState();
         if (_targetedBy.Contains(GetComponent<Character>()))
         {
             _targetedBy.Remove(GetComponent<Character>());
@@ -122,7 +125,7 @@ public class Character : MonoBehaviour {
 
         void Update()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y/1000);
         switch (_currentState)
         {
             case (int)_characterStates.Combat:

@@ -82,6 +82,14 @@ public class Tile : MonoBehaviour {
 	void SetState(state spawnState)
 	{
 		_tileState = spawnState;
+        if (_tileState == state.Dug)
+        {
+            GetComponent<Rigidbody2D>().simulated = false;
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().simulated = true;
+        }
 
 		switch (_tileState)
 		{
@@ -108,6 +116,7 @@ public class Tile : MonoBehaviour {
 				Destroy(stateVisual);
 				stateVisual = Instantiate(stateDugPrefab, transform.position, transform.rotation, transform);
 
+                
 				Solid = false;
 				break;
 
