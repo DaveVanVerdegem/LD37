@@ -118,7 +118,13 @@ public class Tile : MonoBehaviour {
 
 				Solid = true;
 
-				// Set entrance spawn.
+				// Change exit tile.
+				if (TileGrid.ExitTile != null)
+					TileGrid.ExitTile.SetState(state.Rock);
+
+				TileGrid.ExitTile = this;
+
+				// Set exit spawn.
 				GameManager.ExitSpawn = GetComponentInChildren<Spawner>();
 
 				break;
@@ -130,7 +136,13 @@ public class Tile : MonoBehaviour {
 
 				Solid = true;
 
-				// Set exit spawn.
+				// Change entrance tile.
+				if (TileGrid.EntranceTile != null)
+					TileGrid.EntranceTile.SetState(state.Rock);
+
+				TileGrid.EntranceTile = this;
+
+				// Set entrance spawn.
 				GameManager.EntranceSpawn = GetComponentInChildren<Spawner>();
 
 				break;
@@ -201,7 +213,7 @@ public class Tile : MonoBehaviour {
 			return false;
 		}
 
-		objectToAttach.transform.SetParent(transform);
+		//objectToAttach.transform.SetParent(transform);
 		_attachedObject = objectToAttach;
 
 		return true;

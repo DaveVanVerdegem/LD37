@@ -8,6 +8,7 @@ using Spine.Unity;
 // alert loskoppelen van combat.
 // enum onderzoeken.
 
+	[SelectionBase]
 public class Character : MonoBehaviour {
 
     #region Inspector Fields
@@ -538,6 +539,8 @@ public class Character : MonoBehaviour {
     
     void Death()
     {
+		Debug.Log("<b>Character died.</b>", this);
+
         DropLoot();
         foreach (Character CharacterTargetedBy in _targetedBy)
         {

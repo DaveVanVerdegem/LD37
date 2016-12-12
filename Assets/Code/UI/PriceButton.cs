@@ -40,6 +40,7 @@ public class PriceButton : MonoBehaviour
 	void Awake()
 	{
 		_selectable = GetComponent<Selectable>();
+		CheckPrice();
 	}
 
 	// Update is called once per frame

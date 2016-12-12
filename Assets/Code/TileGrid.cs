@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileGrid : MonoBehaviour {
+public class TileGrid : MonoBehaviour
+{
     [SerializeField] int gridWidth  = 10;
     [SerializeField] int gridHeight = 10;
     [SerializeField] float tileDistance = 1;
@@ -16,9 +17,19 @@ public class TileGrid : MonoBehaviour {
 	[SerializeField]
     private Tile[,] _tileList;
 
+	#region Properties
+	/// <summary>
+	/// Entrance tile of this scene.
+	/// </summary>
+	public static Tile EntranceTile;
 
+	/// <summary>
+	/// Exit tile of this scene.
+	/// </summary>
+	public static Tile ExitTile;
+	#endregion
 
-    void Start() {
+	void Start() {
         RedrawGrid();
     }
 
