@@ -34,9 +34,19 @@ public class GameManager : MonoBehaviour
 	/// Prefab to spawn chest.
 	/// </summary>
 	private Chest _chestPrefab;
+
+	[SerializeField]
+	[Tooltip("Character list of heroes to spawn.")]
+	/// <summary>
+	/// Character list of heroes to spawn.
+	/// </summary>
+	private List<Character> _heroes = new List<Character>();
 	#endregion
 
 	#region Properties
+	/// <summary>
+	/// Instance reference of this gamemanager singleton.
+	/// </summary>
 	public static GameManager Instance;
 
 	/// <summary>
@@ -48,6 +58,16 @@ public class GameManager : MonoBehaviour
 	/// Ingame chest object.
 	/// </summary>
 	public static Chest Chest;
+
+	/// <summary>
+	/// Spawner for the entrance.
+	/// </summary>
+	public static Spawner EntranceSpawn;
+
+	/// <summary>
+	/// Spawner for the exit.
+	/// </summary>
+	public static Spawner ExitSpawn;
 	#endregion
 
 	#region Fields
@@ -84,7 +104,9 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
+			// Spawn hero.
+			SpawnCharacter(_heroes[Random.Range(0, _heroes.Count)]);
 	}
 	#endregion
 
@@ -126,6 +148,29 @@ public class GameManager : MonoBehaviour
 			GoldUpdatedEvent();
 
 		return true;
+	}
+	#endregion
+
+	#region Spawning
+	/// <summary>
+	/// Spawn an object.
+	/// </summary>
+	/// <param name="spawner">Spawner to spawn the object at.</param>
+	/// <param name="objectToSpawn">Object to spawn.</param>
+	/// <returns>The spawned object.</returns>
+	//public static Object SpawnObject(Spawner spawner, Object objectToSpawn)
+	//{
+	//	Object spawnedObject = Instantiate(objectToSpawn, spawner.transform.position, spawner.transform.rotation);
+
+	//	return spawnedObject;
+	//}
+
+	
+	public static Character SpawnCharacter(Character characterToSpawn)
+	{
+		Spawner spawner = (characterToSpawn.Group == "Hero") ? EntranceSpawn : ExitSpawn;
+
+		return Instantiate(characterToSpawn, spawner.transform.position, spawner.transform.rotation);
 	}
 	#endregion
 }
