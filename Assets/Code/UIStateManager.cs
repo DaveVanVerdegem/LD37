@@ -60,6 +60,13 @@ public class UIStateManager : MonoBehaviour
 	/// Alert panel for missing chest.
 	/// </summary>
 	private GameObject _noChestAlertPanel;
+
+	//[SerializeField]
+	[Tooltip("Herocounters component.")]
+	/// <summary>
+	/// Herocounters component.
+	/// </summary>
+	public HeroCounters HeroCounters;
 	#endregion
 
 	#region Properties
