@@ -251,7 +251,8 @@ public class Character : MonoBehaviour {
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        transform.position = Vector2.MoveTowards(transform.position, destination, MoveStep);
+        destination = new Vector3(destination.x, destination.y, transform.position.z);
+        transform.position = Vector3.MoveTowards(transform.position, destination, MoveStep);
         OrientSelf(destination);
     }
 
