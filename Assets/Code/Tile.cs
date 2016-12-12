@@ -117,6 +117,10 @@ public class Tile : MonoBehaviour {
 				stateVisual = Instantiate(stateExitPrefab, transform.position, transform.rotation, transform);
 
 				Solid = true;
+
+				// Set entrance spawn.
+				GameManager.ExitSpawn = GetComponentInChildren<Spawner>();
+
 				break;
 
 			case state.Entrance:
@@ -125,6 +129,10 @@ public class Tile : MonoBehaviour {
 				stateVisual = Instantiate(stateEntrancePrefab, transform.position, transform.rotation, transform);
 
 				Solid = true;
+
+				// Set exit spawn.
+				GameManager.EntranceSpawn = GetComponentInChildren<Spawner>();
+
 				break;
 		}
 	}

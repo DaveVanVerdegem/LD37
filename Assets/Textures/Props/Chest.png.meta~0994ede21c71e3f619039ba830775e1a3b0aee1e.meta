@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Textures/Props/Chest.png.meta~0994ede21c71e3f619039ba830775e1a3b0aee1e.meta
+guid: ebd835559d1d8c74888abee75a07427c
+timeCreated: 1481507825
+=======
 guid: d2443e58f10a84f44886a8ee88d0f0bc
 timeCreated: 1481507988
+>>>>>>> f0968967acfc79e7d9dfc8a35663234b578c6398:Assets/Textures/Props/Chest.png.meta~0994ede21c71e3f619039ba830775e1a3b0aee1e.meta
 licenseType: Free
 DefaultImporter:
   userData: 
