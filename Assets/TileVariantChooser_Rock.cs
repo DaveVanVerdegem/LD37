@@ -22,7 +22,7 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 	public Sprite Tile_TShapeSmallRed_Flipped;
 
 	private Sprite sprit;
-	public float _rotationDegrees = 0.0f;
+	private float _rotationDegrees = 0.0f;
 
 	private List<KeyValuePair<char[],Sprite>> RefArray = new List<KeyValuePair<char[],Sprite>>();
 
@@ -31,22 +31,29 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		addElement(new char[]{ '1', '0', '1', '0', '0', '0', '0', '0' },Tile_TShapeRed);
-		addElement(new char[]{ '1', '0', '1', '0', '1', '0', '1', '0' },Tile_CrossYellow);
-		addElement(new char[]{ '1', '0', '1', '0', '0', '0', '1', '0' },Tile_CrossOneRed);
-	
-		addElement(new char[]{ '0', '0', '1', '0', '1', '1', '0', '0' },Tile_TShapeSmallRed);
-		addElement(new char[]{ '0', '0', '0', '1', '1', '0', '1', '0' },Tile_TShapeSmallRed_Flipped);
+		Initialize();
+	}
 
-		addElement(new char[]{ '0', '0', '0', '0', '1', '0', '0', '0' },Tile_CornerBigRed);
-		addElement(new char[]{ 'X', '1', 'X', '1', 'X', '1', 'X', '1' },Tile_SingleSquare);
-		addElement(new char[]{ 'X', '1', 'X', '1', 'X', '0', 'X', '1' },Tile_Stump);
-		addElement(new char[]{ '0', '0', '0', '0', 'X', '1', 'X', '0' },Tile_OuterWall);
-		addElement(new char[]{ 'X', '0', 'X', '1', 'X', '0', 'X', '1' },Tile_InnerWall);
+	void Initialize()
+	{
+		addElement(new char[] { '1', '0', '1', '0', '0', '0', '0', '0' }, Tile_TShapeRed);
+		addElement(new char[] { '1', '0', '1', '0', '1', '0', '1', '0' }, Tile_CrossYellow);
+		addElement(new char[] { '1', '0', '1', '0', '0', '0', '1', '0' }, Tile_CrossOneRed);
 
-		addElement(new char[]{ '0', '0', 'X', '1', 'X', '1', 'X', '0' },Tile_CornerSmallRed);
+		addElement(new char[] { '1', '0', '1', '0', '1', '1', 'X', '1' }, Tile_CornerYellow);
 
-		addElement(new char[]{ '1', '0', '1', '0', 'X', '1', 'X', '0' },Tile_TShape);
+		addElement(new char[] { '0', '0', '1', '0', '1', '1', '0', '0' }, Tile_TShapeSmallRed);
+		addElement(new char[] { '0', '0', '0', '1', '1', '0', '1', '0' }, Tile_TShapeSmallRed_Flipped);
+
+		addElement(new char[] { '0', '0', '0', '0', '1', '0', '0', '0' }, Tile_CornerBigRed);
+		addElement(new char[] { 'X', '1', 'X', '1', 'X', '1', 'X', '1' }, Tile_SingleSquare);
+		addElement(new char[] { 'X', '1', 'X', '1', 'X', '0', 'X', '1' }, Tile_Stump);
+		addElement(new char[] { '0', '0', '0', '0', 'X', '1', 'X', '0' }, Tile_OuterWall);
+		addElement(new char[] { 'X', '0', 'X', '1', 'X', '0', 'X', '1' }, Tile_InnerWall);
+
+		addElement(new char[] { '0', '0', 'X', '1', 'X', '1', 'X', '0' }, Tile_CornerSmallRed);
+
+		addElement(new char[] { '1', '0', '1', '0', 'X', '1', 'X', '0' }, Tile_TShape);
 	}
 
 	public void addElement(char[] charArray, Sprite wantedSprite){
@@ -58,7 +65,9 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 
 	}
 
-	public void setTileGraphics (bool[,] TileHood) {	
+	public void setTileGraphics (bool[,] TileHood) {
+
+		Initialize();
 
 		_rotationDegrees = 0.0f;
 
@@ -74,7 +83,6 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(0.0f, 0.0f, _rotationDegrees);
 		//(0.0f, 0.0f, _rotationDegrees);
 		//GetComponent<Transform> ().Rotate (new Vector3(0.0f,0.0f,_rotationDegrees));
-			
 	}
 
 	public void compareHood(char[] TileHoodArray){

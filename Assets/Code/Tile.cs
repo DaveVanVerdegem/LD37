@@ -177,7 +177,10 @@ public class Tile : MonoBehaviour {
 	{
 		if (_tileState == state.Rock)
 		{
+			//SetState(state.Rock);
 			stateVisual.GetComponentInChildren<TileVariantChooser_Rock> ().setTileGraphics (getHood());
+
+			
 		}
 		//else if (_tileState == state.Hardrock)  {
 		//	stateVisual.GetComponentInChildren<TileVariantChooser_Hardrock> ().setTileGraphics (getHood());
