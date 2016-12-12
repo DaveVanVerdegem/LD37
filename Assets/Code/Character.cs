@@ -25,11 +25,17 @@ public class Character : MonoBehaviour {
     /// Amount of gold in inventory of this character.
     /// </summary>
     private int _gold = 10;
-    #endregion
 
-    // character core attributes
-    #region Properties
-    public int MaxHealth;
+	[Tooltip("Price in gold of this character.")]
+	/// <summary>
+	/// Price in gold of this character.
+	/// </summary>
+	public int Price = 10;
+	#endregion
+
+	// character core attributes
+	#region Properties
+	public int MaxHealth;
     public float MovementSpeedIdle;
     public float MovementSpeedCombat;
     public float MinBaseDamage;
@@ -39,6 +45,7 @@ public class Character : MonoBehaviour {
     public float MaxIdleMovement;
     public float MaxIdleWaitSeconds;
     public float MaxAlertnessDurationSeconds;
+    
 
 
     public float IdleDetectionRadius;
@@ -65,7 +72,7 @@ public class Character : MonoBehaviour {
     private float _alertnessTimer = 0.0f;
     private bool _newIdlePositionChosen = false;
 
-    private Vector2 _newIdleMovePosition;
+    public Vector2 NewIdleMovePosition;
     private GameObject _currentTarget;
     private List<Character> _targetedBy = new List<Character>();
 
@@ -77,6 +84,8 @@ public class Character : MonoBehaviour {
 
     private bool _animationFinished = true;
     private bool _deathAnimationFinished = false;
+
+    private float _movementEpsilon = 0.3f;
     #endregion
 
 
@@ -126,6 +135,7 @@ public class Character : MonoBehaviour {
         void Update()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y/1000);
+        Debug.Log(_skeletonAnimation.state.GetCurrent(0).ToString());
         switch (_currentState)
         {
             case (int)_characterStates.Combat:
@@ -235,7 +245,7 @@ public class Character : MonoBehaviour {
     }
 
     // not happy with how this works out managing the death inside...
-    void TriggerHitAnimation()
+    public void TriggerHitAnimation()
     {
         if (_currentState == (int)_characterStates.Death)
         {
@@ -254,7 +264,7 @@ public class Character : MonoBehaviour {
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        destination = new Vector3(destination.x, destination.y, transform.position.z);
+        destination = new Vector3(destination.x, destination.y, -1.0f + destination.y / 1000);
         transform.position = Vector3.MoveTowards(transform.position, destination, MoveStep);
         OrientSelf(destination);
     }
@@ -381,13 +391,13 @@ public class Character : MonoBehaviour {
             SetNewIdlePosition();
         }
 
-        if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
         {
             StartIdleWait();
         }
         else
         {
-            MoveTo(_newIdleMovePosition, MovementSpeedIdle);
+            MoveTo(NewIdleMovePosition, MovementSpeedIdle);
         }
     }
 
@@ -408,7 +418,7 @@ public class Character : MonoBehaviour {
 
     void SetNewIdlePosition()
     {
-        _newIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
+        NewIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
         _newIdlePositionChosen = true;
     }
     #endregion
@@ -428,14 +438,14 @@ public class Character : MonoBehaviour {
 
     void CharacterAlertMove()
     {
-        if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
         {
             SetNewIdlePosition();
         }
         else
         {
             SetAnimation("CombatMove");
-            MoveTo(_newIdleMovePosition, MovementSpeedCombat);
+            MoveTo(NewIdleMovePosition, MovementSpeedCombat);
         }
     }
 

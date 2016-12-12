@@ -5,26 +5,59 @@ using UnityEngine;
 
 public class TileVariantChooser_Rock : MonoBehaviour {
 
-	public Texture TileVariant_CornerBigRed;
-	public Texture TileVariant_CornerSmallRed;
-	public Texture TileVariant_OuterWall;
-	public Texture TileVariant_Red;
-	public Texture TileVariant_CornerYellow;
-	public Texture TileVariant_CrossDoubleRed;
-	public Texture TileVariant_CrossOneRed;
-	public Texture TileVariant_CrossYellow;
-	public Texture TileVariant_SingleSquare;
-	public Texture TileVariant_InnerWall;
-	public Texture TileVariant_Stump;
-	public Texture TileVariant_TShape;
-	public Texture TileVariant_TShapeRed;
-	public Texture TileVariant_TShapeSmallRed;
+	public Sprite Tile_CornerBigRed;
+	public Sprite Tile_CornerSmallRed;
+	public Sprite Tile_OuterWall;
+	public Sprite Tile_Red;
+	public Sprite Tile_CornerYellow;
+	public Sprite Tile_CrossDoubleRed;
+	public Sprite Tile_CrossOneRed;
+	public Sprite Tile_CrossYellow;
+	public Sprite Tile_SingleSquare;
+	public Sprite Tile_InnerWall;
+	public Sprite Tile_Stump;
+	public Sprite Tile_TShape;
+	public Sprite Tile_TShapeRed;
+	public Sprite Tile_TShapeSmallRed;
+	public Sprite Tile_TShapeSmallRed_Flipped;
+
+	private Sprite sprit;
+	private float _rotationDegrees = 0.0f;
+
+	private List<KeyValuePair<char[],Sprite>> RefArray = new List<KeyValuePair<char[],Sprite>>();
 
 	//private List<string,Texture> TileVariants;
 
-
 	// Use this for initialization
 	void Start () {
+
+		Initialize();
+	}
+
+	void Initialize()
+	{
+		addElement(new char[] { '1', '0', '1', '0', '0', '0', '0', '0' }, Tile_TShapeRed);
+		addElement(new char[] { '1', '0', '1', '0', '1', '0', '1', '0' }, Tile_CrossYellow);
+		addElement(new char[] { '1', '0', '1', '0', '0', '0', '1', '0' }, Tile_CrossOneRed);
+
+		addElement(new char[] { '1', '0', '1', '0', '1', '1', 'X', '1' }, Tile_CornerYellow);
+
+		addElement(new char[] { '0', '0', '1', '0', '1', '1', '0', '0' }, Tile_TShapeSmallRed);
+		addElement(new char[] { '0', '0', '0', '1', '1', '0', '1', '0' }, Tile_TShapeSmallRed_Flipped);
+
+		addElement(new char[] { '0', '0', '0', '0', '1', '0', '0', '0' }, Tile_CornerBigRed);
+		addElement(new char[] { 'X', '1', 'X', '1', 'X', '1', 'X', '1' }, Tile_SingleSquare);
+		addElement(new char[] { 'X', '1', 'X', '1', 'X', '0', 'X', '1' }, Tile_Stump);
+		addElement(new char[] { '0', '0', '0', '0', 'X', '1', 'X', '0' }, Tile_OuterWall);
+		addElement(new char[] { 'X', '0', 'X', '1', 'X', '0', 'X', '1' }, Tile_InnerWall);
+
+		addElement(new char[] { '0', '0', 'X', '1', 'X', '1', 'X', '0' }, Tile_CornerSmallRed);
+
+		addElement(new char[] { '1', '0', '1', '0', 'X', '1', 'X', '0' }, Tile_TShape);
+	}
+
+	public void addElement(char[] charArray, Sprite wantedSprite){
+		RefArray.Add(new KeyValuePair<char[],Sprite> (charArray, wantedSprite));
 	}
 
 	// Update is called once per frame
@@ -32,574 +65,126 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 
 	}
 
-	public void setTileGraphics (bool[,] TileHood) {	
-		Texture tex;
-		float _rotationDegrees = 0.0f;
+	public void setTileGraphics (bool[,] TileHood) {
 
-		int numberOfDiggedDiagonalNeighbours = 0;
-		int numberOfDiggedStraightNeighbours;
-		int numberOfDiggedNeighbours = 0;
+		Initialize();
 
-		int numberOfRockyDiagonalNeighbours;
-		int numberOfRockyStraightNeighbours;
-		int numberOfRockyNeighbours;
+		_rotationDegrees = 0.0f;
 
-		List<Vector2> directionOfDiggedNeighbours = new List<Vector2>();
-		List<Vector2> directionOfRockyNeighbours = new List<Vector2>();
+		char[] TileHoodArray = getHoodString(TileHood);
 
-		List<Vector2> directionOfRockyDiagonalNeighbours = new List<Vector2>();
-		List<Vector2> directionOfRockyStraightNeighbours = new List<Vector2>();
+		compareHood (TileHoodArray);
 
-		List<Vector2> directionOfDiggedDiagonalNeighbours = new List<Vector2>();
-		List<Vector2> directionOfDiggedStraightNeighbours = new List<Vector2>();
+		if (sprit == Tile_OuterWall) {
+			Debug.Log (_rotationDegrees);
+		}
 
-		for (int xx=0;xx<=2;xx++){
-			for (int yy=0;yy<=2;yy++){
-				if (TileHood [xx, yy]) {
-					numberOfDiggedNeighbours++;
-					directionOfDiggedNeighbours.Add (new Vector2 (xx, yy));
-					if ((xx + yy) % 2 == 0) {
-						numberOfDiggedDiagonalNeighbours++;
-						directionOfDiggedDiagonalNeighbours.Add (new Vector2 (xx, yy));
-					} else {
-						directionOfDiggedStraightNeighbours.Add (new Vector2 (xx, yy));
-					}
-				}
-				else if(!(xx==1 & yy==1)) {
-					directionOfRockyNeighbours.Add(new Vector2(xx,yy));
-					if ((xx + yy) % 2 == 0) {
-						directionOfRockyDiagonalNeighbours.Add (new Vector2 (xx, yy));
-					} else {
-						directionOfRockyStraightNeighbours.Add (new Vector2 (xx, yy));
-					}
-					}
+		GetComponent< SpriteRenderer >().sprite= sprit;
+		transform.rotation = Quaternion.Euler(0.0f, 0.0f, _rotationDegrees);
+		//(0.0f, 0.0f, _rotationDegrees);
+		//GetComponent<Transform> ().Rotate (new Vector3(0.0f,0.0f,_rotationDegrees));
+	}
+
+	public void compareHood(char[] TileHoodArray){
+		int matchStrength = 0;
+
+		for (int ii = 0; ii < RefArray.Count; ii++) {
+			for (int jj = 0; jj < 8; jj++) {
+
+				if (TileHoodArray [jj] == RefArray [ii].Key [jj] || RefArray [ii].Key [jj] == 'X') {
+					matchStrength++;
 				}
 			}
+			if (matchStrength == 8) {
 
-		numberOfDiggedStraightNeighbours=numberOfDiggedNeighbours-numberOfDiggedDiagonalNeighbours;
+				sprit = RefArray [ii].Value;
+				return;
 
-		numberOfRockyDiagonalNeighbours=4-numberOfDiggedDiagonalNeighbours;
-		numberOfRockyStraightNeighbours=4-numberOfDiggedStraightNeighbours;
-		numberOfRockyNeighbours=8-numberOfDiggedNeighbours;
-
-		//Debug.Log (numberOfDiggedDiagonalNeighbours);
-		switch(numberOfDiggedNeighbours){
-		case 0:
-			tex=TileVariant_Red;
-			break;
-		//Only one digged tile...
-		case 1:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 0: //There's one straight digged neighbour!
-				tex = TileVariant_OuterWall;
-				switch ((int) directionOfDiggedNeighbours [0].x) {
-				case 1:
-					switch ((int) directionOfDiggedNeighbours [0].y) {
-					case 0:
-						_rotationDegrees = 180.0f;
-						break;
-					default:
-						_rotationDegrees = 0.0f;
-						break;
-					}
-					break;
-				case 0:
-					_rotationDegrees = 270.0f;
-					break;
-				default:
-					_rotationDegrees = 90.0f;
-					break;
-				}
-				break;
-			default: //There's only one diagonal digged neighbour!
-				tex = TileVariant_CornerBigRed;
-				switch ((int) directionOfDiggedNeighbours [0].x) {
-				case 0:
-					switch ((int) directionOfDiggedNeighbours [0].y) {
-					case 0:
-						_rotationDegrees = 180.0f;
-						break;
-					default:
-						_rotationDegrees = 270.0f;
-						break;
-					}
-					break;
-				default:
-					switch ((int) directionOfDiggedNeighbours [0].y) {
-					case 0:
-						_rotationDegrees = 90.0f;
-						break;
-					default:
-						_rotationDegrees = 0.0f;
-						break;
-					}
-					break;
-				}
-				break;
+			} else {
+				matchStrength = 0;
 			}
-			break;
-		//Only two digged tiles...
-		case 2:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 0:
-				Vector2 diagJesus = new Vector2();
-				//find jesus
-				for (int ii=0;ii<=3;ii++){
-					if ((directionOfDiggedStraightNeighbours[0].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfRockyDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfRockyDiagonalNeighbours[ii].y) ){
-						diagJesus=directionOfRockyDiagonalNeighbours[ii];
-					}
-				}
-				tex = TileVariant_CornerSmallRed;
-				if (diagJesus.x==0){
-					if(diagJesus.y==0){
-						_rotationDegrees = 270.0f;
-							} else {
-								_rotationDegrees = 0.0f;
-							}
-						} else {
-							if(diagJesus.y==0){
-								_rotationDegrees = 180.0f;
-							} else {
-								_rotationDegrees = 90.0f;
-							}
-						}
-				break;
-			case 1:
-				if (directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [0].y | directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [0].x) {
-					if (directionOfDiggedStraightNeighbours [0].x == 1) {
-						if (directionOfDiggedStraightNeighbours [0].y == 0) {
-							_rotationDegrees = 180.0f;
-						} else {
-							_rotationDegrees = 0.0f;
-						}
-					} else {
-						if (directionOfDiggedStraightNeighbours [0].x == 0) {
-							_rotationDegrees = 270.0f;
-						} else {
-							_rotationDegrees = 90.0f;
-						}
-					}
-					tex = TileVariant_OuterWall;
-				} else {
-					//STILL WORK TO DO HERE!
-					tex = TileVariant_CornerSmallRed;
-				}
-				break;
-			default:
-				if (directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedDiagonalNeighbours [1].y | directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedDiagonalNeighbours [1].x) {
-					tex = TileVariant_TShapeRed;
-					if ((directionOfDiggedDiagonalNeighbours [0].x==2 & directionOfDiggedDiagonalNeighbours [0].y==2) | (directionOfDiggedDiagonalNeighbours [1].x==2 & directionOfDiggedDiagonalNeighbours [1].y==2)) {
-						if ((directionOfDiggedDiagonalNeighbours [0].x == 0 & directionOfDiggedDiagonalNeighbours [0].y == 2) | (directionOfDiggedDiagonalNeighbours [1].x == 0 & directionOfDiggedDiagonalNeighbours [1].y == 2)) {
-							_rotationDegrees = 0.0f;
-						} else {
-							_rotationDegrees = 90.0f;
-						}
-					} else {
-						if ((directionOfDiggedDiagonalNeighbours [0].x == 0 & directionOfDiggedDiagonalNeighbours [0].y == 2) | (directionOfDiggedDiagonalNeighbours [1].x == 0 & directionOfDiggedDiagonalNeighbours [1].y == 2)) {
-							_rotationDegrees = 270.0f;
-						} else {
-							_rotationDegrees = 180.0f;
-						}
-					}
-				} else {
-					tex = TileVariant_CrossDoubleRed;
-					if (directionOfDiggedDiagonalNeighbours [0].x!=directionOfDiggedDiagonalNeighbours [0].y) {
-						_rotationDegrees = 90.0f;
-					}
-						
-				}
-				break;
-			}
-			break;
-		//Only tree digged tiles...
-		case 3:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 0:
-				tex = TileVariant_Stump;
-				if (directionOfRockyStraightNeighbours [0].x == 1) {
-					if (directionOfRockyStraightNeighbours [0].y == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				} else {
-					if (directionOfRockyStraightNeighbours [0].x == 0) {
-						_rotationDegrees = 180.0f;
-					} else {
-						_rotationDegrees = 0.0f;
-					}
-				}
-				break;
-			case 1:
-				//find jesus
-				if ((directionOfDiggedStraightNeighbours [0].x == directionOfDiggedDiagonalNeighbours [0].x & directionOfDiggedStraightNeighbours [1].y == directionOfDiggedDiagonalNeighbours [0].y) | (directionOfDiggedStraightNeighbours [1].x == directionOfDiggedDiagonalNeighbours [0].x & directionOfDiggedStraightNeighbours [0].y == directionOfDiggedDiagonalNeighbours [0].y)) {
-					tex = TileVariant_CornerSmallRed;
-					if (directionOfDiggedDiagonalNeighbours[0].x==0){
-						if(directionOfDiggedDiagonalNeighbours[0].y==0){
-							_rotationDegrees = 270.0f;
-						} else {
-							_rotationDegrees = 0.0f;
-						}
-					} else {
-						if(directionOfDiggedDiagonalNeighbours[0].y==0){
-							_rotationDegrees = 180.0f;
-						} else {
-							_rotationDegrees = 90.0f;
-						}
-					}
-
-				} else {
-					tex = TileVariant_CornerYellow;
-					if (directionOfDiggedDiagonalNeighbours[0].x==0){
-						if(directionOfDiggedDiagonalNeighbours[0].y==0){
-							_rotationDegrees = 90.0f;
-						} else {
-							_rotationDegrees = 180.0f;
-						}
-					} else {
-						if(directionOfDiggedDiagonalNeighbours[0].y==0){
-							_rotationDegrees = 0.0f;;
-						} else {
-							_rotationDegrees = 270.0f;
-						}
-					}
-				}
-					
-				break;
-			case 2:
-				if (directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedDiagonalNeighbours [1].y) {
-					if (directionOfDiggedStraightNeighbours [0].y==directionOfDiggedDiagonalNeighbours [0].y ){
-						tex = TileVariant_OuterWall;
-						if (directionOfDiggedStraightNeighbours [0].y == 0) {
-							_rotationDegrees = 180.0f;
-						} else {
-							_rotationDegrees = 0.0f;
-						}
-					} else {
-						tex = TileVariant_TShape;
-						Debug.Log ("test2");
-						if (directionOfDiggedStraightNeighbours [0].y == 0) {
-							_rotationDegrees = 90.0f;
-						} else {
-							_rotationDegrees = 270.0f;
-						}
-					}
-				} else if(directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedDiagonalNeighbours [1].x) {
-					if (directionOfDiggedStraightNeighbours [0].x == directionOfDiggedDiagonalNeighbours [0].x){
-						tex = TileVariant_OuterWall;
-						if (directionOfDiggedStraightNeighbours [0].x == 0) {
-							_rotationDegrees = 270.0f;
-						} else {
-							_rotationDegrees = 90.0f;
-						}
-					}
-					else {
-						tex = TileVariant_TShape;
-						if (directionOfDiggedStraightNeighbours [0].x == 0) {
-							_rotationDegrees = 180.0f;
-						} else {
-							_rotationDegrees = 0.0f;
-						}
-					}
-
-				} else {
-					//STILL WORK TO DO HERE!
-					tex = TileVariant_CornerSmallRed;
-				}
-				break;
-			default:
-				tex = TileVariant_CrossOneRed;
-				if (directionOfRockyDiagonalNeighbours [0].x == 0) {
-					if (directionOfRockyDiagonalNeighbours  [0].y == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 180.0f;
-					}
-				} else {
-					if (directionOfRockyDiagonalNeighbours  [0].y == 0) {
-						_rotationDegrees = 0.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				}
-				break;
-			}
-			break;
-		//Only fourrr digged tiles...
-		case 4:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 0:
-				tex = TileVariant_SingleSquare;
-				break;
-			case 1:
-				tex = TileVariant_Stump;
-				if (directionOfRockyStraightNeighbours [0].x == 1) {
-					if (directionOfRockyStraightNeighbours [0].y == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				} else {
-					if (directionOfRockyStraightNeighbours [0].x == 0) {
-						_rotationDegrees = 180.0f;
-					} else {
-						_rotationDegrees = 0.0f;
-					}
-				}
-				break;
-			case 2:
-				if (directionOfRockyStraightNeighbours[0].y==directionOfRockyStraightNeighbours[1].y | directionOfRockyStraightNeighbours[0].x==directionOfRockyStraightNeighbours[1].x){
-					tex = TileVariant_InnerWall;
-					if (directionOfRockyStraightNeighbours[0].x==directionOfRockyStraightNeighbours[1].x) {
-						_rotationDegrees = 90.0f;
-					}
-				} else {
-					Vector2 diagJesus = new Vector2();
-					Vector2 diagJudas = new Vector2();
-					//find jesus
-					for (int ii=0;ii<=1;ii++){
-						if ((directionOfDiggedStraightNeighbours[0].x == directionOfDiggedDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfDiggedDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfDiggedDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfDiggedDiagonalNeighbours[ii].y) ){
-								diagJesus=directionOfDiggedDiagonalNeighbours[ii];
-						}
-						if ((directionOfDiggedStraightNeighbours[0].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfRockyDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfRockyDiagonalNeighbours[ii].y) ){
-							diagJudas=directionOfDiggedDiagonalNeighbours[ii];
-						}
-					}
-						
-					if (directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedDiagonalNeighbours [1].x) {
-						if ((directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [0].x)|(directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [1].x)) {
-							tex = TileVariant_CornerSmallRed;
-
-							if (diagJesus.x==0){
-								if(diagJesus.y==0){
-									_rotationDegrees = 270.0f;
-								} else {
-									_rotationDegrees = 0.0f;
-								}
-							} else {
-								if(diagJesus.y==0){
-									_rotationDegrees = 180.0f;
-								} else {
-									_rotationDegrees = 90.0f;
-								}
-							}
-
-						} else {
-							tex = TileVariant_CornerYellow;
-
-							if (diagJudas.x==0){
-								if(diagJudas.y==0){
-									_rotationDegrees = 180.0f;
-								} else {
-									_rotationDegrees = 90.0f;
-								}
-							} else {
-								if(diagJudas.y==0){
-									_rotationDegrees = 270.0f;
-								} else {
-									_rotationDegrees = 0.0f;
-								}
-							}
-						}
-					} else {
-						if ((directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [0].y)|(directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [1].y)){
-							tex = TileVariant_CornerSmallRed;
-
-							if (diagJesus.x==0){
-								if(diagJesus.y==0){
-									_rotationDegrees = 270.0f;
-								} else {
-									_rotationDegrees = 0.0f;
-								}
-							} else {
-								if(diagJesus.y==0){
-									_rotationDegrees = 180.0f;
-								} else {
-									_rotationDegrees = 90.0f;
-								}
-							}
-
-						} else {
-							tex = TileVariant_CornerYellow;
-
-							if (diagJudas.x==0){
-								if(diagJudas.y==0){
-									_rotationDegrees = 0.0f;
-								} else {
-									_rotationDegrees = 270.0f;
-								}
-							} else {
-								if(diagJudas.y==0){
-									_rotationDegrees = 90.0f;
-								} else {
-									_rotationDegrees = 180.0f;
-								}
-							}
-						}
-					}
-				}
-				break;
-			case 3:
-				//STILL WORK TO DO HERE!
-				tex = TileVariant_CrossYellow;
-				break;
-			default:
-				tex = TileVariant_CrossYellow;
-				break;
-			}
-			break;
-		//Only five digged tiles...
-		case 5:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 1:
-				tex = TileVariant_SingleSquare;
-				break;
-			case 2:
-				tex = TileVariant_Stump;
-				if (directionOfRockyStraightNeighbours [0].x == 1) {
-					if (directionOfRockyStraightNeighbours [0].y == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				} else {
-					if (directionOfRockyStraightNeighbours [0].x == 0) {
-						_rotationDegrees = 180.0f;
-					} else {
-						_rotationDegrees = 0.0f;
-					}
-				}
-				break;
-			case 3:
-				if (directionOfRockyStraightNeighbours[0].y==directionOfRockyStraightNeighbours[1].y | directionOfRockyStraightNeighbours[0].x==directionOfRockyStraightNeighbours[1].x){
-					tex = TileVariant_InnerWall;
-					if (directionOfRockyStraightNeighbours[0].x==directionOfRockyStraightNeighbours[1].x) {
-						_rotationDegrees = 90.0f;
-					}
-				} else {
-					tex = TileVariant_CornerSmallRed;
-					if (directionOfRockyDiagonalNeighbours [0].x == 0) {
-						if (directionOfRockyDiagonalNeighbours [0].y == 0) {
-							_rotationDegrees = 90.0f;
-						} else {
-							_rotationDegrees = 180.0f;
-						}
-					} else {
-						if (directionOfRockyDiagonalNeighbours [0].y == 0) {
-							_rotationDegrees = 0.0f;
-						} else {
-							_rotationDegrees = 270.0f;
-						}
-					}
-				}
-				break;
-			default:
-				tex = TileVariant_TShape;
-				if (directionOfDiggedStraightNeighbours [0].x == 1) {
-					if (directionOfDiggedStraightNeighbours [0].y == 0) {
-						_rotationDegrees = 0.0f;
-					} else {
-						_rotationDegrees = 180.0f;
-					}
-				} else {
-					if (directionOfDiggedStraightNeighbours [0].x == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				}
-				break;
-			}
-			break;
-		//Only SIX digged tilesssss...
-		case 6:
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 2: //There's two diagonal digged neighbour!
-				tex=TileVariant_SingleSquare;
-				break;
-			case 3: //There's three diagonal digged neighbour! (& 3 straight digged neighbours!)
-				tex = TileVariant_Stump;
-				if (directionOfRockyStraightNeighbours [0].x == 1) {
-					if (directionOfRockyStraightNeighbours [0].y == 0) {
-						_rotationDegrees = 90.0f;
-					} else {
-						_rotationDegrees = 270.0f;
-					}
-				} else {
-					if (directionOfRockyStraightNeighbours [0].x == 0) {
-						_rotationDegrees = 180.0f;
-					} else {
-						_rotationDegrees = 0.0f;
-					}
-				}
-				break;
-			default: //There's four diagonal digged neighbour!
-				if (directionOfRockyNeighbours[0].y==directionOfRockyNeighbours[1].y | directionOfRockyNeighbours[0].x==directionOfRockyNeighbours[1].x){
-					tex = TileVariant_InnerWall;
-					if (directionOfRockyNeighbours [0].x == directionOfRockyNeighbours [1].x) {
-						_rotationDegrees = 90.0f;
-					}
-				} else {
-					tex=TileVariant_CornerYellow;
-					if (directionOfRockyNeighbours [0].x == 0 | directionOfRockyNeighbours [1].x == 0) {
-						if (directionOfRockyNeighbours [0].y == 0 | directionOfRockyNeighbours [1].y == 0) {
-							_rotationDegrees = 90.0f;
-						} else {
-							_rotationDegrees = 180.0f;
-						}
-					} else {
-						if (directionOfRockyNeighbours [0].y == 0 | directionOfRockyNeighbours [1].y == 0) {
-							_rotationDegrees = 0.0f;
-						} else {
-							_rotationDegrees = 270.0f;
-						}	
-					}
-				}
-				break;
-			}
-			break;
-		//Its a tile only connected with one side!
-		case 7: 
-			switch (numberOfDiggedDiagonalNeighbours) {
-			case 4:
-				tex = TileVariant_Stump;
-				switch ((int) directionOfRockyNeighbours [0].x) {
-				case 1:
-					switch ((int) directionOfRockyNeighbours [0].y) {
-					case 0:
-						_rotationDegrees = 90.0f;
-						break;
-					default:
-						_rotationDegrees = 270.0f;
-						break;
-					}
-					break;
-				case 0:
-					_rotationDegrees = 180.0f;
-					break;
-				default:
-					_rotationDegrees = 0.0f;
-					break;
-				}
-				break;
-			default:
-				tex = TileVariant_SingleSquare;
-				break;
-			}
-			break;
-		//Its a tile surrounded by digged areas!
-		case 8:
-			tex = TileVariant_SingleSquare;
-			break;
-		default:
-			tex=TileVariant_Red;
-			break;
-
 		}
 			
-		GetComponent<Renderer>().material.SetFloat ("_RotationDegrees", _rotationDegrees);
+		_rotationDegrees -= 90.0f;
 
-		GetComponent<Renderer> ().material.mainTexture = tex;
+		if (_rotationDegrees > -360.0f) {
+			compareHood (shiftHoodString (TileHoodArray));
+		} else {
+			//Debug.Log ("nothing was found!");
+			sprit = Tile_Red;
+			return;
+		}
+	}
+
+	public char[] getHoodString(bool[,] TileHood) {
+		char[] TileHoodArray = { '1', '1', '1', '1', '1', '1', '1', '1' };
+		int index = 0;
+
+		for (int xx = 0; xx <= 2; xx++) {
+			for (int yy = 0; yy <= 2; yy++) {
+				if (!(xx == 1 & yy== 1)) {
+					if (!TileHood [xx, yy]) {
+						switch (xx) {
+						case 0:
+							index = yy;
+							break;
+						case 1:
+							switch (yy) {
+							case 0:
+								index = 7;
+								break;
+							default: //case 2:
+								index = 3;
+								break;
+							}
+							break;
+						default: //case 2:
+							switch (yy) {
+							case 0:
+								index = 6;
+								break;
+							case 1:
+								index= 5;
+								break;
+							default: //case 2:
+								index = 4;
+								break;
+							}
+							break;
+						}
+						TileHoodArray[index]='0';
+					}
+				}
+			}
+		}
+
+		//Debug.Log (TileHood[0,0]);
+		//Debug.Log (new string (TileHoodArray));
+
+		return TileHoodArray;
+	
+	}
+
+	public char[] shiftHoodString(char[] TileHoodArray) {
+
+		char[] shiftedArray = shiftRight (TileHoodArray); 
+		shiftedArray = shiftRight (shiftedArray); 
+
+		return shiftedArray;
+		}
+
+	public char[] shiftRight(char[] arr) 
+	{
+		char[] demo = new char[arr.Length];
+
+		for (int i = 1; i < arr.Length; i++) 
+		{
+			demo[i] = arr[i - 1];
+		}
+
+		demo[0] = arr[demo.Length - 1];
+
+		return demo;
 	}
 
 }

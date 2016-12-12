@@ -11,7 +11,6 @@ public class TileGrid : MonoBehaviour
     [SerializeField] bool hardrockBypresets = false;
 
     [SerializeField] GameObject tilePrefab = null;
-    [SerializeField] TextAsset gridPreset;
 
 	[Tooltip("This is the tile list.")]
 	[SerializeField]
@@ -29,7 +28,8 @@ public class TileGrid : MonoBehaviour
 	public static Tile ExitTile;
 	#endregion
 
-	void Start() {
+	void Start()
+	{
         RedrawGrid();
     }
 
@@ -53,12 +53,12 @@ public class TileGrid : MonoBehaviour
 		}
 		
         //preset fields
-        bool preset = gridPreset==null?false:true;
+        bool preset = (GameManager.Instance.LevelProperties.LevelPreset == null) ? false : true;
 
         string[,] presetmap = null;
         if(preset)
 		{
-            string[] lines = gridPreset.text.Split(',');
+            string[] lines = GameManager.Instance.LevelProperties.LevelPreset.text.Split(',');
 
             for(int y = 0; y<lines.Length;y++)
 			{

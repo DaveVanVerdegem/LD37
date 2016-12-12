@@ -41,12 +41,11 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private Chest _chestPrefab;
 
-	[SerializeField]
 	[Tooltip("Properties of this level.")]
 	/// <summary>
 	/// Properties of this level.
 	/// </summary>
-	private LevelProperties _levelProperties;
+	public LevelProperties LevelProperties;
 	#endregion
 
 	#region Properties
@@ -128,11 +127,13 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// Check input.
-		if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
-			// Spawn hero.
-			SpawnCharacter(_levelProperties.SpawnList[Random.Range(0, _levelProperties.SpawnList.Count)]);
-
+        // Check input.
+        if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
+        {
+            // Spawn hero.
+            Character Hero = SpawnCharacter(LevelProperties.SpawnList[Random.Range(0, LevelProperties.SpawnList.Count)]);
+            Hero.NewIdleMovePosition = TileGrid.ExitTile.transform.position;
+        }
 		if (Input.GetKeyDown(KeyCode.Return))
 			AddGold(10);
 
@@ -215,6 +216,7 @@ public class GameManager : MonoBehaviour
 	public static void HeroLeavesRoom()
 	{
 		_heroesPassed++;
+		UIStateManager.Instance.HeroCounters.TickOffHeroes(_heroesPassed);
 
 		if (_heroesPassed >= Instance.HeroLimit)
 			UIStateManager.Instance.GameOver();
@@ -224,7 +226,7 @@ public class GameManager : MonoBehaviour
 	{
 		_heroesKilled++;
 
-		if ((_heroesPassed + _heroesKilled) >= Instance._levelProperties.SpawnList.Count)
+		if ((_heroesPassed + _heroesKilled) >= Instance.LevelProperties.SpawnList.Count)
 			UIStateManager.Instance.Win();
 	}
 	#endregion

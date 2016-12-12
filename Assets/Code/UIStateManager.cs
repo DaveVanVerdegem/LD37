@@ -60,6 +60,13 @@ public class UIStateManager : MonoBehaviour
 	/// Alert panel for missing chest.
 	/// </summary>
 	private GameObject _noChestAlertPanel;
+
+	//[SerializeField]
+	[Tooltip("Herocounters component.")]
+	/// <summary>
+	/// Herocounters component.
+	/// </summary>
+	public HeroCounters HeroCounters;
 	#endregion
 
 	#region Properties
@@ -237,6 +244,12 @@ public class UIStateManager : MonoBehaviour
 
 			yield return null;
 		}
+	}
+
+	public void SpawnCharacter(Character character)
+	{
+		if(GameManager.AddGold(-character.Price))
+			GameManager.SpawnCharacter(character);
 	}
 	#endregion
 

@@ -463,6 +463,56 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 437792529}
+--- !u!1 &463778813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1672602073318338, guid: 0ed70b35c4986db49896b8759318875d,
+    type: 2}
+  m_PrefabInternal: {fileID: 500542655}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 463778815}
+  - component: {fileID: 463778814}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &463778814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 114005530840531784, guid: 0ed70b35c4986db49896b8759318875d,
+    type: 2}
+  m_PrefabInternal: {fileID: 500542655}
+  m_GameObject: {fileID: 463778813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e44061b6b2bcc47a8b615293a3e8b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainMenuScene: {fileID: 102900000, guid: fee53d2caf5f2a74c983254571cb7b28, type: 3}
+  GameScene: {fileID: 102900000, guid: 9269db56d80487b49978ede00dcce03d, type: 3}
+  _startingGold: 500
+  HeroLimit: 5
+  _chestPrefab: {fileID: 114963951263199164, guid: eca6793d2aaf7164fba6ed12ecac44fa,
+    type: 2}
+  _levelProperties: {fileID: 0}
+--- !u!4 &463778815
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 4544086254528292, guid: 0ed70b35c4986db49896b8759318875d,
+    type: 2}
+  m_PrefabInternal: {fileID: 500542655}
+  m_GameObject: {fileID: 463778813}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &500542655
 Prefab:
   m_ObjectHideFlags: 0
@@ -502,9 +552,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114005530840531784, guid: 0ed70b35c4986db49896b8759318875d,
+        type: 2}
+      propertyPath: _startingGold
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ed70b35c4986db49896b8759318875d, type: 2}
-  m_RootGameObject: {fileID: 1519322528}
+  m_RootGameObject: {fileID: 463778813}
   m_IsPrefabParent: 0
 --- !u!1 &531250675
 GameObject:
@@ -618,6 +673,10 @@ MonoBehaviour:
   _goldCounterText: {fileID: 1401983660}
   DigPrice: 3
   FillPrice: 3
+  _gameOverPanel: {fileID: 0}
+  _winPanel: {fileID: 0}
+  _noChestAlertPanel: {fileID: 0}
+  HeroCounters: {fileID: 0}
 --- !u!1 &535522356
 GameObject:
   m_ObjectHideFlags: 0
@@ -1401,7 +1460,7 @@ Prefab:
         type: 2}
       propertyPath: gridPreset
       value: 
-      objectReference: {fileID: 4900000, guid: a178089cf6382b44eadcc08700bb821c, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 114883584429841150, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
         type: 2}
       propertyPath: hardrockChance
@@ -1419,7 +1478,7 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5, type: 2}
-  m_RootGameObject: {fileID: 1617572107}
+  m_RootGameObject: {fileID: 1150477611}
   m_IsPrefabParent: 0
 --- !u!1 &1081253409
 GameObject:
@@ -1632,6 +1691,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1150477611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1780065907862682, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
+    type: 2}
+  m_PrefabInternal: {fileID: 951410629}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1150477613}
+  - component: {fileID: 1150477612}
+  m_Layer: 0
+  m_Name: Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1150477612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 114883584429841150, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
+    type: 2}
+  m_PrefabInternal: {fileID: 951410629}
+  m_GameObject: {fileID: 1150477611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6467f9ab5f632cd41acf8ef568acd7c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridWidth: 10
+  gridHeight: 10
+  tileDistance: 1
+  hardrockChance: 0
+  hardrockBypresets: 0
+  tilePrefab: {fileID: 1111596000053628, guid: 6f4fcbe44a65f3444acc4b820c4a241e, type: 2}
+  gridPreset: {fileID: 0}
+--- !u!4 &1150477613
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 4892781064737872, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
+    type: 2}
+  m_PrefabInternal: {fileID: 951410629}
+  m_GameObject: {fileID: 1150477611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1266745635
 GameObject:
@@ -2405,56 +2514,6 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
---- !u!1 &1519322528
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 1672602073318338, guid: 0ed70b35c4986db49896b8759318875d,
-    type: 2}
-  m_PrefabInternal: {fileID: 500542655}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1519322530}
-  - component: {fileID: 1519322529}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1519322529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114005530840531784, guid: 0ed70b35c4986db49896b8759318875d,
-    type: 2}
-  m_PrefabInternal: {fileID: 500542655}
-  m_GameObject: {fileID: 1519322528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e44061b6b2bcc47a8b615293a3e8b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainMenuScene: {fileID: 102900000, guid: fee53d2caf5f2a74c983254571cb7b28, type: 3}
-  GameScene: {fileID: 102900000, guid: 9269db56d80487b49978ede00dcce03d, type: 3}
-  _startingGold: 10
-  _chestPrefab: {fileID: 114963951263199164, guid: eca6793d2aaf7164fba6ed12ecac44fa,
-    type: 2}
-  _heroes:
-  - {fileID: 114831221321222586, guid: fcffa4dd8fcc2d0468733b91b618b5ee, type: 2}
---- !u!4 &1519322530
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 4544086254528292, guid: 0ed70b35c4986db49896b8759318875d,
-    type: 2}
-  m_PrefabInternal: {fileID: 500542655}
-  m_GameObject: {fileID: 1519322528}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1539834613
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,56 +2759,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1570798023}
---- !u!1 &1617572107
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 1780065907862682, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
-    type: 2}
-  m_PrefabInternal: {fileID: 951410629}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1617572109}
-  - component: {fileID: 1617572108}
-  m_Layer: 0
-  m_Name: Grid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1617572108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114883584429841150, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
-    type: 2}
-  m_PrefabInternal: {fileID: 951410629}
-  m_GameObject: {fileID: 1617572107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6467f9ab5f632cd41acf8ef568acd7c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridWidth: 10
-  gridHeight: 10
-  tileDistance: 1
-  hardrockChance: 0
-  hardrockBypresets: 0
-  tilePrefab: {fileID: 1111596000053628, guid: 6f4fcbe44a65f3444acc4b820c4a241e, type: 2}
-  gridPreset: {fileID: 4900000, guid: a178089cf6382b44eadcc08700bb821c, type: 3}
---- !u!4 &1617572109
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 4892781064737872, guid: 6823e4e5a49f7fb498b5d3fc4a1bd7e5,
-    type: 2}
-  m_PrefabInternal: {fileID: 951410629}
-  m_GameObject: {fileID: 1617572107}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1668205730
 GameObject:
   m_ObjectHideFlags: 0
