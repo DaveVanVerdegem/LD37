@@ -18,6 +18,7 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 	public Texture TileVariant_Stump;
 	public Texture TileVariant_TShape;
 	public Texture TileVariant_TShapeRed;
+	public Texture TileVariant_TShapeSmallRed;
 
 	//private List<string,Texture> TileVariants;
 
@@ -141,15 +142,27 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 		case 2:
 			switch (numberOfDiggedDiagonalNeighbours) {
 			case 0:
-				if (directionOfDiggedStraightNeighbours[0].y==directionOfDiggedStraightNeighbours[1].y | directionOfDiggedStraightNeighbours[0].x==directionOfDiggedStraightNeighbours[1].x){
-					tex = TileVariant_InnerWall;
-					if (directionOfDiggedStraightNeighbours [0].y == 1) {
-						_rotationDegrees = 90.0f;
-					} 
-				} else {
-					//STILL WORK TO DO HERE!
-					tex = TileVariant_CornerSmallRed;
+				Vector2 diagJesus = new Vector2();
+				//find jesus
+				for (int ii=0;ii<=3;ii++){
+					if ((directionOfDiggedStraightNeighbours[0].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfRockyDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfRockyDiagonalNeighbours[ii].y) ){
+						diagJesus=directionOfRockyDiagonalNeighbours[ii];
+					}
 				}
+				tex = TileVariant_CornerSmallRed;
+				if (diagJesus.x==0){
+					if(diagJesus.y==0){
+						_rotationDegrees = 270.0f;
+							} else {
+								_rotationDegrees = 0.0f;
+							}
+						} else {
+							if(diagJesus.y==0){
+								_rotationDegrees = 180.0f;
+							} else {
+								_rotationDegrees = 90.0f;
+							}
+						}
 				break;
 			case 1:
 				if (directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [0].y | directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [0].x) {
@@ -198,7 +211,7 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 				break;
 			}
 			break;
-		//Only fourrr digged tiles...
+		//Only tree digged tiles...
 		case 3:
 			switch (numberOfDiggedDiagonalNeighbours) {
 			case 0:
@@ -218,7 +231,40 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 				}
 				break;
 			case 1:
-				tex = TileVariant_CornerSmallRed;
+				//find jesus
+				if ((directionOfDiggedStraightNeighbours [0].x == directionOfDiggedDiagonalNeighbours [0].x & directionOfDiggedStraightNeighbours [1].y == directionOfDiggedDiagonalNeighbours [0].y) | (directionOfDiggedStraightNeighbours [1].x == directionOfDiggedDiagonalNeighbours [0].x & directionOfDiggedStraightNeighbours [0].y == directionOfDiggedDiagonalNeighbours [0].y)) {
+					tex = TileVariant_CornerSmallRed;
+					if (directionOfDiggedDiagonalNeighbours[0].x==0){
+						if(directionOfDiggedDiagonalNeighbours[0].y==0){
+							_rotationDegrees = 270.0f;
+						} else {
+							_rotationDegrees = 0.0f;
+						}
+					} else {
+						if(directionOfDiggedDiagonalNeighbours[0].y==0){
+							_rotationDegrees = 180.0f;
+						} else {
+							_rotationDegrees = 90.0f;
+						}
+					}
+
+				} else {
+					tex = TileVariant_CornerYellow;
+					if (directionOfDiggedDiagonalNeighbours[0].x==0){
+						if(directionOfDiggedDiagonalNeighbours[0].y==0){
+							_rotationDegrees = 90.0f;
+						} else {
+							_rotationDegrees = 180.0f;
+						}
+					} else {
+						if(directionOfDiggedDiagonalNeighbours[0].y==0){
+							_rotationDegrees = 0.0f;;
+						} else {
+							_rotationDegrees = 270.0f;
+						}
+					}
+				}
+					
 				break;
 			case 2:
 				if (directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedDiagonalNeighbours [1].y) {
@@ -231,10 +277,11 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 						}
 					} else {
 						tex = TileVariant_TShape;
+						Debug.Log ("test2");
 						if (directionOfDiggedStraightNeighbours [0].y == 0) {
-							_rotationDegrees = 0.0f;
+							_rotationDegrees = 90.0f;
 						} else {
-							_rotationDegrees = 180.0f;
+							_rotationDegrees = 270.0f;
 						}
 					}
 				} else if(directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedDiagonalNeighbours [1].x) {
@@ -249,9 +296,9 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 					else {
 						tex = TileVariant_TShape;
 						if (directionOfDiggedStraightNeighbours [0].x == 0) {
-							_rotationDegrees = 90.0f;
+							_rotationDegrees = 180.0f;
 						} else {
-							_rotationDegrees = 270.0f;
+							_rotationDegrees = 0.0f;
 						}
 					}
 
@@ -307,9 +354,89 @@ public class TileVariantChooser_Rock : MonoBehaviour {
 						_rotationDegrees = 90.0f;
 					}
 				} else {
-					//STILL WORK TO DO HERE!
-					//tex = TileVariant_CornerYellow;
-					tex = TileVariant_CornerSmallRed;
+					Vector2 diagJesus = new Vector2();
+					Vector2 diagJudas = new Vector2();
+					//find jesus
+					for (int ii=0;ii<=1;ii++){
+						if ((directionOfDiggedStraightNeighbours[0].x == directionOfDiggedDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfDiggedDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfDiggedDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfDiggedDiagonalNeighbours[ii].y) ){
+								diagJesus=directionOfDiggedDiagonalNeighbours[ii];
+						}
+						if ((directionOfDiggedStraightNeighbours[0].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[1].y == directionOfRockyDiagonalNeighbours[ii].y) | (directionOfDiggedStraightNeighbours[1].x == directionOfRockyDiagonalNeighbours[ii].x  & directionOfDiggedStraightNeighbours[0].y == directionOfRockyDiagonalNeighbours[ii].y) ){
+							diagJudas=directionOfDiggedDiagonalNeighbours[ii];
+						}
+					}
+						
+					if (directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedDiagonalNeighbours [1].x) {
+						if ((directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [0].x)|(directionOfDiggedDiagonalNeighbours [0].x == directionOfDiggedStraightNeighbours [1].x)) {
+							tex = TileVariant_CornerSmallRed;
+
+							if (diagJesus.x==0){
+								if(diagJesus.y==0){
+									_rotationDegrees = 270.0f;
+								} else {
+									_rotationDegrees = 0.0f;
+								}
+							} else {
+								if(diagJesus.y==0){
+									_rotationDegrees = 180.0f;
+								} else {
+									_rotationDegrees = 90.0f;
+								}
+							}
+
+						} else {
+							tex = TileVariant_CornerYellow;
+
+							if (diagJudas.x==0){
+								if(diagJudas.y==0){
+									_rotationDegrees = 180.0f;
+								} else {
+									_rotationDegrees = 90.0f;
+								}
+							} else {
+								if(diagJudas.y==0){
+									_rotationDegrees = 270.0f;
+								} else {
+									_rotationDegrees = 0.0f;
+								}
+							}
+						}
+					} else {
+						if ((directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [0].y)|(directionOfDiggedDiagonalNeighbours [0].y == directionOfDiggedStraightNeighbours [1].y)){
+							tex = TileVariant_CornerSmallRed;
+
+							if (diagJesus.x==0){
+								if(diagJesus.y==0){
+									_rotationDegrees = 270.0f;
+								} else {
+									_rotationDegrees = 0.0f;
+								}
+							} else {
+								if(diagJesus.y==0){
+									_rotationDegrees = 180.0f;
+								} else {
+									_rotationDegrees = 90.0f;
+								}
+							}
+
+						} else {
+							tex = TileVariant_CornerYellow;
+
+							if (diagJudas.x==0){
+								if(diagJudas.y==0){
+									_rotationDegrees = 0.0f;
+								} else {
+									_rotationDegrees = 270.0f;
+								}
+							} else {
+								if(diagJudas.y==0){
+									_rotationDegrees = 90.0f;
+								} else {
+									_rotationDegrees = 180.0f;
+								}
+							}
+						}
+					}
 				}
 				break;
 			case 3:
