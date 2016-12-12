@@ -39,6 +39,7 @@ public class Character : MonoBehaviour {
     public float MaxIdleMovement;
     public float MaxIdleWaitSeconds;
     public float MaxAlertnessDurationSeconds;
+    
 
 
     public float IdleDetectionRadius;
@@ -77,6 +78,8 @@ public class Character : MonoBehaviour {
 
     private bool _animationFinished = true;
     private bool _deathAnimationFinished = false;
+
+    private float _movementEpsilon = 0.3f;
     #endregion
 
 
@@ -126,6 +129,7 @@ public class Character : MonoBehaviour {
         void Update()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y/1000);
+        Debug.Log(_skeletonAnimation.state.GetCurrent(0).ToString());
         switch (_currentState)
         {
             case (int)_characterStates.Combat:
@@ -254,7 +258,7 @@ public class Character : MonoBehaviour {
     {
         // TODO implement pathfinding here proper.
         float MoveStep = MovementSpeed * Time.deltaTime;
-        destination = new Vector3(destination.x, destination.y, transform.position.z);
+        destination = new Vector3(destination.x, destination.y, -1.0f + destination.y / 1000);
         transform.position = Vector3.MoveTowards(transform.position, destination, MoveStep);
         OrientSelf(destination);
     }
@@ -381,7 +385,7 @@ public class Character : MonoBehaviour {
             SetNewIdlePosition();
         }
 
-        if (Vector2.Distance(NewIdleMovePosition, transform.position) == 0f)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
         {
             StartIdleWait();
         }
@@ -428,7 +432,7 @@ public class Character : MonoBehaviour {
 
     void CharacterAlertMove()
     {
-        if (Vector2.Distance(NewIdleMovePosition, transform.position) == 0f)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
         {
             SetNewIdlePosition();
         }
