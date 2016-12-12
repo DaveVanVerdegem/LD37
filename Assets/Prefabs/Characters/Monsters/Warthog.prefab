@@ -193,6 +193,7 @@ MonoBehaviour:
   MaxBaseDamage: 3
   AttackSpeedSeconds: 1
   AttackDistance: 2
+  MinIdleMovement: 1.2
   MaxIdleMovement: 2
   MaxIdleWaitSeconds: 3
   MaxAlertnessDurationSeconds: 5

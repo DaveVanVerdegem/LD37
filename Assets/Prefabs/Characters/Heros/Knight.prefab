@@ -194,12 +194,12 @@ MonoBehaviour:
   MaxBaseDamage: 6
   AttackSpeedSeconds: 2
   AttackDistance: 2
-  MaxIdleMovement: 2
+  MaxIdleMovement: 5
   MaxIdleWaitSeconds: 2
   MaxAlertnessDurationSeconds: 10
   IdleDetectionRadius: 7
   CombatDetectionRadius: 10
-  AutoGoToExit: 0
+  AutoGoToExit: 1
   Group: Hero
   BattleType: 
   Skills: []
