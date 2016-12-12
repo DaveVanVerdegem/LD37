@@ -907,6 +907,7 @@ GameObject:
   - component: {fileID: 222813393264488630}
   - component: {fileID: 114260207247632396}
   - component: {fileID: 114135228018346838}
+  - component: {fileID: 114744663697327190}
   m_Layer: 5
   m_Name: Monster 1
   m_TagString: Untagged
@@ -1318,12 +1319,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114660267964064422}
-        m_MethodName: PlaceObject
+        m_MethodName: SpawnCharacter
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1662679227713274, guid: 56dc7365621411048a211cf4dcbe87cc,
+          m_ObjectArgument: {fileID: 114808200681203832, guid: c39d9beba6b853140bcb27f7d5ac7731,
             type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: Character, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2424,6 +2425,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cross: {fileID: 114231183913573254}
+--- !u!114 &114744663697327190
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1977499372541976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e9c953bd6d7e34596b82af1ff5b9cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _object: {fileID: 0}
+  _price: 10
 --- !u!114 &114753320309624194
 MonoBehaviour:
   m_ObjectHideFlags: 1
