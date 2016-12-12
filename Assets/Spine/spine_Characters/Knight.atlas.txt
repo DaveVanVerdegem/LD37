@@ -1,131 +1,194 @@
 
 Knight.png
-size: 1024,128
+size: 1024,256
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Bandit head
-  rotate: true
-  xy: 180, 24
-  size: 102, 142
-  orig: 102, 142
+  rotate: false
+  xy: 114, 94
+  size: 112, 160
+  orig: 112, 160
   offset: 0, 0
   index: -1
 Bandit_arm
-  rotate: true
-  xy: 474, 23
-  size: 27, 31
-  orig: 27, 31
+  rotate: false
+  xy: 492, 144
+  size: 27, 34
+  orig: 27, 34
   offset: 0, 0
   index: -1
 Bandit_body
   rotate: true
-  xy: 778, 76
-  size: 50, 60
-  orig: 50, 60
+  xy: 739, 147
+  size: 49, 60
+  orig: 49, 60
+  offset: 0, 0
+  index: -1
+Bandit_hand
+  rotate: false
+  xy: 457, 143
+  size: 33, 35
+  orig: 33, 35
   offset: 0, 0
   index: -1
 Knight_Body
-  rotate: true
-  xy: 840, 73
+  rotate: false
+  xy: 151, 33
   size: 53, 59
   orig: 53, 59
   offset: 0, 0
   index: -1
 Knight_arm_shield
-  rotate: false
-  xy: 324, 2
+  rotate: true
+  xy: 206, 60
   size: 32, 22
   orig: 32, 22
   offset: 0, 0
   index: -1
 Knight_arm_weapon
   rotate: false
-  xy: 434, 25
+  xy: 151, 6
   size: 38, 25
   orig: 38, 25
   offset: 0, 0
   index: -1
 Knight_hand_weapon
   rotate: true
-  xy: 142, 11
+  xy: 408, 108
   size: 33, 35
   orig: 33, 35
   offset: 0, 0
   index: -1
 Knight_helmet
   rotate: false
-  xy: 324, 26
+  xy: 525, 154
   size: 108, 100
   orig: 108, 100
   offset: 0, 0
   index: -1
 Knight_helmet_brushBack
   rotate: false
-  xy: 963, 91
+  xy: 408, 143
   size: 47, 35
   orig: 47, 35
   offset: 0, 0
   index: -1
 Knight_helmet_brushFront
-  rotate: true
-  xy: 901, 81
+  rotate: false
+  xy: 853, 142
   size: 45, 60
   orig: 45, 60
   offset: 0, 0
   index: -1
 Knight_leg1
   rotate: true
-  xy: 553, 53
+  xy: 114, 77
   size: 15, 28
   orig: 15, 28
   offset: 0, 0
   index: -1
 Knight_leg2
-  rotate: true
-  xy: 358, 7
+  rotate: false
+  xy: 944, 172
   size: 17, 30
   orig: 17, 30
   offset: 0, 0
   index: -1
 Mace
   rotate: true
-  xy: 434, 52
+  xy: 406, 180
   size: 74, 117
   orig: 74, 117
   offset: 0, 0
   index: -1
 Shield
-  rotate: true
-  xy: 2, 4
+  rotate: false
+  xy: 109, 2
   size: 40, 73
   orig: 40, 73
   offset: 0, 0
   index: -1
 Sword
   rotate: true
-  xy: 553, 70
+  xy: 739, 198
   size: 56, 111
   orig: 56, 111
   offset: 0, 0
   index: -1
+axe
+  rotate: true
+  xy: 2, 8
+  size: 67, 105
+  orig: 67, 105
+  offset: 0, 0
+  index: -1
+axeman_arm
+  rotate: true
+  xy: 445, 114
+  size: 27, 34
+  orig: 27, 34
+  offset: 0, 0
+  index: -1
+axeman_body
+  rotate: false
+  xy: 801, 136
+  size: 50, 60
+  orig: 50, 60
+  offset: 0, 0
+  index: -1
+axeman_head
+  rotate: false
+  xy: 635, 163
+  size: 102, 91
+  orig: 102, 91
+  offset: 0, 0
+  index: -1
+bishop_body
+  rotate: false
+  xy: 964, 201
+  size: 57, 53
+  orig: 57, 53
+  offset: 0, 0
+  index: -1
+bishop_book
+  rotate: false
+  xy: 900, 151
+  size: 42, 51
+  orig: 42, 51
+  offset: 0, 0
+  index: -1
+bishop_head
+  rotate: false
+  xy: 2, 77
+  size: 110, 177
+  orig: 110, 177
+  offset: 0, 0
+  index: -1
 particle_Slash1
   rotate: false
-  xy: 666, 76
+  xy: 852, 204
   size: 110, 50
   orig: 110, 50
   offset: 0, 0
   index: -1
 particle_Slash2
   rotate: false
-  xy: 2, 46
+  xy: 228, 174
   size: 176, 80
   orig: 176, 80
   offset: 0, 0
   index: -1
+scepter
+  rotate: true
+  xy: 228, 98
+  size: 74, 149
+  orig: 74, 149
+  offset: 0, 0
+  index: -1
 schaduwke
-  rotate: false
-  xy: 77, 17
+  rotate: true
+  xy: 379, 109
   size: 63, 27
   orig: 63, 27
   offset: 0, 0
