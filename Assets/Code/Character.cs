@@ -86,8 +86,6 @@ public class Character : MonoBehaviour {
         {
             _targetedBy.Remove(GetComponent<Character>());
         }
-        SetAnimation("Death");
-        SwitchToDeathState();
         _skeletonAnimation.state.Complete += delegate {
             // You can also use an anonymous delegate.
             _animationFinished = true;
@@ -96,10 +94,12 @@ public class Character : MonoBehaviour {
             {
                 _deathAnimationFinished = true;
             }
-            if (_skeletonAnimation.Equals("attack"))
+            if (CurrentAnimation.Equals("attack"))
             {
+                Debug.Log("Must be hit");
                 if (_currentTarget.GetComponent<Character>()._currentState != (int)_characterStates.Death)
                 {
+                    Debug.Log("Is hit");
                     _currentTarget.GetComponent<Character>().TriggerHitAnimation();
                 }
             }
@@ -108,6 +108,7 @@ public class Character : MonoBehaviour {
 
     void Update()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
         switch (_currentState)
         {
             case (int)_characterStates.Combat:
