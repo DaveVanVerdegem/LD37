@@ -107,6 +107,9 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
 			// Spawn hero.
 			SpawnCharacter(_heroes[Random.Range(0, _heroes.Count)]);
+
+		if (Input.GetKeyDown(KeyCode.Return))
+			AddGold(10);
 	}
 	#endregion
 

@@ -219,6 +219,9 @@ public class UIStateManager : MonoBehaviour
 	#region UI
 	void UpdateGoldCounter()
 	{
+		if (_goldCounterText == null)
+			return;
+
 		_goldCounterText.text = GameManager.Gold.ToString();
 	}
 	#endregion

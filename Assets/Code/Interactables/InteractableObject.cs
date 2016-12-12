@@ -79,6 +79,8 @@ public class InteractableObject : MonoBehaviour
 
 	void OnMouseDown()
 	{
+		Debug.Log("Registered click.", this);
+
 		if (!_initialized)
 			return;
 
