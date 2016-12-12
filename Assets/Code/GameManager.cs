@@ -128,11 +128,13 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// Check input.
-		if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
-			// Spawn hero.
-			SpawnCharacter(_levelProperties.SpawnList[Random.Range(0, _levelProperties.SpawnList.Count)]);
-
+        // Check input.
+        if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
+        {
+            // Spawn hero.
+            Character Hero = SpawnCharacter(_levelProperties.SpawnList[Random.Range(0, _levelProperties.SpawnList.Count)]);
+            Hero.NewIdleMovePosition = TileGrid.ExitTile.transform.position;
+        }
 		if (Input.GetKeyDown(KeyCode.Return))
 			AddGold(10);
 
