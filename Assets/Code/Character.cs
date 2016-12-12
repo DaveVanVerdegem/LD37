@@ -63,7 +63,7 @@ public class Character : MonoBehaviour {
     private SkeletonAnimation _skeletonAnimation;
 
     private enum _characterStates { Idle, Combat, Alert, Fetch, Death }
-    private int _currentState = (int)_characterStates.Idle;
+    private int _currentState = (int)_characterStates.Idle; // private _characterStates
     private bool _isAlive = true;
     private int _currentHealth;
     private float _attackTimer = 0.0f;
@@ -84,6 +84,8 @@ public class Character : MonoBehaviour {
 
     private bool _animationFinished = true;
     private bool _deathAnimationFinished = false;
+
+    private bool _nearExit = false;
 
     private float _movementEpsilon = 0.3f;
     #endregion
@@ -156,6 +158,14 @@ public class Character : MonoBehaviour {
                 break;
         }
         transform.position = new Vector3(transform.position.x, transform.position.y, -1.0f + transform.position.y / 1000);
+        if (AutoGoToExit)
+        {
+            if (GetDistanceToTarget(TileGrid.ExitTile.transform.position) < 1 && _currentState == (int)_characterStates.Idle)
+            {
+                _nearExit = true;
+                GameManager.HeroLeavesRoom(gameObject);
+            }
+        }
     }
 
     #region GeneralFunctionality
