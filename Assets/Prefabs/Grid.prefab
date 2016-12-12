@@ -56,5 +56,5 @@ MonoBehaviour:
   tileDistance: 1
   hardrockChance: 0.05
   hardrockBypresets: 0
-  tilePrefab: {fileID: 1111596000053628, guid: 43102ece0f883184095aa3f2a6d57471, type: 2}
-  gridPreset: {fileID: 0}
+  tilePrefab: {fileID: 1111596000053628, guid: e89218eda06a6994f86910997e55eabd, type: 2}
+  gridPreset: {fileID: 4900000, guid: 2baa065420ca06440996070724aae4c3, type: 3}
