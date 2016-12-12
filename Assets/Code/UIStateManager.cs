@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 #region Enums
@@ -11,13 +12,27 @@ public enum UIState
 }
 #endregion
 
-public class UIStateManager : MonoBehaviour {
+public class UIStateManager : MonoBehaviour
+{
 
-	UIStateManager instance;
 
     public static string state;
 
+	#region Inspector Fields
+	[SerializeField]
+	[Tooltip("Text component for the gold counter.")]
+	/// <summary>
+	/// Text component for the gold counter.
+	/// </summary>
+	private Text _goldCounterText;
+	#endregion
+
 	#region Properties
+	/// <summary>
+	/// Static reference to this instance.
+	/// </summary>
+	public static UIStateManager Instance;
+
 	/// <summary>
 	/// Current state of the UI.
 	/// </summary>
@@ -34,9 +49,17 @@ public class UIStateManager : MonoBehaviour {
 
 
 	#region Life Cycle
+	private void Awake()
+	{
+		// Set reference.
+		if (Instance == null)
+			Instance = this;
+	}
+
 	void Start()
 	{
 		state = "Dig";
+		UpdateGoldCounter();
 	}
 
 	void Update()
@@ -165,6 +188,13 @@ public class UIStateManager : MonoBehaviour {
 
 			yield return null;
 		}
+	}
+	#endregion
+
+	#region UI
+	public void UpdateGoldCounter()
+	{
+		_goldCounterText.text = GameManager.Gold.ToString();
 	}
 	#endregion
 }

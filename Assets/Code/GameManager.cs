@@ -109,6 +109,8 @@ public class GameManager : MonoBehaviour
 		// Adjust the total gold value.
 		Gold += amountOfGold;
 
+		UIStateManager.Instance.UpdateGoldCounter();
+
 		Debug.Log("Current amount of gold: " + Gold);
 
 		return true;
