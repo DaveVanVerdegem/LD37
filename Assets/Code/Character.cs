@@ -65,7 +65,7 @@ public class Character : MonoBehaviour {
     private float _alertnessTimer = 0.0f;
     private bool _newIdlePositionChosen = false;
 
-    private Vector2 _newIdleMovePosition;
+    public Vector2 NewIdleMovePosition;
     private GameObject _currentTarget;
     private List<Character> _targetedBy = new List<Character>();
 
@@ -235,7 +235,7 @@ public class Character : MonoBehaviour {
     }
 
     // not happy with how this works out managing the death inside...
-    void TriggerHitAnimation()
+    public void TriggerHitAnimation()
     {
         if (_currentState == (int)_characterStates.Death)
         {
@@ -381,13 +381,13 @@ public class Character : MonoBehaviour {
             SetNewIdlePosition();
         }
 
-        if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
+        if (Vector2.Distance(NewIdleMovePosition, transform.position) == 0f)
         {
             StartIdleWait();
         }
         else
         {
-            MoveTo(_newIdleMovePosition, MovementSpeedIdle);
+            MoveTo(NewIdleMovePosition, MovementSpeedIdle);
         }
     }
 
@@ -408,7 +408,7 @@ public class Character : MonoBehaviour {
 
     void SetNewIdlePosition()
     {
-        _newIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
+        NewIdleMovePosition = (Vector2)transform.position + Random.insideUnitCircle * MaxIdleMovement;
         _newIdlePositionChosen = true;
     }
     #endregion
@@ -428,14 +428,14 @@ public class Character : MonoBehaviour {
 
     void CharacterAlertMove()
     {
-        if (Vector2.Distance(_newIdleMovePosition, transform.position) == 0f)
+        if (Vector2.Distance(NewIdleMovePosition, transform.position) == 0f)
         {
             SetNewIdlePosition();
         }
         else
         {
             SetAnimation("CombatMove");
-            MoveTo(_newIdleMovePosition, MovementSpeedCombat);
+            MoveTo(NewIdleMovePosition, MovementSpeedCombat);
         }
     }
 
