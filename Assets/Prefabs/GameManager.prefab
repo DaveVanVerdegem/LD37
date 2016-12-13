@@ -58,3 +58,4 @@ MonoBehaviour:
   _chestPrefab: {fileID: 114963951263199164, guid: eca6793d2aaf7164fba6ed12ecac44fa,
     type: 2}
   LevelProperties: {fileID: 11400000, guid: ca3d869af6ffce340baa85477b7fc935, type: 2}
+  CheatsEnabled: 0

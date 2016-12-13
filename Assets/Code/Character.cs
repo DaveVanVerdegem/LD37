@@ -581,8 +581,11 @@ public class Character : MonoBehaviour {
         {
             CharacterTargetedBy.ClearTarget();
         }
+
+		if (Group == "Hero")
+			GameManager.HeroKilled();
+
         Destroy(gameObject);
-        // Destroy(gameObject.GetComponent<Character>());
     }
 
 	/// <summary>

@@ -80,6 +80,10 @@ public class GameManager : MonoBehaviour
 	/// Spawner for the exit.
 	/// </summary>
 	public static Spawner ExitSpawn;
+
+	public static bool GameOver = false;
+
+	public bool CheatsEnabled = true;
 	#endregion
 
 	#region Fields
@@ -135,7 +139,9 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		AddGold(_startingGold);
+		//AddGold(_startingGold);
+
+		ResetGame();
 	}
 
 	// Update is called once per frame
@@ -145,14 +151,22 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Escape))
 			Application.Quit();
 
-        if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
-        {
-            // Spawn hero.
-            Character Hero = SpawnCharacter(LevelProperties.SpawnList[Random.Range(0, LevelProperties.SpawnList.Count)]);
-            // Hero.NewIdleMovePosition = TileGrid.EntranceTile.transform.position;
-        }
-		if (Input.GetKeyDown(KeyCode.Return))
-			AddGold(10);
+		if (GameOver && Input.anyKeyDown)
+		{
+			ReloadLevel();			
+		}
+			
+		if(CheatsEnabled)
+		{
+			if (Input.GetKeyDown(KeyCode.Space) && EntranceSpawn != null && ExitSpawn != null)
+			{
+				// Spawn hero.
+				Character Hero = SpawnCharacter(LevelProperties.SpawnList[Random.Range(0, LevelProperties.SpawnList.Count)]);
+			}
+			if (Input.GetKeyDown(KeyCode.Return))
+				AddGold(10);
+		}
+
 
 		if (Input.GetKeyDown(KeyCode.S))
 			GameCanStart = true;
@@ -200,6 +214,29 @@ public class GameManager : MonoBehaviour
 	public static void LoadLevel(string sceneToLoad)
 	{
 		SceneManager.LoadScene(sceneToLoad);
+	}
+
+	public static void ReloadLevel()
+	{
+		Instance.ResetGame();
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
+
+	void ResetGame()
+	{
+		Gold = 0;
+		AddGold(_startingGold);
+
+		GameOver = false;
+
+		_heroSpawnIndex = 0;
+		_heroesPassed = 0;
+		_heroesKilled = 0;
+		_spawnTimer = 0;
+
+		Chest = null;
+
+		Time.timeScale = 1;
 	}
 	#endregion
 
@@ -270,6 +307,8 @@ public class GameManager : MonoBehaviour
 
 		if (_heroesPassed >= Instance.HeroLimit)
 			UIStateManager.Instance.GameOver();
+		else if ((_heroesPassed + _heroesKilled) >= Instance.LevelProperties.SpawnList.Count)
+			UIStateManager.Instance.Win();
 	}
 
 	public static void HeroKilled()
