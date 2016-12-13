@@ -277,6 +277,8 @@ public class UIStateManager : MonoBehaviour
 	{
 		Time.timeScale = 0;
 		_gameOverPanel.SetActive(true);
+
+		GameManager.GameOver = true;
 	}
 
 	/// <summary>
@@ -286,6 +288,8 @@ public class UIStateManager : MonoBehaviour
 	{
 		Time.timeScale = 0;
 		_winPanel.SetActive(true);
+
+		GameManager.GameOver = true;
 	}
 	#endregion
 }
