@@ -87,7 +87,7 @@ public class Character : MonoBehaviour {
 
     private bool _nearExit = false;
 
-    private float _movementEpsilon = 0.3f;
+    private float _movementEpsilon = 0.1f;
     #endregion
 
 
@@ -97,7 +97,14 @@ public class Character : MonoBehaviour {
         _skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         _currentHealth = MaxHealth;
         _alertnessTimer = MaxAlertnessDurationSeconds; // causes the monster to not be alert at first
-        SwitchToIdleState();
+        if (AutoGoToExit)
+        {
+            SwitchToAlertState();
+        }
+        else
+        {
+            SwitchToIdleState();
+        }
         if (_targetedBy.Contains(GetComponent<Character>()))
         {
             _targetedBy.Remove(GetComponent<Character>());
@@ -136,6 +143,7 @@ public class Character : MonoBehaviour {
 
         void Update()
     {
+        Debug.Log(_skeletonAnimation.state.GetCurrent(0).ToString());
         switch (_currentState)
         {
             case (int)_characterStates.Combat:
@@ -343,12 +351,13 @@ public class Character : MonoBehaviour {
     void ClearTarget()
     {
         // RemoveFromTargetingList();
+        _detectedGameObjects = new List<GameObject>();
         _currentTarget = null;
         if (_currentState == (int)_characterStates.Combat)
         {
+            Debug.Log("Wait?");
             SwitchToAlertState();
         }
-        _detectedGameObjects = new List<GameObject>();
         // _detectedGameObjects.Clear();
     }
 
@@ -361,16 +370,6 @@ public class Character : MonoBehaviour {
                 _currentTarget.GetComponent<Character>()._targetedBy.Remove(GetComponent<Character>());
             }
         }
-        /*
-        if (_currentTarget.GetComponent<Treasure>() != null)
-        {
-            if (_currentTarget.GetComponent<Treasure>()._targetedBy.Contains(GetComponent<Character>()))
-            {
-                _currentTarget.GetComponent<Treasure>()._targetedBy.Remove(GetComponent<Character>());
-            }
-        }
-        */
-
     }
 
     #endregion
@@ -455,13 +454,12 @@ public class Character : MonoBehaviour {
     void CharacterAlert()
     {
         _alertnessTimer += Time.deltaTime;
-        DetectCollidersInArea(CombatDetectionRadius);
         CharacterAlertMove();
-
         if (_alertnessTimer > MaxAlertnessDurationSeconds)
         {
             SwitchToIdleState();
         }
+        DetectCollidersInArea(CombatDetectionRadius);
     }
 
     void CharacterAlertMove()
