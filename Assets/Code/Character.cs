@@ -400,22 +400,29 @@ public class Character : MonoBehaviour {
             SetNewIdlePosition();
         }
 
-        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon || Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position).distance < 0.1)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon || Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position).distance < 0.05)
         {
             RaycastHit2D Hit = Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position);
-            Debug.Log(Hit.collider.name);
-            Tile Tile = Hit.collider.GetComponent<Tile>();
-            if (Tile != null)
+            if (Hit.collider != null)
             {
-                Debug.Log("WHAT?");
-                if (Tile.Solid)
+                Tile Tile = Hit.collider.GetComponent<Tile>();
+                if (Tile != null)
                 {
-                    StartIdleWait();
-                    return;
+                    if (!Tile.Solid)
+                    {
+                        MoveTo(NewIdleMovePosition, MovementSpeedIdle);
+                        return;
+                    }
+                    Debug.Log("WwowowoowIdle");
                 }
             }
+            StartIdleWait();
         }
-        MoveTo(NewIdleMovePosition, MovementSpeedIdle);
+        else
+        {
+            MoveTo(NewIdleMovePosition, MovementSpeedIdle);
+        }
+        
     }
 
     void SwitchToIdleState()
@@ -459,8 +466,21 @@ public class Character : MonoBehaviour {
 
     void CharacterAlertMove()
     {
-        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon)
+        if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon || Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position).distance < 0.05)
         {
+            RaycastHit2D Hit = Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position);
+            if (Hit.collider != null)
+            {
+                Tile Tile = Hit.collider.GetComponent<Tile>();
+                if (Tile != null)
+                {
+                    if (!Tile.Solid)
+                    {
+                        SetAnimation("CombatMove");
+                        MoveTo(NewIdleMovePosition, MovementSpeedCombat);
+                    }
+                }
+            }
             SetNewIdlePosition();
         }
         else

@@ -193,12 +193,11 @@ MonoBehaviour:
   MaxBaseDamage: 3
   AttackSpeedSeconds: 1
   AttackDistance: 2
-  MinIdleMovement: 1.2
   MaxIdleMovement: 2
   MaxIdleWaitSeconds: 3
   MaxAlertnessDurationSeconds: 5
-  IdleDetectionRadius: 5
-  CombatDetectionRadius: 8
+  IdleDetectionRadius: 10
+  CombatDetectionRadius: 12
   AutoGoToExit: 0
   Group: Monster
   BattleType: 
