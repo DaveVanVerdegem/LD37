@@ -16,8 +16,8 @@ public class Loot : InteractableObject
 	public override void Initialize(Tile parentTile)
 	{
 		Debug.Log("Initialized loot.");
-
-		base.Initialize(parentTile);
+        GetComponent<Collider2D>().isTrigger = true;
+        base.Initialize(parentTile);
 	}
 	#endregion
 

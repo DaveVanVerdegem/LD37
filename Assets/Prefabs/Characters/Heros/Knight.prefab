@@ -197,8 +197,8 @@ MonoBehaviour:
   MaxIdleMovement: 5
   MaxIdleWaitSeconds: 2
   MaxAlertnessDurationSeconds: 10
-  IdleDetectionRadius: 7
-  CombatDetectionRadius: 10
+  IdleDetectionRadius: 10
+  CombatDetectionRadius: 12
   AutoGoToExit: 1
   Group: Hero
   BattleType: 
