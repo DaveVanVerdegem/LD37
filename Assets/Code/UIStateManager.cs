@@ -67,6 +67,8 @@ public class UIStateManager : MonoBehaviour
 	/// Herocounters component.
 	/// </summary>
 	public HeroCounters HeroCounters;
+
+	public GameObject TutorialWindow;
 	#endregion
 
 	#region Properties
@@ -250,6 +252,12 @@ public class UIStateManager : MonoBehaviour
 	{
 		if(GameManager.AddGold(-character.Price))
 			GameManager.SpawnCharacter(character);
+	}
+
+	public void StartGame()
+	{
+		TutorialWindow.SetActive(false);
+		GameManager.GameCanStart = true;
 	}
 	#endregion
 

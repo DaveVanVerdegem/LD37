@@ -105,7 +105,7 @@ Material:
       second: 0.02
     - first:
         name: _RotationDegrees
-      second: -90
+      second: 180
     - first:
         name: _SmoothnessTextureChannel
       second: 0

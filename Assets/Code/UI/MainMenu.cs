@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
 	#region UI Interaction
 	public void LoadGameScene()
 	{
-		GameManager.GameCanStart = true;
+		//GameManager.GameCanStart = true;
 		GameManager.LoadLevel(GameManager.Instance.GameScene);
 	}
 	#endregion
