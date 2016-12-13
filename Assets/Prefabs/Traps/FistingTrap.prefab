@@ -138,10 +138,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rotatable: 1
-  Price: 5
+  Price: 60
   _type: 1
-  _shotsAvailable: 5
-  _attackStrength: 100
+  _shotsAvailable: 3
+  _attackStrength: 20
   _normalSprite: {fileID: 21300000, guid: 07b73470ae72c104a930ff315a47eb43, type: 3}
   _loadedSprite: {fileID: 21300000, guid: 07b73470ae72c104a930ff315a47eb43, type: 3}
   _cooldown: 1

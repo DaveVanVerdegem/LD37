@@ -185,19 +185,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lootPrefab: {fileID: 0}
   _gold: 10
-  Price: 10
-  MaxHealth: 10
+  Price: 70
+  MaxHealth: 100
   MovementSpeedIdle: 1
   MovementSpeedCombat: 1.5
-  MinBaseDamage: 2
-  MaxBaseDamage: 3
+  MinBaseDamage: 32
+  MaxBaseDamage: 50
   AttackSpeedSeconds: 1
   AttackDistance: 2
   MaxIdleMovement: 2
   MaxIdleWaitSeconds: 3
   MaxAlertnessDurationSeconds: 5
-  IdleDetectionRadius: 5
-  CombatDetectionRadius: 8
+  IdleDetectionRadius: 10
+  CombatDetectionRadius: 15
   AutoGoToExit: 0
   Group: Monster
   BattleType: 

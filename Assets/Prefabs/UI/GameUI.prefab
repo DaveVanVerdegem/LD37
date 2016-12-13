@@ -2844,8 +2844,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _goldCounterText: {fileID: 114265203687106516}
-  DigPrice: 3
-  FillPrice: 3
+  DigPrice: 1
+  FillPrice: 1
   _gameOverPanel: {fileID: 1680665287806004}
   _winPanel: {fileID: 1719959630247730}
   _noChestAlertPanel: {fileID: 1675756769024480}
@@ -2902,7 +2902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 0}
-  _price: 25
+  _price: 80
 --- !u!114 &114734586911888102
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2942,7 +2942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 0}
-  _price: 10
+  _price: 20
 --- !u!114 &114759731047509316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3008,7 +3008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 114741370476346830, guid: 56dc7365621411048a211cf4dcbe87cc, type: 2}
-  _price: 1
+  _price: 10
 --- !u!114 &114802645869266520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3129,7 +3129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 114741370476346830, guid: 56c7714122035f241b7bf0520e558eec, type: 2}
-  _price: 1
+  _price: 30
 --- !u!114 &114851347206414642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3482,7 +3482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 114741370476346830, guid: f7ebb89d36832a247a33f446f957c7bb, type: 2}
-  _price: 1
+  _price: 60
 --- !u!222 &222001046419394676
 CanvasRenderer:
   m_ObjectHideFlags: 1

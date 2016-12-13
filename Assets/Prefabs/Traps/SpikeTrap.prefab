@@ -175,13 +175,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rotatable: 0
-  Price: 1
+  Price: 10
   _type: 0
   _shotsAvailable: 3
-  _attackStrength: 100
+  _attackStrength: 50
   _normalSprite: {fileID: 21300000, guid: 21376774bc1b2a946ab30deb5b9c49f9, type: 3}
   _loadedSprite: {fileID: 21300000, guid: 47b1b935501d64843bd752c96d8f226e, type: 3}
-  _cooldown: 0.5
+  _cooldown: 1
   _projectilePrefab: {fileID: 0}
 --- !u!212 &212208662874610414
 SpriteRenderer:

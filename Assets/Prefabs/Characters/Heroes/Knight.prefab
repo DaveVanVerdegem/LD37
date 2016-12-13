@@ -185,13 +185,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lootPrefab: {fileID: 114942809738713750, guid: 7f53ca74bd2f4cb418ba003a97ce43db,
     type: 2}
-  _gold: 10
+  _gold: 60
   Price: 10
-  MaxHealth: 30
-  MovementSpeedIdle: 1
-  MovementSpeedCombat: 1.5
-  MinBaseDamage: 4
-  MaxBaseDamage: 6
+  MaxHealth: 120
+  MovementSpeedIdle: 0.7
+  MovementSpeedCombat: 1
+  MinBaseDamage: 12
+  MaxBaseDamage: 16
   AttackSpeedSeconds: 2
   AttackDistance: 2
   MaxIdleMovement: 5

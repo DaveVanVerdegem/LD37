@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 70197797825337048}
   - component: {fileID: 50417743876583068}
   m_Layer: 0
-  m_Name: Bishop
+  m_Name: AxeMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: f2d7020dfa0d3884d9bf1b24e7c8f2e5, type: 2}
-  initialSkinName: Bishop
+  initialSkinName: Axeman
   separatorSlotNames: []
   zSpacing: 0
   renderMeshes: 1
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lootPrefab: {fileID: 114942809738713750, guid: 7f53ca74bd2f4cb418ba003a97ce43db,
     type: 2}
-  _gold: 10
+  _gold: 20
   Price: 10
   MaxHealth: 30
   MovementSpeedIdle: 1

@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainMenuScene: Main
   GameScene: Game
-  _startingGold: 10
+  _startingGold: 100
   HeroLimit: 5
   _chestPrefab: {fileID: 114963951263199164, guid: eca6793d2aaf7164fba6ed12ecac44fa,
     type: 2}
