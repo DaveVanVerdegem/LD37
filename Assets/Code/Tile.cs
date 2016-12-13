@@ -53,6 +53,9 @@ public class Tile : MonoBehaviour {
 	#region Methods
 	void UpdateState(string newState)
 	{
+		if (!GameManager.GameRunning)
+			return;
+
 		//DIG
 		if (_tileState == state.Rock && newState == "Dig" && GameManager.AddGold(-UIStateManager.Instance.DigPrice))
 		{
