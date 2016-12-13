@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 70833470638324612}
   - component: {fileID: 50992233650609432}
   m_Layer: 0
-  m_Name: Warthog
+  m_Name: Dragon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: f2d7020dfa0d3884d9bf1b24e7c8f2e5, type: 2}
-  initialSkinName: Warthog
+  initialSkinName: Dragon
   separatorSlotNames: []
   zSpacing: 0
   renderMeshes: 1
@@ -196,8 +196,8 @@ MonoBehaviour:
   MaxIdleMovement: 2
   MaxIdleWaitSeconds: 3
   MaxAlertnessDurationSeconds: 5
-  IdleDetectionRadius: 10
-  CombatDetectionRadius: 12
+  IdleDetectionRadius: 5
+  CombatDetectionRadius: 8
   AutoGoToExit: 0
   Group: Monster
   BattleType: 
