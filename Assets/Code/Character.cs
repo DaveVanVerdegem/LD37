@@ -190,26 +190,36 @@ public class Character : MonoBehaviour {
         if (_skeletonAnimation.state.GetCurrent(0) == null)
         {
             SetNewAnimation(animation, loop);
+            return;
         }
         string CurrentAnimation = _skeletonAnimation.state.GetCurrent(0).ToString();
+
+        if (CurrentAnimation.Equals("attack") && _currentTarget == null)
+        {
+            SetNewAnimation(animation, loop);
+        }
         // if previous animation cycle is rounded up, just do this.
         if (_animationFinished)
         {
             SetNewAnimation(animation, loop);
+            return;
         }
         else
         {
             if (!animation.Equals(CurrentAnimation) && (CurrentAnimation.Equals("walk") || (CurrentAnimation.Equals("idle"))))
             {
                 SetNewAnimation(animation, loop);
+                return;
             }
             else if (animation.Equals("attack") && !CurrentAnimation.Equals("attack"))
             {
                 SetNewAnimation(animation, loop);
+                return;
             }
             else if (animation.Equals("death") && !CurrentAnimation.Equals("death"))
             {
                 SetNewAnimation(animation, loop);
+                return;
             }
             else if (animation.Equals("hurt"))
             {
@@ -220,10 +230,12 @@ public class Character : MonoBehaviour {
                 if (animation.Equals(CurrentAnimation))
                 {
                     SetNewAnimation(animation, loop);
+                    return;
                 }
                 else if (!CurrentAnimation.Equals("attack") || !CurrentAnimation.Equals("death"))
                 {
                     SetNewAnimation(animation, loop);
+                    return;
                 }
             }
         }
@@ -404,15 +416,10 @@ public class Character : MonoBehaviour {
             RaycastHit2D Hit = Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position);
             if (Hit.collider != null)
             {
-                Tile Tile = Hit.collider.GetComponent<Tile>();
-                if (Tile != null)
+                if (DetectionRules(Hit.collider))
                 {
-                    if (!Tile.Solid)
-                    {
-                        MoveTo(NewIdleMovePosition, MovementSpeedIdle);
-                        return;
-                    }
-                    Debug.Log("WwowowoowIdle");
+                    MoveTo(NewIdleMovePosition, MovementSpeedIdle);
+                    return;
                 }
             }
             StartIdleWait();
@@ -462,6 +469,35 @@ public class Character : MonoBehaviour {
         DetectCollidersInArea(CombatDetectionRadius);
     }
 
+    void MoveWithCollisions()
+    {
+
+    }
+
+    bool DetectionRules(Collider2D Collider)
+    {
+        bool CanMove = false;
+
+        Tile Tile = Collider.GetComponent<Tile>();
+        if (Tile != null && !Tile.Solid)
+        {
+            CanMove = true;
+        }
+        Loot Loot = Collider.GetComponent<Loot>();
+        if (Loot != null)
+        {
+            CanMove = true;
+        }
+
+        Trap Trap = Collider.GetComponent<Trap>();
+        if (Trap != null)
+        {
+            CanMove = true;
+        }
+
+        return CanMove;
+    }
+
     void CharacterAlertMove()
     {
         if (GetDistanceToTarget(NewIdleMovePosition) <= _movementEpsilon || Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position).distance < 0.05)
@@ -469,14 +505,11 @@ public class Character : MonoBehaviour {
             RaycastHit2D Hit = Physics2D.Raycast(transform.position, NewIdleMovePosition - (Vector2)transform.position);
             if (Hit.collider != null)
             {
-                Tile Tile = Hit.collider.GetComponent<Tile>();
-                if (Tile != null)
+                if (DetectionRules(Hit.collider))
                 {
-                    if (!Tile.Solid)
-                    {
-                        SetAnimation("CombatMove");
-                        MoveTo(NewIdleMovePosition, MovementSpeedCombat);
-                    }
+                    SetAnimation("CombatMove");
+                    MoveTo(NewIdleMovePosition, MovementSpeedCombat);
+                    return;
                 }
             }
             SetNewIdlePosition();
