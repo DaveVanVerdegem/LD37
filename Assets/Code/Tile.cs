@@ -4,9 +4,22 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [SelectionBase]
-public class Tile : MonoBehaviour {
-    
-    [SerializeField] GameObject stateRockPrefab;
+public class Tile : MonoBehaviour
+{
+	#region Enums
+	/// <summary>
+	/// Composition state for tile.
+	/// </summary>
+	public enum State
+	{
+		Excavated,
+		Dirt,
+		Rock
+	}
+	#endregion
+
+
+	[SerializeField] GameObject stateRockPrefab;
     [SerializeField] GameObject stateHardrockPrefab;
     [SerializeField] GameObject stateDugPrefab;
     [SerializeField] GameObject stateExitPrefab;
@@ -19,7 +32,17 @@ public class Tile : MonoBehaviour {
     public enum state { Rock, Hardrock, Dug, Exit, Entrance}
 	private state _tileState = state.Rock;
 
+	#region Inspector Fields
+	[SerializeField]
+	[Tooltip("Properties for the grid.")]
+	/// <summary>
+	/// Properties for the grid.
+	/// </summary>
+	private GridProperties _gridProperties;
+	#endregion
+
 	#region Properties
+	// Instance
 	[HideInInspector]
 	/// <summary>
 	/// Returns true if the tile is a solid and isn't walkable.
@@ -28,6 +51,24 @@ public class Tile : MonoBehaviour {
 	#endregion
 
 	#region Fields
+	// Statics
+	/// <summary>
+	/// 2D Array of all the tiles in the game.
+	/// </summary>
+	private static Tile[,] _tiles;
+
+	/// <summary>
+	/// Parent of the grid.
+	/// </summary>
+	private static Transform _grid;
+
+
+	// Instance
+	/// <summary>
+	/// Current state of this tile.
+	/// </summary>
+	private State _state = State.Dirt;
+
 	/// <summary>
 	/// Interactable object attached to this tile.
 	/// </summary>
@@ -47,6 +88,62 @@ public class Tile : MonoBehaviour {
 			return;
 
 		UpdateState(UIStateManager.state);
+	}
+	#endregion
+
+	#region Grid
+	void GenerateGrid()
+	{
+		// Don't create a grid if there's already one.
+		if (_grid != null)
+			return;
+
+		// Only continue if the right properties are available.
+		if(_gridProperties == null)
+		{
+			Debug.LogWarning("No properties set for the grid!", this);
+			return;
+		}
+
+		// Create a parent for the grid.
+		_grid = new GameObject("Grid").transform;
+
+		// Create array for the grid.
+		_tiles = new Tile[(int)_gridProperties.Size.x, (int)_gridProperties.Size.y];
+
+		// Create grid.
+		for(int height = 0; height < _gridProperties.y; height++)
+		{
+			for (int width = 0; width < _gridProperties.Size.x; width++)
+			{
+				// Create tile.
+				Tile newTile = Instantiate(_gridProperties.TilePrefab);
+
+				// Position tile.
+				newTile.transform.position = ReturnPositionOnGrid( new Vector2(width, height));
+
+				// Save tile in array.
+				----
+
+			}
+		}
+
+		// Initialize all tiles.
+		-------
+
+	}
+
+	/// <summary>
+	/// Returns the world position of a tile in the grid.
+	/// </summary>
+	/// <param name="gridPosition">Position of the tile in the grid.</param>
+	/// <returns>Returns the world position as a Vector2.</returns>
+	Vector2 ReturnPositionOnGrid(Vector2 gridPosition)
+	{
+		float xPosition = Mathf.RoundToInt(gridPosition.x - (_gridProperties.Size.x / 2));
+		float yPosition = Mathf.RoundToInt(gridPosition.y - (_gridProperties.Size.y / 2));
+
+		return new Vector2(xPosition, yPosition);
 	}
 	#endregion
 
